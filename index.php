@@ -3,18 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <title>Registration</title>
+    <link rel="stylesheet" type="text/css" href="./CSS/style.css">
+    <title>OpenHub Homepage</title>
 </head>
 <body>
 
-
     <?php include("./php/shared/nav.php") ?>
 
-
     <main class="main_container">
-
-
+        
         <section class="column">
             <img class="main_img" src="./images/BESTLOGO.png" alt="BESTLOGO">
         </section>
@@ -24,6 +21,7 @@
             <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
             <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
             <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+            <p class="desc">Furry ipsum dolor sit amet consectetur adipisicing elit.</p>
         </section>
 
         <section class="column">   
