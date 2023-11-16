@@ -12,7 +12,6 @@
     <?php include("./php/shared/nav.php") ?>
 
 
-
     <main class="main_container">
 
 
@@ -21,6 +20,7 @@
         </section>
 
         <section class="column">
+            <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
             <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
             <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
             <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
