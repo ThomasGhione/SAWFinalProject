@@ -21,7 +21,7 @@
             <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
             <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
             <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            <p class="desc">Furry ipsum dolor sit amet consectetur adipisicing elit.</p>
+            <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
         </section>
 
         <section class="column">   
