@@ -10,14 +10,16 @@ body {
     min-height: 100vh;    
 }
 
-/* Nav Data */
+
+
+
 
 nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: sticky;
-
+    
     background-color: black;
 }
 
@@ -35,24 +37,9 @@ nav > div {
     color: white;
 }
 
-/* Footer data */
 
-footer {
-    background-color: black;
-    color: white;
-    text-align: center;
-    margin-top: auto;
-}
 
-/*
-h1 {
-    color: black;
-    font-size: 20px;
-    text-align: center;
-    margin-top: 40px;
-    margin-bottom: 40px;
-}
-*/
+
 
 fieldset {
     background-color: #f2f2f2;
@@ -66,7 +53,7 @@ fieldset {
 
 .register_section {
     margin: auto;
-    width: 50%;
+    width: auto;
     border: 3px solid green;    
     padding: 10px;
 }
@@ -99,8 +86,6 @@ input {
     height: 440px;
 }
 
-
-
 .main_container {
     display: flex;
     justify-content: space-evenly;
@@ -108,8 +93,30 @@ input {
     flex-grow: 1;
 }
 
-
-
 .desc {
     text-align: center;
+}
+
+.input_box {
+    display: flex;
+    align-items: center;
+}
+
+.second_column {
+    width: 100%;
+    height: auto;
+
+    border-style: solid;
+    border-radius: 10px;
+    border-color: black;
+}
+
+
+
+
+footer {
+    background-color: black;
+    color: white;
+    text-align: center;
+    margin-top: auto;
 }

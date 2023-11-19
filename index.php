@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="./CSS/style.css">
     <title>OpenHub Homepage</title>
 </head>
-<body>
 
+<body>
     <?php include("./php/shared/nav.php") ?>
 
     <main class="main_container">
@@ -17,44 +18,49 @@
         </section>
 
         <section class="column">
-            <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+            <div class="second_column">
+                <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>    
+            </div>
         </section>
 
         <section class="column">   
-            <div class ="register_section">
-                <fieldset>
-            
-                    <h2>
-                        Sign up here:
-                    </h2>
+                <fieldset class="register_section">
+                    <h2>Sign up here:</h2>
         
-                    <label>Username:</label><br>
-                    <input type ="text" id="username" placeholder="Username" name="username" maxlength="50" required><br>
-                   
-                    <label>Password:</label><br>
-                    <input type ="password" id="password" placeholder="Password" name="password" maxlength="50" required><br>
+                    <div class="input_box">
+                        <label>First name:</label>
+                        <input type ="text" id="first_name" placeholder="First name" name="first_name" maxlength="64" required>       
+                    </div>
+
+                    <div class="input_box">
+                        <label>Last Name:</label>
+                        <input type ="text" id="last_name" placeholder="Last name" name="last_name" maxlength="64" required>
+                    </div>
                     
+                    <div class="input_box">
+                        <label>Username:</label>
+                        <input type ="text" id="username" placeholder="Username" name="username" maxlength="64" required>
+                    </div>
+                    
+                    <div class="input_box">
+                        <label>Password:</label>
+                        <input type ="password" id="password" placeholder="Password" name="password" maxlength="64" required>
+                    </div>
+
                     <button type="submit" class="register">Register</button><br>
                     <button type="submit" name="log-in">Already an user?</button>
         
                 </fieldset>
-            </div>
         </section>
-
-
 
     </main>
 
 
 
-
-
-    
     <?php include("./php/shared/footer.php") ?>
-    
 </body>
 </html>
