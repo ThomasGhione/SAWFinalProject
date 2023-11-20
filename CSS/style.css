@@ -23,18 +23,8 @@ nav {
     justify-content: space-between;
     position: sticky;
     
+    /* Dovrà essere cambiato */
     background-color: black;
-}
-
-nav > div > img {
-    width: 50px;
-    height: 50px;
-    margin: 10px;
-    border-radius: 100%;
-}
-
-.left_nav > button {
-    margin: 3px;
 }
 
 nav > div {
@@ -44,12 +34,29 @@ nav > div {
     color: white;    
 }
 
+.navLogo {
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+    border-radius: 100%;
+}
+
+.navLogo:hover {
+    filter: brightness(125%);
+}
+
+.left_nav > button {
+    margin: 0px 3px;
+}
+
 .right_nav > button {
     width: 50px;
     height: 50px;
     margin: 10px;
     border-radius: 100%;
 }
+
+
 
 
 
@@ -71,7 +78,7 @@ nav > div {
     right: 0;
     bottom: 0;
     left: 0;
-    background-image: url("../images/homeBackGround.jpg");
+    background-image: url("/SAW/SAWFinalProject/images/homeBackGround.jpg");
     filter: blur(4px);
     z-index: -1; /* Assicurati che il pseudo-elemento sia dietro agli altri contenuti */
     background-position: center;
@@ -98,9 +105,6 @@ nav > div {
     height: auto;
     width: 33.4%;
     padding: 10px;
-    border-style: solid;
-    border-radius: 10px;
-    border-color: black;
 }
 
 fieldset {
@@ -123,32 +127,34 @@ fieldset {
 
 /* second column */
 
-.second_column {
-    border-style: solid;
-    border-radius: 10px;
-    border-color: black;
-}
-
 .second_column > p {
     text-align: center;
 }
 
+
 /* third column */
 
 .register_section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
     margin: auto;
     width: auto;
-    border: 3px solid green;    
+    border: 3px solid black;    
+    border-radius: 10px;
     padding: 10px;
+    background-color: #FCFAFA;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .input_box {
     display: flex;
     justify-content: center;
     width: auto;
-    border-style: solid;
-    border-radius: 3px;
-    border-color: black;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 input {
@@ -156,16 +162,25 @@ input {
     margin: 3px;
 }
 
-.input_box {
+.inputBox {
     display: flex;
     align-items: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
-.register {
-    padding: 3px;
-    margin: 3px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+.formButton {
+    background-color: #A4B8C4;
+    padding: 6px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    border: 2px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.formButton:hover {
+    filter: brightness(125%);
 }
 
 
