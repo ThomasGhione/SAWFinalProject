@@ -178,3 +178,33 @@ footer {
     text-align: center;
     margin-top: auto;
 }
+
+
+
+
+
+/* PERSONAL AREA */
+
+.left_column {
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 30%;
+    height: 100%;
+
+    border-color: black;
+    border-style: solid;
+    border-radius: 10px;
+}
+
+.right_column {
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 70%;
+    height: 100%;
+
+    border-color: black;
+    border-style: solid;
+    border-radius: 10px;
+}

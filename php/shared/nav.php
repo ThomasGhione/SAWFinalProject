@@ -1,7 +1,7 @@
 <nav>
 
     <div class="left_nav">
-        <img src="./images/BESTLOGO.png" alt="Website Logo">
+        <img src="/SAW/SAWFinalProject/images/BESTLOGO.png" alt="Website Logo">
         <button>Homepage</button>
         <button>Dashboard</button>
         <button>Explore</button>
