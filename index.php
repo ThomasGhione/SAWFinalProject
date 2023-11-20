@@ -11,8 +11,10 @@
 <body>
     <?php include("./php/shared/nav.php") ?>
 
+    <div class="bg-image"></div>
+
     <main class="main_container">
-        
+
         <section class="column">
             <img src="./images/BESTLOGO.png" alt="BESTLOGO">
         </section>
