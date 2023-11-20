@@ -7,8 +7,9 @@
         <a>text3</a>
     </div>
 
-    <div>
-        <a>search_bar_placeholder</a>
+    <div class="search_bar_box">
+        <label>search_bar_placeholder</label>
+        <input type ="text" id="search_bar" placeholder="search bar" name="search_bar" maxlength="128">   
     </div>
 
 </nav>

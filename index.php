@@ -14,16 +14,16 @@
     <main class="main_container">
         
         <section class="column">
-            <img class="main_img" src="./images/BESTLOGO.png" alt="BESTLOGO">
+            <img src="./images/BESTLOGO.png" alt="BESTLOGO">
         </section>
 
         <section class="column">
             <div class="second_column">
-                <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                <p class="desc">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>    
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>    
             </div>
         </section>
 
@@ -50,9 +50,9 @@
                         <label>Password:</label>
                         <input type ="password" id="password" placeholder="Password" name="password" maxlength="64" required>
                     </div>
-
+                    
                     <button type="submit" class="register">Register</button><br>
-                    <button type="submit" name="log-in">Already an user?</button>
+                    <button type="submit" name="log-in">Already an user?</button>   
         
                 </fieldset>
         </section>
