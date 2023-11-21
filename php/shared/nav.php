@@ -2,9 +2,9 @@
 
     <div class="left_nav">
         <a href="/SAW/SAWFinalProject/index.php"><img class="navLogo" src="/SAW/SAWFinalProject/images/bestLogo.png" alt="Website Logo"></a>
-        <button>Homepage</button>
-        <button>Dashboard</button>
-        <button>Explore</button>
+        <a class="navButton">Homepage</a>
+        <a class="navButton">Dashboard</a>
+        <a class="navButton">Explore</a>
     </div>
 
     <div class="right_nav">

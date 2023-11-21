@@ -169,7 +169,7 @@ input {
     margin-bottom: 5px;
 }
 
-.formButton {
+.formButton, .navButton {
     background-color: #A4B8C4;
     padding: 6px;
     margin-top: 3px;
@@ -180,6 +180,10 @@ input {
 }
 
 .formButton:hover {
+    filter: brightness(125%);
+}
+
+.navButton:hover {
     filter: brightness(125%);
 }
 
