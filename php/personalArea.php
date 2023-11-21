@@ -11,11 +11,19 @@
 
     <div class="main_personalarea">
         <column id="left_column">
-            <p>left column</p>
+            <div>                
+                <p>left column</p>
+                <p>left column</p>
+                <p>left column</p>
+            </div>
         </column>
         
         <column id="right_column">
-            <p>right column</p>
+            <div>                
+                <p>right column</p>
+                <p>right column</p>
+                <p>right column</p>
+            </div>
         </column>
     </div>
 
