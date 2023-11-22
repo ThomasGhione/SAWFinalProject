@@ -2,28 +2,28 @@
     <h2>Sign up here:</h2>
         
     <div class="inputBox">
-        <label>First name:</label>
-        <input type ="text" id="first_name" placeholder="First name" name="first_name">       
+        <label for="firstName">First name: </label>
+        <input type ="text" id="firstName" name="firstName" placeholder="First name" >       
     </div>
 
     <div class="inputBox">
-        <label>Last Name:</label>
-        <input type ="text" id="last_name" placeholder="Last name" name="last_name">
+        <label for="lastName">Last Name: </label>
+        <input type ="text" id="lastName" name="lastName" placeholder="Last name">
     </div>
                     
     <div class="inputBox">
-        <label>Username:</label>
-        <input type ="text" id="username" placeholder="Username" name="username">
+        <label for="userName">Username: </label>
+        <input type ="text" id="userName" name="userName" placeholder="Username">
     </div>
                     
     <div class="inputBox">
-        <label>E-Mail:</label>
-        <input type="text" id="email" placeholder="Email" name="email"> 
+        <label for="email">E-Mail: </label>
+        <input type="text" id="email" name="email" placeholder="Email"> 
     </div>
 
     <div class="inputBox">
-        <label>Password:</label>
-        <input type ="password" id="password" placeholder="Password" name="password">
+        <label for="password">Password: </label>
+        <input type="password" id="password" name="password" placeholder="Password" >
     </div>
                     
     <input type="submit" class="formButton" value="Submit">

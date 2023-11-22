@@ -22,11 +22,17 @@
 
             <div class="inputBox">
                 <label>Password:</label>
-                <input type ="password" id="password" placeholder="Password" name="password">
+                <input type="password" id="password" placeholder="Password" name="password">
             </div>
-                    
+
+            <div class="inputBox">
+                <label>Remember Me:</label>
+                <input type="checkbox" id="RememberMe" placeholder="RememberMe" name="RememberMe">
+            </div>
+
             <button type="submit" class="formButton">Log in</button><br> 
             
+
         </fieldset>
 
     </main>

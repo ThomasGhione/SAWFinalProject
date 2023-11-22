@@ -9,7 +9,7 @@
 
     <div class="right_nav">
         <i class="fa fa-search" aria-hidden="true"></i>
-        <input type="text" id="search_bar" placeholder="search bar" name="search_bar" maxlength="128">   
+        <input type="text" id="search_bar" placeholder="Search repos or users..." name="search_bar" maxlength="128">   
 
         <button alt="Your profile">ph</button>
     </div>
