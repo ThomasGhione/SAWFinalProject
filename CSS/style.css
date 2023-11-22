@@ -1,5 +1,11 @@
 /* Html/Body Data */
 
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
 html, body {
     height: 100%;
     margin: 0px;
@@ -230,6 +236,81 @@ footer {
     flex-direction: column;
     align-items: center;
     width: 70%;
+    height: auto;
+
+    border: 5px solid black;
+    border-radius: 10px;
+}
+
+.pfp {
+    width: 128px;
+    height: 128px;
+    border-radius: 100%;
+    margin: 10px;
+}
+
+.infos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border: 5px solid black;
+    border-radius: 10px;
+}
+
+.infos > p {
+    margin: 3px;
+}
+
+.list_of_badges {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    border: 5px solid black;
+    border-radius: 10px;
+}
+
+.list_of_badges > p {
+    margin: 3px;
+}
+
+.first_section {
+    display: flex;
+    width: 100%;
+    height: auto;
+
+    border: 5px solid black;
+    border-radius: 10px;
+}
+
+.top_badges {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 50%;
+    height: auto;
+
+    border: 5px solid black;
+    border-radius: 10px;
+}
+
+.top_sponsors {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 50%;
+    height: auto;
+
+    border: 5px solid black;
+    border-radius: 10px;
+}
+
+.second_section {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
     height: auto;
 
     border: 5px solid black;
