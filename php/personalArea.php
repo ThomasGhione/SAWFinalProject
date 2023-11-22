@@ -35,6 +35,8 @@
                     <p>badge1</p>
                     <p>badge2</p>
                     <p>badge3</p>
+                    <p>badge4</p>
+                    <p>badge5</p>
                 </div>
 
                 
@@ -42,17 +44,24 @@
                     <p>sponsor1</p>
                     <p>sponsor2</p>
                     <p>sponsor3</p>
+                    <p>sponsor4</p>
+                    <p>sponsor5</p>
                 </div>
             </section>
 
+            <div class="top_repos">
+                <p>top_repo1</p>
+                <p>top_repo2</p>
+                <p>top_repo3</p>
+                <p>...</p>
+            </div>
 
-            <section class="second_section">
-                <div>                
-                    <p>repo1</p>
-                    <p>repo2</p>
-                    <p>repo3</p>
-                </div>
-            </section>
+            <div class="second_section">          
+                <p>repo1</p>
+                <p>repo2</p>
+                <p>repo3</p>
+                <p>...</p>
+            </div>
 
 
         </column>
