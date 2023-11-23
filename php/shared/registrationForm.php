@@ -3,27 +3,32 @@
         
     <div class="inputBox">
         <label for="firstName">First name: </label>
-        <input type ="text" id="firstName" name="firstName" placeholder="First name" required>       
+        <input required type ="text" id="firstName" name="firstName" placeholder="First name">       
     </div>
 
     <div class="inputBox">
         <label for="lastName">Last Name: </label>
-        <input type ="text" id="lastName" name="lastName" placeholder="Last name" required>
+        <input required type ="text" id="lastName" name="lastName" placeholder="Last name">
     </div>
                     
     <div class="inputBox">
         <label for="userName">Username: </label>
-        <input type ="text" id="userName" name="userName" placeholder="Username" required>
+        <input required type ="text" id="userName" name="userName" placeholder="Username">
     </div>
                     
     <div class="inputBox">
         <label for="email">E-Mail: </label>
-        <input type="email" id="email" name="email" placeholder="Email" required> 
+        <input required type="email" id="email" name="email" placeholder="Email"> 
     </div>
 
     <div class="inputBox">
         <label for="password">Password: </label>
-        <input type="password" id="password" name="password" placeholder="Password" required>
+        <input required type="password" id="password" name="password" placeholder="Password">
+    </div>
+
+    <div class="inputBox">
+        <label for="confirmPwd">Confirm Password: </label>
+        <input required type="password" id="confirmPwd" name="confirmPwd" placeholder="Confirm Password">
     </div>
                     
     <input type="submit" class="formButton" value="Submit">

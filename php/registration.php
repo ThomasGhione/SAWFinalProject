@@ -1,9 +1,14 @@
+<?php
+    session_start();
+    
+    require("./phpFunc/errInitialize.php");
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="../CSS/style.css">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <?php require_once("./shared/commonHead.php") ?>
     <title>OpenHub - Registration Page</title>
 </head>
 <body>
@@ -15,6 +20,6 @@
         <?php include("./shared/registrationForm.php") ?>
     </main>
 
-    <?php include("./shared/footer.php"); ?>
+    <?php include("./shared/footer.html"); ?>
 </body>
 </html>
