@@ -86,7 +86,7 @@ nav > div {
     left: 0;
     background-image: url("/SAW/SAWFinalProject/images/homeBackGround.jpg");
     filter: blur(4px);
-    z-index: -1; /* Assicurati che il pseudo-elemento sia dietro agli altri contenuti */
+    z-index: -1;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -133,7 +133,7 @@ fieldset {
 
 /* second column */
 
-.second_column > p {
+.second_column {
     text-align: center;
 }
 

@@ -10,24 +10,24 @@
     <?php include("./shared/nav.php"); ?>
 
     
-    <main class=main_container>
+    <main class="main_container">
 
         <fieldset class="register_section">
             <h2>Log in here:</h2>
                         
             <div class="inputBox">
-                <label>E-Mail:</label>
-                <input type="text" id="email" placeholder="Email" name="email"> 
+                <label for="email">E-Mail:</label>
+                <input type="email" id="email" name="email" placeholder="Email" required> 
             </div>
 
             <div class="inputBox">
-                <label>Password:</label>
-                <input type="password" id="password" placeholder="Password" name="password">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Password" required>
             </div>
 
             <div class="inputBox">
-                <label>Remember Me:</label>
-                <input type="checkbox" id="RememberMe" placeholder="RememberMe" name="RememberMe">
+                <label for="rememberme">Remember Me:</label>
+                <input type="checkbox" id="rememberme" name="RememberMe" placeholder="RememberMe" required>
             </div>
 
             <button type="submit" class="formButton">Log in</button><br> 

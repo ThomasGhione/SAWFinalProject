@@ -22,11 +22,8 @@
 
         <section class="column">
             <div class="second_column">
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>    
+                <p>WE PRESENT YOU OPENHUB</p>
+                <p>The leading (maybe not) platform for open source projects<p>
             </div>
         </section>
 

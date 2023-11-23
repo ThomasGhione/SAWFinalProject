@@ -15,8 +15,6 @@
         <?php include("./shared/registrationForm.php") ?>
     </main>
 
-
-
     <?php include("./shared/footer.php"); ?>
 </body>
 </html>

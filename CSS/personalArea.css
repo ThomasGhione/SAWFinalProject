@@ -1,5 +1,7 @@
 /* CSS file only for Personal Area */
 
+/* Container for main */
+
 .main_personalarea {
     width: auto;
     height: auto;
@@ -7,6 +9,9 @@
     display: flex;
     flex-grow: 1;
 }
+
+
+/* Containers for columns */
 
 #left_column {
     display: flex;
@@ -29,6 +34,9 @@
     border: 5px solid purple;
     border-radius: 10px;
 }
+
+
+/* Elements of left_column */
 
 .pfp {
     width: 128px;
@@ -63,6 +71,9 @@
     margin: 3px;
 }
 
+
+/* Elements of right column */
+
 .first_section {
     display: flex;
     width: 100%;
@@ -75,16 +86,14 @@
 .top_badges {
     display: flex;
     flex-direction: row;
+    justify-content: space-evenly;
+
     width: 50%;
     height: auto;
     text-align: center;
 
     border: 5px solid purple;
     border-radius: 10px;
-}
-
-.top_badges > p {
-    margin: auto;
 }
 
 .top_sponsors {
