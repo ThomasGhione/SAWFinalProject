@@ -33,7 +33,6 @@
                 die ('Server error' . $this->conn->error);
             }
 
-
             if ( str_contains($stmtString, 'SELECT') )
                 $result = $stmt->get_result();
             else
