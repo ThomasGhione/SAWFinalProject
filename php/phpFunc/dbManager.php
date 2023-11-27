@@ -16,7 +16,7 @@
             }  
         }
 
-        function dbQuery($stmtString, $paramsTypes, $params) {
+        function dbQueryWithParams($stmtString, $paramsTypes, $params) {
             
             if ( !($stmt = $this->conn->prepare($stmtString)) ) {
                 error_log('Error: cannot prepare the following query -> ' . $stmtString);
@@ -43,6 +43,20 @@
             return $result;
         }
 
+        function dbQueryWithNoParams($stmtString) {
+            $res = $this->$conn->query($stmtString);
+
+
+
+            if ( str_contains($stmtString, 'SELECT') )
+                $result = $this->conn->get_result();
+            else
+                $result = $this->conn->affected_rows;
+
+            return $result;
+        }
+
+
         function closeConnection() {
             $this->conn->close();
         }
@@ -55,6 +69,9 @@
 
         }
         
+        function allUser() {
+
+        }
 
 
     }
