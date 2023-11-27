@@ -1,7 +1,7 @@
 <?php
     session_start();
     
-    require("./phpFunc/errInitialize.php");
+    require("./scripts/errInitialize.php");
 ?>
 
 
