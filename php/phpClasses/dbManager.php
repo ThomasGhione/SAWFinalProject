@@ -116,7 +116,31 @@
         }
 
         function loginUser($email, $password) {
+            // TODO aggiungere messaggi contestuali per ogni errore
 
+            if ( empty($email) || empty($password) ) {
+                error_log('Error: empty parameters');
+                return false;
+            }
+
+            $email = trim($email);
+            $password = trim($password);
+
+            $result = $this->dbQueryWithParams('SELECT * FROM users WHERE email = ?', 's', $email);
+
+            if ( $result->num_rows != 1 ) {
+                error_log('Error: email not found');
+                return false;
+            }
+
+            $row = $result->fetch_assoc();
+
+            if ( !password_verify($password, $row['password']) ) {
+                error_log('Error: wrong password');
+                return false;
+            }
+
+            return true;
         }
         
         function allUsers() {
@@ -125,15 +149,8 @@
         
         // Aux functions //
 
-
-
-
-
-
+        
 
     }
-
-
-
 
 ?>
