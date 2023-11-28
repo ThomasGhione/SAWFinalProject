@@ -8,6 +8,8 @@
         private $dbName = 'databaseUni';
    
         private $conn;
+
+        static private $emailregex = "/\S+@\S+\.\S+/";
         
         function __construct() {
             if ( !( $this->conn = new mysqli($this->dbServer, $this->username, $this->password, $this->dbName) )) {
@@ -71,8 +73,8 @@
 
             // TODO aggiungere messaggi contestuali per ogni errore
 
-            if ( !isset($_POST['firstName']) || !isset($_POST['lastName']) || !isset($_POST['email']) || !isset($_POST['password']) || !isset($_POST['confirmpwd'])) {
-                error_log('Error: missing parameters');
+            if ( empty($_POST['firstName']) || empty($_POST['lastName']) || empty($_POST['email']) || empty($_POST['password']) || empty($_POST['confirmpwd'])) {
+                error_log('Error: empty parameters');
                 return false;
             }
 
@@ -84,13 +86,24 @@
             
             // TODO correggere regex per email
             
-            if ( ( $password != $confirmpwd ) || ( !preg_match("/\S+@\S+\.\S+/", $email) ) )
+            if ( !preg_match($this->emailregex, $email) ) {
+                error_log('Error: invalid email format');
                 return false;
+            
+            }
+            
+            if ( $password != $confirmpwd ) {
+                error_log('Error: passwords do not match');
+                return false;
+            }
+
 
             $result = $this->dbQueryWithParams('SELECT * FROM users WHERE email = ?', 's', $email);
 
-            if ($result->num_rows > 0)
+            if ( $result->num_rows != 0 ) {
+                error_log('Error: email already in use');
                 return false;
+            }
             
             $password = password_hash($password, PASSWORD_DEFAULT);
             $paramArr = array($firstname, $lastname, $email, $password);
