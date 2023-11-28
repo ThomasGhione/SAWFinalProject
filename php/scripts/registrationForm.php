@@ -1,4 +1,9 @@
 <?php
+    session_start();
+    
+    // TODO controllare se l'utente non è già loggato
+
+
     require_once('../phpClasses/dbManager.php');
 
     $dbManager = new dbManager();
@@ -12,7 +17,7 @@
         $confirmpwd = trim($_POST['confirmPwd']);
 
         if ($dbManager->registerUser($firstname, $lastname, $email, $password, $confirmpwd))
-            $_SESSION["success"] = "Registration successful, go to login page";
+            $_SESSION["success"] = "Registration successful, go to login page to access your content";
     }
 
     header ('Location: ../registration.php');
