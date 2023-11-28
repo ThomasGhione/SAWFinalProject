@@ -22,7 +22,8 @@
         }
 
         function __destruct() {
-            $this->conn->close();
+            if ( $this->conn ) 
+                $this->conn->close();
         }
 
         // Query functions //
@@ -143,7 +144,7 @@
         }
         
         function allUsers() {
-
+            return $this->dbQueryWithNoParams('SELECT * FROM users');
         }
         
         // Aux functions //
