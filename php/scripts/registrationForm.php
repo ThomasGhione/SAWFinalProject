@@ -1,35 +1,20 @@
 <?php
-    require_once 'dbManager.php';
+    require_once('../phpClasses/dbManager.php');
 
     $dbManager = new dbManager();
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        
+        $firstname = trim($_POST['firstname']);
+        $lastname = trim($_POST['lastname']);
         $email = trim($_POST['email']);
+        $password = trim($_POST['password']);
+        $confirmpwd = trim($_POST['confirmPwd']);
 
-        if (doesUserExist($email, $dbManager)) {
-            error_log('Error: email already in use', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
-            $_SESSION["error"] = "Email already in use";
-            header("Location: ../registration.php");
-        }
-        else {
-            if ($dbManager->registerUser()) {
-                $_SESSION["success"] = "Registration successful";
-                header("Location: ../login.php");
-            }
-            else {
-                $_SESSION["error"] = "Registration failed";
-                header("Location: ../registration.php");
-            }
-        }
+        if ($dbManager->registerUser($firstname, $lastname, $email, $password, $confirmpwd))
+            $_SESSION["success"] = "Registration successful, go to login page";
     }
 
-
-    function doesUserExist($email, $dbManager) {
-        $stmtString = "SELECT * FROM users WHERE email = ?";
-        $paramsTypes = "s";
-        $params = array($email);
-        $result = $dbManager->dbQueryWithParams($stmtString, $paramsTypes, $params);
-        return $result->num_rows != 0;
-    }
+    header ('Location: ../registration.php');
 
 ?>

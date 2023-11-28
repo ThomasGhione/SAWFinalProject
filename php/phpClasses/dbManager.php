@@ -73,28 +73,25 @@
 
         // User functions //
 
-        function registerUser() {
+        function registerUser($firstName, $lastName, $email, $password, $confirmpwd) {
 
             // TODO aggiungere messaggi contestuali per ogni errore
 
-            if ( empty($_POST['firstName']) || empty($_POST['lastName']) || empty($_POST['email']) || empty($_POST['password']) || empty($_POST['confirmpwd'])) {
+            if ( empty($firstName) || empty($lastName) || empty($email) || empty($password) || empty($confirmpwd) ) {
                 error_log('Error: empty parameters');
+                $_SESSION['error'] = 'Empty parameters passed to the form';
                 return false;
             }
-
-            $firstname = trim($_POST['firstname']);
-            $lastname = trim($_POST['lastname']);
-            $email = trim($_POST['email']);
-            $password = trim($_POST['password']);
-            $confirmpwd = trim($_POST['confirmPwd']);
             
             if ( !preg_match($this->emailregex, $email) ) {
                 error_log('Error: invalid email format', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
+                $_SESSION['error'] = 'Invalid Email format';
                 return false;
             }
             
             if ( $password != $confirmpwd ) {
                 error_log('Error: passwords do not match', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
+                $_SESSION['error'] = 'Passwords do not match';
                 return false;
             }
 
@@ -103,11 +100,12 @@
 
             if ( $result->num_rows != 0 ) {
                 error_log('Error: email already in use', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
+                $_SESSION['error'] = 'Email already in use';
                 return false;
             }
             
             $password = password_hash($password, PASSWORD_DEFAULT);
-            $paramArr = array($firstname, $lastname, $email, $password);
+            $paramArr = array($firstName, $lastName, $email, $password);
 
             // TODO 
             $result = $this->dbQueryWithParams('INSERT INTO users (firstname, lastname, email, password) VALUES (?, ?, ?, ?)', 'ssss', $paramArr);
