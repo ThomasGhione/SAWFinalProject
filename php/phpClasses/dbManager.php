@@ -2,14 +2,17 @@
 
     class dbManager {  
     
+        // TODO Might be static in the future
         private $dbServer = 'localhost';
         private $username = '';
         private $password = '';
         private $dbName = 'databaseUni';
-   
-        private $conn;
-
+        
+        // TODO correggere regex per email
         static private $emailregex = "/\S+@\S+\.\S+/";
+
+
+        private $conn;
         
         function __construct() {
             if ( !( $this->conn = new mysqli($this->dbServer, $this->username, $this->password, $this->dbName) )) {
@@ -27,22 +30,22 @@
         function dbQueryWithParams($stmtString, $paramsTypes, $params) {
 
             if ( !($stmt = $this->conn->prepare($stmtString)) ) {
-                error_log('Error: cannot prepare the following query -> ' . $stmtString);
+                error_log('Error: cannot prepare the following query -> ' . $stmtString, 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
                 die ('Server error' . $this->conn->error);
             }
 
             if ( count($params) != strlen($paramsTypes) ) {
-                error_log('Error: number of parameters does not match the number of types');
+                error_log('Error: number of parameters does not match the number of types', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
                 die ('Server error' . $this->conn->error);
             }
 
             if ( !($stmt->bind_param($paramsTypes, ...$params)) ) {
-                error_log('Error: cannot bind the following parameters -> ' . $params);
+                error_log('Error: cannot bind the following parameters -> ' . $params, 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
                 die ('Server error' . $this->conn->error);
             }
 
             if ( !($stmt->execute() ) ) {
-                error_log('Error: cannot execute the following query -> ' . $stmtString);
+                error_log('Error: cannot execute the following query -> ' . $stmtString, 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
                 die ('Server error' . $this->conn->error);
             }
 
@@ -60,7 +63,7 @@
         function dbQueryWithNoParams($stmtString) {
 
             if ( ($result = $this->conn->query($stmtString)) === false ) {
-                error_log('Error: cannot execute the following query -> ' . $stmtString);
+                error_log('Error: cannot execute the following query -> ' . $stmtString, 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
                 die ('Server error' . $this->conn->error);
             }
 
@@ -84,16 +87,13 @@
             $password = trim($_POST['password']);
             $confirmpwd = trim($_POST['confirmPwd']);
             
-            // TODO correggere regex per email
-            
             if ( !preg_match($this->emailregex, $email) ) {
-                error_log('Error: invalid email format');
+                error_log('Error: invalid email format', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
                 return false;
-            
             }
             
             if ( $password != $confirmpwd ) {
-                error_log('Error: passwords do not match');
+                error_log('Error: passwords do not match', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
                 return false;
             }
 
@@ -101,7 +101,7 @@
             $result = $this->dbQueryWithParams('SELECT * FROM users WHERE email = ?', 's', $email);
 
             if ( $result->num_rows != 0 ) {
-                error_log('Error: email already in use');
+                error_log('Error: email already in use', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
                 return false;
             }
             
@@ -110,7 +110,6 @@
 
             // TODO 
             $result = $this->dbQueryWithParams('INSERT INTO users (firstname, lastname, email, password) VALUES (?, ?, ?, ?)', 'ssss', $paramArr);
-            
 
             return $result == 1;
         }
@@ -119,7 +118,7 @@
             // TODO aggiungere messaggi contestuali per ogni errore
 
             if ( empty($email) || empty($password) ) {
-                error_log('Error: empty parameters');
+                error_log('Error: empty parameters', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
                 return false;
             }
 
@@ -129,14 +128,14 @@
             $result = $this->dbQueryWithParams('SELECT * FROM users WHERE email = ?', 's', $email);
 
             if ( $result->num_rows != 1 ) {
-                error_log('Error: email not found');
+                error_log('Error: email not found', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
                 return false;
             }
 
             $row = $result->fetch_assoc();
 
             if ( !password_verify($password, $row['password']) ) {
-                error_log('Error: wrong password');
+                error_log('Error: wrong password', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
                 return false;
             }
 
