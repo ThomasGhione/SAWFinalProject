@@ -20,23 +20,36 @@
         <fieldset class="register_section">
             <h2>Log in here:</h2>
                         
-            <div class="inputBox">
-                <label for="email">E-Mail:</label>
-                <input required type="email" id="email" name="email" placeholder="Email"> 
-            </div>
+            <?php
+                if(isset($_SESSION["error"])) {
+                    echo "<p class='error'>" . $_SESSION["error"] . "</p>";
+                    unset($_SESSION["error"]);
+                }
+                else
+                    echo "<p class='error'>&nbsp;</p>";
+                
+                $email = "";
+                $password = "";    
+            ?>
 
-            <div class="inputBox">
-                <label for="password">Password:</label>
-                <input required type="password" id="password" name="password" placeholder="Password">
-            </div>
-
-            <div class="inputBox">
-                <label for="rememberme">Remember Me:</label>
-                <input required type="checkbox" id="rememberme" name="RememberMe" placeholder="RememberMe">
-            </div>
-
-            <button type="submit" class="formButton">Log in</button><br> 
-            
+            <form action="./scripts/loginForm.php">
+                <div class="inputBox">
+                    <label for="email">E-Mail:</label>
+                    <input required type="email" id="email" name="email" placeholder="Email"> 
+                </div>
+    
+                <div class="inputBox">
+                    <label for="password">Password:</label>
+                    <input required type="password" id="password" name="password" placeholder="Password">
+                </div>
+    
+                <div class="inputBox">
+                    <label for="rememberme">Remember Me:</label>
+                    <input type="checkbox" id="rememberme" name="RememberMe" placeholder="RememberMe">
+                </div>
+    
+                <button type="submit" class="formButton">Log in</button><br> 
+            </form>
 
         </fieldset>
 

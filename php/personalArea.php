@@ -1,7 +1,7 @@
 <?php
     session_start();
     
-    require("./php/scripts/errInitialize.php");
+    require("./scripts/errInitialize.php");
 ?>
 
 
@@ -75,6 +75,6 @@
 
 
 
-    <?php include("shared/footer.php") ?>
+    <?php include("shared/footer.html") ?>
 </body>
 </html>
