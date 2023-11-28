@@ -24,10 +24,13 @@
 
         function dbQueryWithParams($stmtString, $paramsTypes, $params) {
 
-            // TODO Controllare meglio numero parametri
-
             if ( !($stmt = $this->conn->prepare($stmtString)) ) {
                 error_log('Error: cannot prepare the following query -> ' . $stmtString);
+                die ('Server error' . $this->conn->error);
+            }
+
+            if ( count($params) != strlen($paramsTypes) ) {
+                error_log('Error: number of parameters does not match the number of types');
                 die ('Server error' . $this->conn->error);
             }
 
@@ -41,10 +44,10 @@
                 die ('Server error' . $this->conn->error);
             }
 
-            if ( str_contains($stmtString, 'SELECT') )
-                $result = $stmt->get_result();
-            else
-                $result = $stmt->affected_rows;
+
+            $result = (str_contains($stmtString, 'SELECT'))
+                ? $stmt->get_result()
+                : $stmt->affected_rows;
 
             $stmt->close();
 
@@ -68,8 +71,10 @@
 
             // TODO aggiungere messaggi contestuali per ogni errore
 
-            if ( !isset($_POST['firstName']) || !isset($_POST['lastName']) || !isset($_POST['email']) || !isset($_POST['password']) || !isset($_POST['confirmpwd']))
+            if ( !isset($_POST['firstName']) || !isset($_POST['lastName']) || !isset($_POST['email']) || !isset($_POST['password']) || !isset($_POST['confirmpwd'])) {
+                error_log('Error: missing parameters');
                 return false;
+            }
 
             $firstname = trim($_POST['firstname']);
             $lastname = trim($_POST['lastname']);
@@ -79,8 +84,7 @@
             
             // TODO correggere regex per email
             
-            if ( ( $password != $confirmpwd )
-                || ( !preg_match("/\S+@\S+\.\S+/", $email) ) )
+            if ( ( $password != $confirmpwd ) || ( !preg_match("/\S+@\S+\.\S+/", $email) ) )
                 return false;
 
             $result = $this->dbQueryWithParams('SELECT * FROM users WHERE email = ?', 's', $email);
@@ -94,10 +98,8 @@
             // TODO 
             $result = $this->dbQueryWithParams('INSERT INTO users (firstname, lastname, email, password) VALUES (?, ?, ?, ?)', 'ssss', $paramArr);
             
-            if ( $result != 1 )
-                return false;            
 
-            return true;
+            return $result == 1;
         }
 
         function loginUser($email, $password) {
