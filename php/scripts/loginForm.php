@@ -7,15 +7,15 @@
 
     $dbManager = new dbManager();
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $email = trim($_POST['email']);
         $password = trim($_POST['password']);
 
-        $dbManager->loginUser($email, $password);
-
-
-
+        if ($dbManager->loginUser($email, $password)) {
+            $_SESSION['success'] = 'Login successful';
+            header('Location: ../personalArea.php');
+        }
 
     }
 

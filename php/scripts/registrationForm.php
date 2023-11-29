@@ -16,8 +16,10 @@
         $password = trim($_POST['password']);
         $confirmpwd = trim($_POST['confirmPwd']);
 
-        if ($dbManager->registerUser($firstname, $lastname, $email, $password, $confirmpwd))
+        if ($dbManager->registerUser($firstname, $lastname, $email, $password, $confirmpwd)) {
             $_SESSION["success"] = "Registration successful, go to login page to access your content";
+            header('Location: ../login.php');
+        }
     }
 
     header ('Location: ../registration.php');
