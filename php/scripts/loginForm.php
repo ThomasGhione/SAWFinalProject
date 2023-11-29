@@ -1,11 +1,10 @@
 <?php
     session_start();
     
-    // TODO controllare se l'utente non è già loggato
+    // TODO check whether the user is already logged in
 
     require_once('../phpClasses/dbManager.php');
     require_once('../phpClasses/sessionManager.php');
-
 
     $dbManager = new dbManager();
 
@@ -15,7 +14,6 @@
         $password = trim($_POST['password']);
 
         if ($dbManager->loginUser($email, $password)) {
-            $_SESSION['success'] = 'Login successful';
             header('Location: ../personalArea.php');
             exit;
         }

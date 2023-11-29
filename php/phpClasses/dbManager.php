@@ -110,7 +110,14 @@
             // TODO 
             $result = $this->dbQueryWithParams('INSERT INTO users (firstname, lastname, email, password) VALUES (?, ?, ?, ?)', 'ssss', $paramArr);
 
-            return $result == 1;
+            if ($result != 1) {
+                error_log('Error: cannot insert user into database', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
+                $_SESSION['error'] = 'Something went wrong, try again later';
+                return false;
+            }
+
+            $_SESSION['success'] = 'Registration successful, go to login page to access your content';
+            return true;
         }
 
         function loginUser($email, $password) {
@@ -141,6 +148,7 @@
                 return false;
             }
 
+            $_SESSION['success'] = 'Login successful';
             return true;
         }
         
@@ -148,10 +156,6 @@
             return $this->dbQueryWithNoParams('SELECT * FROM users');
         }
         
-        // Aux functions //
-
-        
-
     }
 
 ?>
