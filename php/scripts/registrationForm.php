@@ -8,7 +8,7 @@
 
     $dbManager = new dbManager();
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         $firstname = trim($_POST['firstname']);
         $lastname = trim($_POST['lastname']);
@@ -17,11 +17,20 @@
         $confirmpwd = trim($_POST['confirmPwd']);
 
         if ($dbManager->registerUser($firstname, $lastname, $email, $password, $confirmpwd)) {
-            $_SESSION["success"] = "Registration successful, go to login page to access your content";
+            $_SESSION['success'] = 'Registration successful, go to login page to access your content';
             header('Location: ../login.php');
+            exit;
+        }
+        else { // invalid registration
+            $_SESSION['error'] = 'Registration failed';
+            header('Location: ../registration.php');
+            exit;
         }
     }
-
-    header ('Location: ../registration.php');
+    else { // invalid request
+        $_SESSION['error'] = 'Invalid request';
+        header ('Location: ../registration.php');
+        exit;
+    }
 
 ?>

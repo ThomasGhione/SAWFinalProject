@@ -15,8 +15,19 @@
         if ($dbManager->loginUser($email, $password)) {
             $_SESSION['success'] = 'Login successful';
             header('Location: ../personalArea.php');
+            exit;
+        }
+        else { // invalid login
+            $_SESSION['error'] = 'Login failed';
+            header('Location: ../login.php');
+            exit;
         }
 
+    }
+    else { // invalid request
+        $_SESSION['error'] = 'Invalid request';
+        header('Location: ../login.php');
+        exit;
     }
 
 ?>
