@@ -1,10 +1,10 @@
 <?php
     session_start();
     
-    // TODO controllare se l'utente non è già loggato
-
+    // TODO check whether the user is already logged in
 
     require_once('../phpClasses/dbManager.php');
+    require_once('../phpClasses/sessionManager.php');
 
     $dbManager = new dbManager();
 
@@ -22,7 +22,6 @@
             exit;
         }
         else { // invalid registration
-            $_SESSION['error'] = 'Registration failed';
             header('Location: ../registration.php');
             exit;
         }

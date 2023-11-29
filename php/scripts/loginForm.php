@@ -1,6 +1,8 @@
 <?php
     session_start();
     
+    // TODO controllare se l'utente non è già loggato
+
     require_once('../phpClasses/dbManager.php');
     require_once('../phpClasses/sessionManager.php');
 
@@ -18,11 +20,9 @@
             exit;
         }
         else { // invalid login
-            $_SESSION['error'] = 'Login failed';
             header('Location: ../login.php');
             exit;
         }
-
     }
     else { // invalid request
         $_SESSION['error'] = 'Invalid request';
