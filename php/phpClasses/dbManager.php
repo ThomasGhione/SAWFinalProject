@@ -118,6 +118,7 @@
 
             if ( empty($email) || empty($password) ) {
                 error_log('Error: empty parameters', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
+                $_SESSION['error'] = 'Empty parameters passed to the form';
                 return false;
             }
 
@@ -128,6 +129,7 @@
 
             if ( $result->num_rows != 1 ) {
                 error_log('Error: email not found', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
+                $_SESSION['error'] = 'Email not found';
                 return false;
             }
 
@@ -135,6 +137,7 @@
 
             if ( !password_verify($password, $row['password']) ) {
                 error_log('Error: wrong password', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
+                $_SESSION['error'] = 'Wrong password';
                 return false;
             }
 
