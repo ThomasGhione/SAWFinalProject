@@ -4,9 +4,9 @@
     
         // TODO Might be static in the future
         private $dbServer = 'localhost';
-        private $username = '';
+        private $username = 'admin';
         private $password = '';
-        private $dbName = 'databaseUni';
+        private $dbName = 'DatabaseSAWFinalProject';
         
         // TODO correggere regex per email
         static private $emailregex = "/\S+@\S+\.\S+/";

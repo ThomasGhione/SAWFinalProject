@@ -68,7 +68,15 @@
                     <label for="confirmPwd">Confirm Password: </label>
                     <input required type="password" id="confirmPwd" name="confirmPwd" placeholder="Confirm Password" value="<?php echo $firstName ?>">
                 </div>
-                                
+
+                <div class="inputBox">
+                    <label for="gender">Gender: </label>
+                </div>
+
+                <div class="inputBox">
+                    <label for="birthdate">Birthdate: </label>
+                </div>
+
                 <input type="submit" class="formButton" value="Submit">
                 <br>
                 <a class="formButton" href="/SAW/SAWFinalProject/php/login.php">Already a user?</a>
