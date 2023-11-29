@@ -4,12 +4,12 @@
     
         // TODO Might be static in the future
         private $dbServer = 'localhost';
-        private $username = 'admin';
+        private $username = 'root';
         private $password = '';
         private $dbName = 'DatabaseSAWFinalProject';
         
         // TODO correggere regex per email
-        static private $emailregex = "/\S+@\S+\.\S+/";
+        private $emailregex = '/^[_a-z0-9.-]+@[a-z0-9-]+(.[a-z]{2,3})$/';
 
 
         private $conn;
@@ -73,11 +73,11 @@
 
         // User functions //
 
-        function registerUser($firstName, $lastName, $email, $password, $confirmpwd) {
+        function registerUser($firstName, $lastName, $email, $password, $confirmpwd, $userName, $gender, $birthdate) {
 
             // TODO aggiungere messaggi contestuali per ogni errore
 
-            if ( empty($firstName) || empty($lastName) || empty($email) || empty($password) || empty($confirmpwd) ) {
+            if ( empty($firstName) || empty($lastName) || empty($email) || empty($password) || empty($confirmpwd) || empty($userName)) {
                 error_log('Error: empty parameters');
                 $_SESSION['error'] = 'Empty parameters passed to the form';
                 return false;
@@ -88,15 +88,14 @@
                 $_SESSION['error'] = 'Invalid Email format';
                 return false;
             }
-            
+
             if ( $password != $confirmpwd ) {
                 error_log('Error: passwords do not match', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
                 $_SESSION['error'] = 'Passwords do not match';
                 return false;
             }
 
-
-            $result = $this->dbQueryWithParams('SELECT * FROM users WHERE email = ?', 's', $email);
+            $result = $this->dbQueryWithParams('SELECT * FROM users WHERE email = ?', 's', [$email]);
 
             if ( $result->num_rows != 0 ) {
                 error_log('Error: email already in use', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
@@ -105,10 +104,14 @@
             }
             
             $password = password_hash($password, PASSWORD_DEFAULT);
-            $paramArr = array($firstName, $lastName, $email, $password);
+
+            if ( $birthdate !== null ) 
+                $birthdate = date('Y-m-d', strtotime($birthdate));
+
+            $paramArr = array($email, $password, $firstName, $lastName, $userName, $gender, $birthdate);
 
             // TODO 
-            $result = $this->dbQueryWithParams('INSERT INTO users (firstname, lastname, email, password) VALUES (?, ?, ?, ?)', 'ssss', $paramArr);
+            $result = $this->dbQueryWithParams('INSERT INTO users (email, password, firstname, lastname, username, permission, pfp, gender, birthdate, description) VALUES (?, ?, ?, ?, ?, "user", null, ?, ?, null)', 'sssssss', ...$paramArr);
 
             if ($result != 1) {
                 error_log('Error: cannot insert user into database', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');

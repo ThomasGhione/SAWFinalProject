@@ -10,13 +10,18 @@
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
-        $firstname = trim($_POST['firstname']);
-        $lastname = trim($_POST['lastname']);
+        $firstname = trim($_POST['firstName']);
+        $lastname = trim($_POST['lastName']);
         $email = trim($_POST['email']);
         $password = trim($_POST['password']);
         $confirmpwd = trim($_POST['confirmPwd']);
+        $userName = trim($_POST['userName']);
 
-        if ($dbManager->registerUser($firstname, $lastname, $email, $password, $confirmpwd)) {
+        // Optional params
+        $gender = isset($_POST['gender']) ? trim($_POST['gender']) : null ;
+        $birthdate = isset($_POST['birthdate']) ? trim($_POST['birthdate']): null;
+
+        if ($dbManager->registerUser($firstname, $lastname, $email, $password, $confirmpwd, $userName, $gender, $birthdate)) {
             header('Location: ../login.php');
             exit;
         }
@@ -26,7 +31,9 @@
         }
     }
     else { // invalid request
-        $_SESSION['error'] = 'Invalid request';
+        
+        // TODO Al posto di usare solo un errore per l'utente, restituire anche un log_error
+        $_SESSION['error'] = 'Something went wrong, please retry later';
         header ('Location: ../registration.php');
         exit;
     }
