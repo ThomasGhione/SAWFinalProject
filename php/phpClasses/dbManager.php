@@ -108,10 +108,10 @@
             if ( $birthdate !== null ) 
                 $birthdate = date('Y-m-d', strtotime($birthdate));
 
-            $paramArr = array($email, $password, $firstName, $lastName, $userName, $gender, $birthdate);
+            $paramArr = [$email, $password, $firstName, $lastName, $userName, $gender, $birthdate];
 
             // TODO 
-            $result = $this->dbQueryWithParams('INSERT INTO users (email, password, firstname, lastname, username, permission, pfp, gender, birthdate, description) VALUES (?, ?, ?, ?, ?, "user", null, ?, ?, null)', 'sssssss', ...$paramArr);
+            $result = $this->dbQueryWithParams('INSERT INTO users (email, password, firstname, lastname, username, permission, pfp, gender, birthdate, description) VALUES (?, ?, ?, ?, ?, "user", null, ?, ?, null)', 'sssssss', $paramArr);
 
             if ($result != 1) {
                 error_log('Error: cannot insert user into database', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');

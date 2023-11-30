@@ -18,7 +18,7 @@
         $userName = trim($_POST['userName']);
 
         // Optional params
-        $gender = isset($_POST['gender']) ? trim($_POST['gender']) : null ;
+        $gender = $_POST['gender'];
         $birthdate = isset($_POST['birthdate']) ? trim($_POST['birthdate']): null;
 
         if ($dbManager->registerUser($firstname, $lastname, $email, $password, $confirmpwd, $userName, $gender, $birthdate)) {

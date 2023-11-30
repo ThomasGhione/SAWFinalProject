@@ -72,7 +72,7 @@
                 <div class="inputBox">
                     <label for="gender">Gender: </label>
                     <select name="gender" id="gender">
-                        <option value="null">Preferisco non specificare</option>
+                        <option value="notSpecified">Preferisco non specificare</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
                     </select>
