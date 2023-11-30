@@ -11,7 +11,7 @@
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         try {
-            $user = new User(null, null, null, $_POST['email'], $_POST['password'], null, null, null, true);
+            $user = new User(true, $_POST['email'], $_POST['password']);
         }
         catch (Exception $e) {
             error_log($e->getMessage(), 3, '/SAW/SAWFinalProject/texts/errorLog.txt');

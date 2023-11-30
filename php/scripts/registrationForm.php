@@ -14,9 +14,9 @@
         
 
         try { // we create the user here, if some parameters are invalid/empty we catch the exception
-            $user = new User($_POST['firstName'], $_POST['lastName'], $_POST['userName'],
-                             $_POST['email'], $_POST['password'], $_POST['confirmPwd'],
-                             $_POST['gender'], $_POST['birthday'], false);
+            $user = new User(false, $_POST['email'], $_POST['password'],
+                             $_POST['firstName'], $_POST['lastName'], $_POST['userName'],
+                             $_POST['confirmPwd'], $_POST['gender'], $_POST['birthday'],);
         }
         catch (Exception $e) {
             error_log($e->getMessage(), 3, '/SAW/SAWFinalProject/texts/errorLog.txt');

@@ -12,7 +12,9 @@
         
         static private $emailregex = "/\S+@\S+\.\S+/";  // TODO correggere regex per email
 
-        function __construct($firstName, $lastName, $userName, $email, $password, $confirmPwd, $gender, $birthday, $login) {
+        function __construct($login, $email, $password,
+                             $firstName = null, $lastName = null, $userName = null,
+                             $confirmPwd = null, $gender = null, $birthday = null) {
 
             if (empty($email) || empty($password)) {
                 error_log('Error: empty parameters');
@@ -25,9 +27,9 @@
             }
 
             if ($login)
-                $this->clogin($email, $password);
+                $this->cLogin($email, $password);
             else
-                $this->cregister($firstName, $lastName, $userName, $email, $password, $confirmPwd, $gender, $birthday);
+                $this->cRegister($firstName, $lastName, $userName, $email, $password, $confirmPwd, $gender, $birthday);
         }
 
         function __destruct() {
@@ -43,12 +45,12 @@
 
         // Constructors
 
-        function clogin($email, $password) {
+        public function cLogin($email, $password) {
             $this->email = trim($email);
             $this->password = trim($password);
         }
 
-        function cregister($firstName, $lastName, $userName, $email, $password, $confirmPwd, $gender, $birthday) {
+        public function cRegister($firstName, $lastName, $userName, $email, $password, $confirmPwd, $gender, $birthday) {
 
             if (empty($firstName) || empty($lastName) || empty($confirmPwd)) {
                 error_log('Error: empty parameters');
@@ -128,6 +130,5 @@
             return !preg_match($this->emailregex, $this->email);
         }
     }
-
 
 ?>
