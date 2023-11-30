@@ -2,7 +2,7 @@
     session_start();
 
     require_once('./phpClasses/dbManager.php');
-    require_once('./phpClasses/sessionManager.php')
+    require_once('./phpClasses/sessionManager.php');
 
     // TODO Gestione pagina, deve ammettere solo admin
 
@@ -12,9 +12,6 @@
 <html lang="en">
 <head>
     <?php require_once('./shared/commonHead.php'); ?>
-
-    <meta charset="UTF-8">
-    
     <title>OpenHub - All Users Page</title>
 </head>
 <body>
@@ -22,6 +19,7 @@
     
     <main class='main_container'>
         
+        <?php require_once('../scripts/showAllUsers.php'); ?>
 
     </main>
 
