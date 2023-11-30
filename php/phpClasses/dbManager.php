@@ -1,5 +1,7 @@
 <?php
 
+    require_once('user.php');
+
     class dbManager {  
     
         // TODO Might be static in the future
@@ -30,22 +32,22 @@
 
         function dbQueryWithParams($stmtString, $paramsTypes, $params) {
 
-            if ( !($stmt = $this->conn->prepare($stmtString)) ) {
+            if (!($stmt = $this->conn->prepare($stmtString))) {
                 error_log('Error: cannot prepare the following query -> ' . $stmtString, 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
                 die ('Server error' . $this->conn->error);
             }
 
-            if ( count($params) != strlen($paramsTypes) ) {
+            if (count($params) != strlen($paramsTypes)) {
                 error_log('Error: number of parameters does not match the number of types', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
                 die ('Server error' . $this->conn->error);
             }
 
-            if ( !($stmt->bind_param($paramsTypes, ...$params)) ) {
+            if (!($stmt->bind_param($paramsTypes, ...$params))) {
                 error_log('Error: cannot bind the following parameters -> ' . $params, 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
                 die ('Server error' . $this->conn->error);
             }
 
-            if ( !($stmt->execute() ) ) {
+            if (!($stmt->execute())) {
                 error_log('Error: cannot execute the following query -> ' . $stmtString, 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
                 die ('Server error' . $this->conn->error);
             }
@@ -63,7 +65,7 @@
         // To be used only for queries without params (lighter on resources because we don't need to prepare the statement)
         function dbQueryWithNoParams($stmtString) {
 
-            if ( ($result = $this->conn->query($stmtString)) === false ) {
+            if (($result = $this->conn->query($stmtString)) === false) {
                 error_log('Error: cannot execute the following query -> ' . $stmtString, 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
                 die ('Server error' . $this->conn->error);
             }
@@ -73,44 +75,18 @@
 
         // User functions //
 
-        function registerUser($firstName, $lastName, $email, $password, $confirmpwd, $userName, $gender, $birthdate) {
+        function registerUser($user) {
 
-            // TODO aggiungere messaggi contestuali per ogni errore
+            $result = $this->dbQueryWithParams('SELECT * FROM users WHERE email = ?', 's', [$user->getEmail()]);
 
-            if ( empty($firstName) || empty($lastName) || empty($email) || empty($password) || empty($confirmpwd) || empty($userName)) {
-                error_log('Error: empty parameters');
-                $_SESSION['error'] = 'Empty parameters passed to the form';
-                return false;
-            }
-            
-            if ( !preg_match($this->emailregex, $email) ) {
-                error_log('Error: invalid email format', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
-                $_SESSION['error'] = 'Invalid Email format';
-                return false;
-            }
-
-            if ( $password != $confirmpwd ) {
-                error_log('Error: passwords do not match', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
-                $_SESSION['error'] = 'Passwords do not match';
-                return false;
-            }
-
-            $result = $this->dbQueryWithParams('SELECT * FROM users WHERE email = ?', 's', [$email]);
-
-            if ( $result->num_rows != 0 ) {
+            if ($result->num_rows != 0) {
                 error_log('Error: email already in use', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
                 $_SESSION['error'] = 'Email already in use';
                 return false;
             }
-            
-            $password = password_hash($password, PASSWORD_DEFAULT);
 
-            if ( $birthdate !== null ) 
-                $birthdate = date('Y-m-d', strtotime($birthdate));
-
-            $paramArr = [$email, $password, $firstName, $lastName, $userName, $gender, $birthdate];
-
-            // TODO 
+            $paramArr = [$user->getEmail(), $user->getPassword(), $user->getFirstName(), $user->getLastName(), $user->getUsername(), $user->getGender(), $user->getBirthday()];
+ 
             $result = $this->dbQueryWithParams('INSERT INTO users (email, password, firstname, lastname, username, permission, pfp, gender, birthdate, description) VALUES (?, ?, ?, ?, ?, "user", null, ?, ?, null)', 'sssssss', $paramArr);
 
             if ($result != 1) {
@@ -123,19 +99,9 @@
             return true;
         }
 
-        function loginUser($email, $password) {
-            // TODO aggiungere messaggi contestuali per ogni errore
+        function loginUser($user) {
 
-            if ( empty($email) || empty($password) ) {
-                error_log('Error: empty parameters', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
-                $_SESSION['error'] = 'Empty parameters passed to the form';
-                return false;
-            }
-
-            $email = trim($email);
-            $password = trim($password);
-
-            $result = $this->dbQueryWithParams('SELECT * FROM users WHERE email = ?', 's', $email);
+            $result = $this->dbQueryWithParams('SELECT * FROM users WHERE email = ?', 's', [$user->getEmail()]);
 
             if ( $result->num_rows != 1 ) {
                 error_log('Error: email not found', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
@@ -145,7 +111,7 @@
 
             $row = $result->fetch_assoc();
 
-            if ( !password_verify($password, $row['password']) ) {
+            if (!password_verify($user->getPassword(), $row['password'])) {
                 error_log('Error: wrong password', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
                 $_SESSION['error'] = 'Wrong password';
                 return false;

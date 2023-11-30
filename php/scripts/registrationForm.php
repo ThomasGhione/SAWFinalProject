@@ -6,22 +6,26 @@
     require_once('../phpClasses/dbManager.php');
     require_once('../phpClasses/sessionManager.php');
 
+    require_once('../phpClasses/user.php');
+
     $dbManager = new dbManager();
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
-        $firstname = trim($_POST['firstName']);
-        $lastname = trim($_POST['lastName']);
-        $email = trim($_POST['email']);
-        $password = trim($_POST['password']);
-        $confirmpwd = trim($_POST['confirmPwd']);
-        $userName = trim($_POST['userName']);
 
-        // Optional params
-        $gender = $_POST['gender'];
-        $birthdate = isset($_POST['birthdate']) ? trim($_POST['birthdate']): null;
-
-        if ($dbManager->registerUser($firstname, $lastname, $email, $password, $confirmpwd, $userName, $gender, $birthdate)) {
+        try { // we create the user here, if some parameters are invalid/empty we catch the exception
+            $user = new User($_POST['firstName'], $_POST['lastName'], $_POST['userName'],
+                             $_POST['email'], $_POST['password'], $_POST['confirmPwd'],
+                             $_POST['gender'], $_POST['birthday'], false);
+        }
+        catch (Exception $e) {
+            error_log($e->getMessage(), 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
+            $_SESSION['error'] = $e->getMessage();
+            header('Location: ../registration.php');
+        }
+        
+        // TODO check whether the user is already registered
+        if ($dbManager->registerUser($user)) {
             header('Location: ../login.php');
             exit;
         }

@@ -3,82 +3,86 @@
     class User {
         private $firstName;
         private $lastName;
-        private $username;
+        private $userName;
         private $email;
         private $password;
         // optional values
-        private $pfp;   // TODO add a default pfp
-        private $bio;
         private $gender;
         private $birthday;
         
         static private $emailregex = "/\S+@\S+\.\S+/";  // TODO correggere regex per email
 
-        function __construct($firstName, $lastName, $username, $password, $confirmpw, $pfp, $bio, $gender, $birthday) {
+        function __construct($firstName, $lastName, $userName, $email, $password, $confirmPwd, $gender, $birthday, $login) {
 
-            // TODO add a catch inside  dbManager->registerUser() to handle these construct's throws
-
-            if ( empty($firstName) || empty($lastName) || empty($email) || empty($password) || empty($confirmpwd) ) {
+            if (empty($email) || empty($password)) {
                 error_log('Error: empty parameters');
                 throw new Exception('Empty parameters passed to the form');
             }
 
-            if ( !$this->isEmailValid() ) {
+            if (!$this->isEmailValid()) {
                 error_log('Error: email is not valid');
                 throw new Exception('Email is not valid');
             }
 
-            if ( !$this->isPasswordStrong() ) {
-                error_log('Error: password is not strong enough');
-                throw new Exception('Password is not strong enough');
-            }
-
-            if ( !$this->isPasswordValid($password, $confirmpw) ) {
-                error_log('Error: passwords do not match');
-                throw new Exception('Passwords do not match');
-            }
-
-            
-            
-
-            $this->firstName = trim($firstName);
-            $this->lastName = trim($lastName);
-            $this->username = trim($username);
-            $this->password = password_hash(trim($password), PASSWORD_DEFAULT);
-
-            $this->pfp = $pfp; //TODO add a default pfp
-
-            if ( $bio != null )
-                $this->bio = $bio;
-            if ($gender != null)
-                $this->gender = $gender;
-            if ($birthday != null)
-                $this->birthday = $birthday;
+            if ($login)
+                $this->clogin($email, $password);
+            else
+                $this->cregister($firstName, $lastName, $userName, $email, $password, $confirmPwd, $gender, $birthday);
         }
 
         function __destruct() {
             $this->firstName = null;
             $this->lastName = null;
-            $this->username = null;
+            $this->userName = null;
             $this->email = null;
             $this->password = null;
 
-            $this->pfp = null;
-            
-            $this->bio = null;
             $this->gender = null;
             $this->birthday = null;
         }
 
+        // Constructors
+
+        function clogin($email, $password) {
+            $this->email = trim($email);
+            $this->password = trim($password);
+        }
+
+        function cregister($firstName, $lastName, $userName, $email, $password, $confirmPwd, $gender, $birthday) {
+
+            if (empty($firstName) || empty($lastName) || empty($confirmPwd)) {
+                error_log('Error: empty parameters');
+                throw new Exception('Empty parameters passed to the form');
+            }
+
+            if ($this->isPasswordWeak($password)) {
+                error_log('Error: password is not strong enough');
+                throw new Exception('Password is not strong enough');
+            }
+
+            if (!$this->isPasswordValid($password, $confirmPwd)) {
+                error_log('Error: passwords do not match');
+                throw new Exception('Passwords do not match');
+            }
+
+            $this->firstName = trim($firstName);
+            $this->lastName = trim($lastName);
+            $this->userName = trim($userName);
+            $this->email = trim($email);
+            $this->password = password_hash(trim($password), PASSWORD_DEFAULT);
+
+            if ($gender !== null)
+                $this->gender = $gender;
+            if ( $birthday !== null ) 
+                $this->birthday = date('Y-m-d', strtotime($birthday));
+        }
 
         // Getters
         function getFirstName() { return $this->firstName; }
         function getLastName() { return $this->lastName; }
-        function getUsername() { return $this->username; }
+        function getUserName() { return $this->userName; }
         function getEmail() { return $this->email; }
         function getPassword() { return $this->password; }
-        function getPfp() { return $this->pfp; }
-        function getBio() { return $this->bio; }
         function getGender() { return $this->gender; }
         function getBirthday() { return $this->birthday; }
 
@@ -86,11 +90,9 @@
             return array(
                 'firstName' => $this->getFirstName(),
                 'lastName' => $this->getLastName(),
-                'username' => $this->getUsername(),
+                'userName' => $this->getUserName(),
                 'email' => $this->getEmail(),
                 'password' => $this->getPassword(),
-                'pfp' => $this->getPfp(),
-                'bio' => $this->getBio(),
                 'gender' => $this->getGender(),
                 'birthday' => $this->getBirthday()
             );
@@ -99,12 +101,10 @@
         // Setters
         function setFirstName($firstName) { $this->firstName = $firstName; }
         function setLastName($lastName) { $this->lastName = $lastName; }
-        function setUsername($username) { $this->username = $username; }
+        function setUserName($userName) { $this->userName = $userName; }
         function setEmail($email) { $this->email = $email; }
         function setPassword($password) { $this->password = $password; }
-        function setConfirmPw($confirmpwd) { $this->password = $confirmpwd; }
-        function setPfp($pfp) { $this->pfp = $pfp; }
-        function setBio($bio) { $this->bio = $bio; }
+        function setConfirmPwd($confirmPwd) { $this->password = $confirmPwd; }
         function setGender($gender) { $this->gender = $gender; }
         function setBirthday($birthday) { $this->birthday = $birthday; }
         
@@ -116,12 +116,12 @@
             return $user->getFirstName() . ' ' . $user->getLastName();
         }
     
-        function isPasswordStrong() {
-            return strlen($this->password) >= 8;
+        function isPasswordWeak($password) {
+            return strlen($password) < 8;
         }
     
-        function isPasswordValid($password, $confirmpw) {
-            return $password == $confirmpw;
+        function isPasswordValid($password, $confirmPwd) {
+            return $password == $confirmPwd;
         }
         
         function isEmailValid() {

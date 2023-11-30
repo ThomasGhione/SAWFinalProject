@@ -10,10 +10,16 @@
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-        $email = trim($_POST['email']);
-        $password = trim($_POST['password']);
+        try {
+            $user = new User(null, null, null, $_POST['email'], $_POST['password'], null, null, null, true);
+        }
+        catch (Exception $e) {
+            error_log($e->getMessage(), 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
+            $_SESSION['error'] = $e->getMessage();
+            header('Location: ../registration.php');
+        }
 
-        if ($dbManager->loginUser($email, $password)) {
+        if ($dbManager->loginUser($user)) {
             header('Location: ../personalArea.php');
             exit;
         }
