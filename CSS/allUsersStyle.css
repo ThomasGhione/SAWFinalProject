@@ -1,0 +1,17 @@
+.allUsersTable {
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+.evenRow {
+    background-color: white;
+}
+
+.oddRow {
+    background-color: lightgray;
+}
+
+.allUsersTable, td, th {
+    padding: 5px;
+    text-align: center;
+}

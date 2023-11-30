@@ -122,9 +122,42 @@
         }
         
         function allUsers() {
-            return $this->dbQueryWithNoParams('SELECT * FROM users');
-        }
-        
-    }
+            
+            $result = $this->dbQueryWithNoParams('SELECT * FROM users');
+            
+            $color = true;
 
+            echo "<table>
+                
+                <caption> <h2>All Users</h2> </caption>
+
+                <thead>
+                    <tr><th>Firstname</th><th>Lastname</th><th>Email</th><th>Permission</th></tr>
+                </thead>
+
+                <tbody>
+            ";
+
+            while ( $row = $result->fetch_assoc() ){
+                if($color)
+                    echo "<tr class='oddRow'>";
+                else
+                    echo "<tr class='evenRow'>";
+                
+                    echo "<td>" . htmlspecialchars($row['firstname']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['lastname']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['email']) . "</td>";
+                    echo "<td>" . htmlspecialchars($row['permission']) . "</td>";
+                echo "</tr>";
+
+                $color = !$color;
+                    
+            }
+
+            echo "</tbody>
+                </table>
+            ";
+
+        }
+    }
 ?>
