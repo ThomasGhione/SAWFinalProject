@@ -21,12 +21,14 @@
             <h2>Log in here:</h2>
                         
             <?php
-                if(isset($_SESSION["error"])) {
+                if ( isset($_SESSION["error"]) ) {
                     echo "<p class='error'>" . $_SESSION["error"] . "</p>";
                     unset($_SESSION["error"]);
                 }
-                else
-                    echo "<p class='error'>&nbsp;</p>";
+                else if ( isset($_SESSION['success']) ) {
+                    echo "<p class='success'" . $_SESSION['success'] . "</p>";
+                    unset($_SESSION['success']);
+                }
                 
                 $email = "";
                 $password = "";    

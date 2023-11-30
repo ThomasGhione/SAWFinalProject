@@ -119,7 +119,7 @@
                 return false;
             }
 
-            $_SESSION['success'] = 'Registration successful, go to login page to access your content';
+            $_SESSION['success'] = 'Registration Completed, please login to access the website';
             return true;
         }
 
