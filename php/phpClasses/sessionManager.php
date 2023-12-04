@@ -1,29 +1,15 @@
 <?php
 
-    class Session {
-
-        /* Fields */
-
-        private $email;
-        private $permission;
-
-
-        /* Constructors*/
-
-        function __construct($email, $permission){
-            $this->email = $email;
-            $this->permission = $permission;
-        }
-
+    class sessionManager {
 
         /* Getter methods*/
 
         function getEmail() {
-            return $this->email;
+            return $_SESSION['email'];
         }
 
         function getPermission() {
-            return $this->permission;
+            return $_SESSION['permission'];
         }
 
         function getSessionVariable($name) {
@@ -47,9 +33,9 @@
             session_start();
         }
 
-        function setSessionVariables() {
-            $_SESSION['email'] = $this->email;
-            $_SESSION['permission'] = $this->permission;
+        function setSessionVariables($email, $permission) {
+            $_SESSION['email'] = $email;
+            $_SESSION['permission'] = $permission;
         }
 
         function endSession() {
@@ -57,10 +43,20 @@
             session_destroy();
         }
 
-        function isSessionSet($name) {
-            return isset($_SESSION[$name]);
+
+
+        function isSessionSet() {
+            return isset($_SESSION['email']);
         }
 
+        function isAdmin() {
+            return isset($_SESSION['permission']) && ($_SESSION['permission'] == 'admin');
+        }
+
+
+
+
+        // Methods not yet used
         function sessionStatus() {
             return session_status();
         }

@@ -1,7 +1,13 @@
 <?php
-    session_start();
-    
+    require('./phpClasses/sessionManager.php');
     require("./scripts/errInitialize.php");
+
+    $sessionManager = new sessionManager();
+
+    $sessionManager->startSession();
+
+    if ( !$sessionManager->isSessionSet() )
+        header('Location: ./login.php');
 ?>
 
 
@@ -20,6 +26,8 @@
         <column id="left_column">
             <a href="/SAW/SAWFinalProject/index.php"><img class="pfp" src="/SAW/SAWFinalProject/images/bestLogo.png" alt="Website Logo"></a>
 
+            <?php echo '<p>Welcome ' . $_SESSION['email'] . '</p>';?>
+            
             <div class="infos">
                 <p>Username</p>
                 <p>email</p>

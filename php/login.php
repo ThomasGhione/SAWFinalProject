@@ -1,7 +1,10 @@
 <?php
-    session_start();
-    
+    require('./phpClasses/sessionManager.php');
     require("./scripts/errInitialize.php");
+
+    $sessionManager = new sessionManager();
+
+    $sessionManager->startSession();
 ?>
 
 
@@ -36,7 +39,7 @@
                 $password = "";   
             ?>
 
-            <form action="./scripts/loginForm.php">
+            <form method='post' action="./scripts/loginForm.php">
                 <div class="inputBox">
                     <label for="email">E-Mail:</label>
                     <input required type="email" id="email" name="email" placeholder="Email"> 

@@ -21,4 +21,6 @@
         <button alt="Your profile">ph</button>
     </div>
 
+    <?php // TODO preparare versione quando ci si logga?>
+
 </nav>

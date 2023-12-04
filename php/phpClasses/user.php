@@ -9,6 +9,7 @@
         // optional values
         private $gender;
         private $birthday;
+        private $permission;
         
         static private $emailregex = "/\S+@\S+\.\S+/";  // TODO correggere regex per email
 
@@ -43,7 +44,7 @@
             $this->birthday = null;
         }
 
-        // Constructors
+        // Constructor extensions
 
         public function cLogin($email, $password) {
             $this->email = trim($email);
@@ -87,6 +88,7 @@
         function getPassword() { return $this->password; }
         function getGender() { return $this->gender; }
         function getBirthday() { return $this->birthday; }
+        function getPermission() { return $this->permission; }
 
         function getUser() {
             return array(
@@ -96,7 +98,8 @@
                 'email' => $this->getEmail(),
                 'password' => $this->getPassword(),
                 'gender' => $this->getGender(),
-                'birthday' => $this->getBirthday()
+                'birthday' => $this->getBirthday(),
+                'permission' => $this->getPermission()
             );
         }
 
@@ -109,6 +112,7 @@
         function setConfirmPwd($confirmPwd) { $this->password = $confirmPwd; }
         function setGender($gender) { $this->gender = $gender; }
         function setBirthday($birthday) { $this->birthday = $birthday; }
+        function setPermission($permission) { $this->permission = $permission; }
         
         
         

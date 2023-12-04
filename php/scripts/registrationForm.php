@@ -12,7 +12,6 @@
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
-
         try { // we create the user here, if some parameters are invalid/empty we catch the exception
             $user = new User(false, $_POST['email'], $_POST['password'],
                              $_POST['firstName'], $_POST['lastName'], $_POST['userName'],

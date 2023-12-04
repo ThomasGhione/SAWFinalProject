@@ -1,12 +1,17 @@
 <?php
-    session_start();
-    
-    // TODO check whether the user is already logged in
-
     require_once('../phpClasses/dbManager.php');
     require_once('../phpClasses/sessionManager.php');
-
+    
     $dbManager = new dbManager();
+    $sessionManager = new sessionManager();
+
+    $sessionManager->startSession();
+
+    // TODO Code to check if cookie is set
+    if ( $sessionManager->isSessionSet() ) {
+        header('Location: ../personalArea.php');
+        exit;
+    }
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -20,18 +25,22 @@
         }
 
         if ($dbManager->loginUser($user)) {
+            // Code to set session and cookie if remember me is set
+            
+            $sessionManager->setSessionVariables($user->getEmail(), $user->getPermission());
+
+            // TODO code for rememberMe Cookie
+
             header('Location: ../personalArea.php');
-            exit;
-        }
-        else { // invalid login
-            header('Location: ../login.php');
             exit;
         }
     }
     else { // invalid request
         $_SESSION['error'] = 'Invalid request';
-        header('Location: ../login.php');
-        exit;
     }
+
+    // Covers both invalid request and invalid login 
+    header('Location: ../login.php');
+    exit;
 
 ?>

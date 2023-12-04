@@ -117,6 +117,8 @@
                 return false;
             }
 
+            $user->setPermission($row['permission']);
+
             $_SESSION['success'] = 'Login successful';
             return true;
         }

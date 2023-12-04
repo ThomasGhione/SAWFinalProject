@@ -1,7 +1,15 @@
 <?php
-    session_start();
-    
     require("./scripts/errInitialize.php");
+    require('./phpClasses/sessionManager.php');
+
+    $sessionManager = new sessionManager();
+
+    $sessionManager->startSession();
+
+    if ( $sessionManager->isSessionSet() ) {
+        header('Location: ./personalArea.php');
+        exit;
+    }
 ?>
 
 
