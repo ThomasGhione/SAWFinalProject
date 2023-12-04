@@ -26,6 +26,9 @@
             return $this->permission;
         }
 
+        function getSessionVariable($name) {
+            return $_SESSION[$name] ?? null;
+        }
 
         /* Setter methods */
 
@@ -40,7 +43,39 @@
 
         /* Methods */
 
-        
+        function startSession() {
+            session_start();
+        }
+
+        function setSessionVariables() {
+            $_SESSION['email'] = $this->email;
+            $_SESSION['permission'] = $this->permission;
+        }
+
+        function endSession() {
+            session_unset();
+            session_destroy();
+        }
+
+        function isSessionSet($name) {
+            return isset($_SESSION[$name]);
+        }
+
+        function sessionStatus() {
+            return session_status();
+        }
+
+        function isSessionStarted() {
+            return session_status() == PHP_SESSION_ACTIVE;
+        }
+
+        function isSessionExpired() { // TODO check if this works
+            return isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 1800);
+        }
+
+        function updateSession() { // TODO check if this works 
+            $_SESSION['LAST_ACTIVITY'] = time();
+        }
 
     }
 
