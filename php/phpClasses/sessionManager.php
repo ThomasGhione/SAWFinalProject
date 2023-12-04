@@ -10,7 +10,7 @@
 
         /* Constructors*/
 
-        function __construct($firstname, $lastname, $email, $permission){
+        function __construct($email, $permission){
             $this->email = $email;
             $this->permission = $permission;
         }
