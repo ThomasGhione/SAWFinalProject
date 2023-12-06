@@ -10,8 +10,18 @@
     </div>
 
     <div class="right_nav">
-        <a class="navButton" href="<?php echo $root; ?>/php/registration.php">Register here!</a>
-        <a class="navButton" href="<?php echo $root; ?>/php/login.php">Login</a>
+
+        <?php
+            require("$root/php/phpClasses/sessionManager.php");
+            $sessionManager = new sessionManager();
+
+            if ($sessionManager->isSessionSet())
+                echo '<a class="navButton" href="' . $root . '/scripts/logout.php">Logout</a>';
+            else {
+                echo '<a class="navButton" href="' . $root . '/php/registration.php">Register here!</a>';
+                echo '<a class="navButton" href="' . $root . '/php/login.php">Login</a>';
+            }
+        ?>
 
         <a class="blankSpace"></a>
 
@@ -20,7 +30,5 @@
 
         <button alt="Your profile">ph</button>
     </div>
-
-    <?php // TODO preparare versione quando ci si logga?>
 
 </nav>

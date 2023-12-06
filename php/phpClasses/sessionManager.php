@@ -19,11 +19,11 @@
         /* Setter methods */
 
         function setEmail($email) {
-            $this->email = $email;
+            $_SESSION['email'] = $email;
         }
 
         function setPermission($permission) {
-            $this->permission = $permission;
+            $_SESSION['permission'] = $permission;
         }
 
 
@@ -34,8 +34,8 @@
         }
 
         function setSessionVariables($email, $permission) {
-            $_SESSION['email'] = $email;
-            $_SESSION['permission'] = $permission;
+            $this->setEmail($email);
+            $this->setPermission($permission);
         }
 
         function endSession() {
