@@ -1,10 +1,11 @@
-<?php
-    session_start();
-    
+<?php 
     require_once("./php/scripts/errInitialize.php");
+    require_once('./php/phpClasses/sessionManager.php');
+
+    $sessionManager = new sessionManager();
+
+    $sessionManager->startSession();
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">

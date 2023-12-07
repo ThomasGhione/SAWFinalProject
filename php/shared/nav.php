@@ -1,6 +1,8 @@
 <nav>
 
-    <?php $root = "/SAW/SAWFinalProject"; ?>
+    <?php 
+        $root = "/SAW/SAWFinalProject";
+    ?>
 
     <div class="left_nav">
         <a href="<?php echo $root; ?>/index.php"><img class="navLogo" src="<?php echo $root; ?>/images/bestLogo.png" alt="Website Logo"></a>
@@ -12,11 +14,10 @@
     <div class="right_nav">
 
         <?php
-            require("$root/php/phpClasses/sessionManager.php");
-            $sessionManager = new sessionManager();
-
+            // TODO Creare una funzione di check che controlli se l'oggetto sessionManager esiste effettivamente
+            
             if ($sessionManager->isSessionSet())
-                echo '<a class="navButton" href="' . $root . '/scripts/logout.php">Logout</a>';
+                echo '<a class="navButton" href="' . $root . '/php/scripts/logout.php">Logout</a>';
             else {
                 echo '<a class="navButton" href="' . $root . '/php/registration.php">Register here!</a>';
                 echo '<a class="navButton" href="' . $root . '/php/login.php">Login</a>';
