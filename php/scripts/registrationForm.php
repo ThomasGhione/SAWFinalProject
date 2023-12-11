@@ -1,6 +1,5 @@
 <?php
-    session_start();
-    
+    $sessionManager = new sessionManager(); 
     // TODO check whether the user is already logged in
 
     require_once('../phpClasses/dbManager.php');

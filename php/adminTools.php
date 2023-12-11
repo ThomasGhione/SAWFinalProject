@@ -1,6 +1,5 @@
 <?php
-    session_start();
-    
+    $sessionManager = new sessionManager();
     require("./scripts/errInitialize.php");
     require_once('./phpClasses/sessionManager.php');
 ?>

@@ -1,5 +1,5 @@
 <?php
-    session_start();
+    $sessionManager = new sessionManager(); 
     require_once('../phpClasses/dbManager.php');
     require_once('../phpClasses/sessionManager.php');
 

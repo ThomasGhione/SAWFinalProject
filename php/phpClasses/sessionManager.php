@@ -2,6 +2,10 @@
 
     class sessionManager {
 
+        function __construct() {
+            session_start();
+        }
+
         /* Getter methods*/
 
         function getEmail() {
@@ -28,10 +32,6 @@
 
 
         /* Methods */
-
-        function startSession() {
-            session_start();
-        }
 
         function setSessionVariables($email, $permission) {
             $this->setEmail($email);
