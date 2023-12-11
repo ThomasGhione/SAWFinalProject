@@ -9,6 +9,11 @@
         header('Location: ./personalArea.php');
         exit;
     }
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        header('Location: ./scripts/registrationForm.php');
+        exit;
+    }
 ?>
 
 
@@ -35,14 +40,47 @@
                 }
                 else
                     echo "<p class='error'>&nbsp;</p>";
-                
-                
-                $firstName = "";
-                $lastName = "";
-                $username = "";
-                $email = "";
-                $password = "";    
             ?>
+
+
+            <form action="registration.php" method="post">
+                
+                <div class='inputBox'>
+                    <label for='firstname'>Firstname: </label>
+                    <input required type='text' id='firstname' name='firstname' placeholder='Firstname (required)'>
+                </div>
+                
+                <div class='inputBox'>
+                    <label for='lastname'>Lastname: </label>
+                    <input required type='text' id='lastname' name='lastname' placeholder='Lastname (required)'>
+                </div>
+
+                <div class='inputBox'>
+                    <label for='email'>Email: </label>
+                    <input required type='email' id='email' name='email' placeholder='Email (required)'>
+                </div>
+
+                <div class='inputBox'>
+                    <label for='pass'>Password: </label>
+                    <input required type='password' id='pass' name='pass' placeholder='Password (required)'>
+                </div>
+
+                <div class='inputBox'>
+                    <label for='confirm'>Confirm Password: </label>
+                    <input required type='password' id='confirm' name='confirm' placeholder='Confirm Password (required)'>
+                </div>
+
+                <input type="submit" class='formButton' name="submit" value='Submit'>
+
+                <a class="formButton" href="/SAW/SAWFinalProject/php/login.php">Already a user?</a>
+            </form>
+
+
+
+
+
+
+        <!--
 
             <form method="post" action="./scripts/registrationForm.php">
             
@@ -95,6 +133,9 @@
                 <a class="formButton" href="/SAW/SAWFinalProject/php/login.php">Already a user?</a>
             
             </form>
+
+        -->
+
         </fieldset>
     </main>
 
