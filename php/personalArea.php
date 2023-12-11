@@ -4,8 +4,6 @@
 
     $sessionManager = new sessionManager();
 
-    $sessionManager->startSession();
-
     if ( !$sessionManager->isSessionSet() )
         header('Location: ./login.php');
 ?>
