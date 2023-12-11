@@ -3,8 +3,6 @@
     require("./scripts/errInitialize.php");
 
     $sessionManager = new sessionManager();
-
-    $sessionManager->startSession();
 ?>
 
 
