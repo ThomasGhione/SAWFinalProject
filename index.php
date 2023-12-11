@@ -3,8 +3,6 @@
     require_once('./php/phpClasses/sessionManager.php');
 
     $sessionManager = new sessionManager();
-
-    $sessionManager->startSession();
 ?>
 
 <!DOCTYPE html>

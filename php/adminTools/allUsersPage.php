@@ -1,9 +1,15 @@
-<?php
-    $sessionManager = new sessionManager(); 
+<?php 
     require_once('../phpClasses/dbManager.php');
     require_once('../phpClasses/sessionManager.php');
 
     // TODO Gestione pagina, deve ammettere solo admin
+
+    $sessionManager = new sessionManager();
+
+    if (!$sessionManager->isSessionSet() && !$sessionManager->isAdmin() ) {
+        header('Location: ../../index.php');
+        exit;
+    }
 
     $dbManager = new dbManager();
 ?>
