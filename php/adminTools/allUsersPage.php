@@ -2,10 +2,9 @@
     require_once('../phpClasses/dbManager.php');
     require_once('../phpClasses/sessionManager.php');
 
-    // TODO Gestione pagina, deve ammettere solo admin
-
     $sessionManager = new sessionManager();
 
+    // TODO Code to check if cookie is set
     if (!$sessionManager->isSessionSet() && !$sessionManager->isAdmin() ) {
         header('Location: ../../index.php');
         exit;

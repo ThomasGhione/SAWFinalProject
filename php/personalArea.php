@@ -4,8 +4,11 @@
 
     $sessionManager = new sessionManager();
 
-    if ( !$sessionManager->isSessionSet() )
+    // TODO Code to check if cookie is set
+    if ( !$sessionManager->isSessionSet() ) {
         header('Location: ./login.php');
+        exit;
+    }
 ?>
 
 

@@ -30,7 +30,7 @@ nav {
     position: sticky;
     
     /* Dovrà essere cambiato */
-    background-color: black;
+    background-image: linear-gradient(180deg, #C8D3D5, #6E8387);
 }
 
 nav > div {
@@ -217,7 +217,7 @@ input {
 /* Footer Data */
 
 footer {
-    background-color: black;
+    background-image: linear-gradient(180deg, #C8D3D5, #6E8387);
     color: white;
     text-align: center;
     margin-top: auto;

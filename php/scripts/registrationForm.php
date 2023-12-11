@@ -1,11 +1,15 @@
-<?php
-    $sessionManager = new sessionManager(); 
-    // TODO check whether the user is already logged in
-
+<?php 
     require_once('../phpClasses/dbManager.php');
     require_once('../phpClasses/sessionManager.php');
-
     require_once('../phpClasses/user.php');
+
+    $sessionManager = new sessionManager();
+    
+    // TODO Code to check if cookie is set
+    if ( $sessionManager->isSessionSet() ) {
+        header('Location: ../personalArea.php');
+        exit;
+    }
 
     $dbManager = new dbManager();
 

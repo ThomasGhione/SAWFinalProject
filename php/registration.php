@@ -4,6 +4,7 @@
 
     $sessionManager = new sessionManager();
 
+    // TODO Code to check if cookie is set
     if ( $sessionManager->isSessionSet() ) {
         header('Location: ./personalArea.php');
         exit;

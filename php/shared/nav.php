@@ -26,7 +26,7 @@
 
         <a class="blankSpace"></a>
 
-        <i class="fa fa-search" aria-hidden="true"></i>
+        <span class="fa fa-search" aria-hidden="true"> </span>
         <input type="text" id="search_bar" placeholder="Search repos or users..." name="search_bar" maxlength="128">   
 
         <button alt="Your profile">ph</button>

@@ -3,13 +3,15 @@
     require_once('./php/phpClasses/sessionManager.php');
 
     $sessionManager = new sessionManager();
+
+    // TODO Code to check if cookie is set
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <?php require_once("./php/shared/commonHead.php"); ?>
+    <?php require("./php/shared/commonHead.php"); ?>
     <title>OpenHub Homepage</title>
 </head>
 
