@@ -9,6 +9,14 @@
         header('Location: ./personalArea.php');
         exit;
     }
+
+    if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
+        $_SESSION["serverStatus"] = "POST";
+        $_SESSION["postData"] = $_POST["email"] . " " . $_POST["pass"];
+        header("Location: ./scripts/loginForm.php");
+        exit;
+    }
+
 ?>
 
 
@@ -37,12 +45,29 @@
                     unset($_SESSION['success']);
                 }
                 else
-                    echo "<p class='error'>&nbsp;</p>";
-
-                $email = "";
-                $password = "";   
+                    echo "<p class='error'>&nbsp;</p>"; 
             ?>
 
+            <form action="login.php" method="post">
+                <div class='inputBox'> 
+                    <label for='email'>E-Mail:</label>
+                    <input required type="email" name="email" placeholder="E-Mail (required)">
+                </div>
+                
+                <div class='inputBox'>
+                    <label for='pass'>Password:</label>
+                    <input type="password" name="pass" placeholder="Password (required)">
+                </div>
+
+                <div class="inputBox">
+                    <label for="rememberme">Remember Me:</label>
+                    <input type="checkbox" id="rememberme" name="RememberMe" placeholder="RememberMe">
+                </div>
+
+                <input type="submit" class='formButton' name="submit" value="Login">
+            </form>
+
+<!--
             <form method='post' action="./scripts/loginForm.php">
                 <div class="inputBox">
                     <label for="email">E-Mail:</label>
@@ -61,7 +86,7 @@
     
                 <button type="submit" class="formButton">Log in</button><br> 
             </form>
-
+-->
         </fieldset>
 
     </main>

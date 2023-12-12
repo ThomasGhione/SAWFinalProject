@@ -11,7 +11,7 @@
         exit;
     }
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SESSION["serverStatus"] == 'POST') {
 
         try {
             $user = new User(true, $_POST['email'], $_POST['password']);
