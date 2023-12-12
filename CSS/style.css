@@ -160,6 +160,10 @@ fieldset {
     text-align: center;
 }
 
+.second_column > p, .second_column > a{
+    margin-top: 5px;
+}
+
 
 /* third column */
 

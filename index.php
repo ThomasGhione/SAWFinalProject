@@ -28,8 +28,11 @@
 
         <section class="column">
             <div class="second_column">
-                <p>WE PRESENT YOU OPENHUB</p>
-                <p>The leading (maybe not) platform for open source projects<p>
+                <h2>WE PRESENT YOU OPENHUB</h2>
+                <p>The leading (maybe not) platform for open source projects.<p>
+                <p>Here you can look at others's repos because we believe in open source projects.</p>
+                <p>(don't even think to make your repos as private)</p>
+                <a>Here's a cookie for you, just click on it: <i class="fa-solid fa-cookie fa-xl"></i></a> 
             </div>
         </section>
 
