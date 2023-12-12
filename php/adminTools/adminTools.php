@@ -22,6 +22,6 @@
 
     <?php // TODO Complete page for admin ?>
     
-    <?php require_once('./shared/footer.html')?>
+    <?php require_once('./shared/footer.php')?>
 </body>
 </html>
