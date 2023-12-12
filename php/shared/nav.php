@@ -16,8 +16,11 @@
         <?php
             // TODO Creare una funzione di check che controlli se l'oggetto sessionManager esiste effettivamente
             
-            if ($sessionManager->isSessionSet())
+            if ($sessionManager->isSessionSet()) {
                 echo '<a class="navButton" href="' . $root . '/php/scripts/logout.php">Logout</a>';
+                if ($sessionManager->isAdmin()) 
+                    echo '<a class="navButton" href="' . $root . '/php/adminTools/adminTools.php">Admin Tools</a>';
+            }
             else {
                 echo '<a class="navButton" href="' . $root . '/php/registration.php">Register here!</a>';
                 echo '<a class="navButton" href="' . $root . '/php/login.php">Login</a>';
