@@ -85,9 +85,9 @@
                 return false;
             }
 
-            $paramArr = [$user->getEmail(), $user->getPassword(), $user->getFirstName(), $user->getLastName(), $user->getUsername(), $user->getGender(), $user->getBirthday()];
+            $paramArr = [$user->getEmail(), $user->getPassword(), $user->getFirstName(), $user->getLastName()];
  
-            $result = $this->dbQueryWithParams('INSERT INTO users (email, password, firstname, lastname, username, permission, pfp, gender, birthdate, description) VALUES (?, ?, ?, ?, ?, "user", null, ?, ?, null)', 'sssssss', $paramArr);
+            $result = $this->dbQueryWithParams('INSERT INTO users (email, password, firstname, lastname, username, permission, pfp, gender, birthdate, description) VALUES (?, ?, ?, ?, null, "user", null, "notSpecified", null, null)', 'ssss', $paramArr);
 
             if ($result != 1) {
                 error_log('Error: cannot insert user into database', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');

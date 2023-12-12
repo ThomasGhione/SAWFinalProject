@@ -1,21 +1,28 @@
 <?php
 
     class User {
-        private $firstName;
-        private $lastName;
-        private $userName;
+        private $firstname;
+        private $lastname;
+        private $username;
         private $email;
         private $password;
-        // optional values
-        private $gender;
-        private $birthday;
         private $permission;
         
         static private $emailregex = "/\S+@\S+\.\S+/";  // TODO correggere regex per email
 
-        function __construct($login, $email, $password,
+        /*function __construct ($login, $email, $password,
                              $firstName = null, $lastName = null, $userName = null,
-                             $confirmPwd = null, $gender = null, $birthday = null) {
+                             $confirmPwd = null, $gender = null, $birthday = null) {*/
+
+        function __construct ($login) {
+            
+            $paramArr = explode( ' ', $_SESSION['postData']);
+
+            $firstname = $paramArr[0];
+            $lastname = $paramArr[1];
+            $email = $paramArr[2];
+            $password = $paramArr[3];
+            $confirm = $paramArr[4];
 
             if (empty($email) || empty($password)) {
                 error_log('Error: empty parameters');
@@ -30,18 +37,15 @@
             if ($login)
                 $this->cLogin($email, $password);
             else
-                $this->cRegister($firstName, $lastName, $userName, $email, $password, $confirmPwd, $gender, $birthday);
+                $this->cRegister($firstname, $lastname, $email, $password, $confirm);
         }
 
         function __destruct() {
-            $this->firstName = null;
-            $this->lastName = null;
-            $this->userName = null;
+            $this->firstname = null;
+            $this->lastname = null;
+            $this->username = null;
             $this->email = null;
             $this->password = null;
-
-            $this->gender = null;
-            $this->birthday = null;
         }
 
         // Constructor extensions
@@ -51,9 +55,9 @@
             $this->password = trim($password);
         }
 
-        public function cRegister($firstName, $lastName, $userName, $email, $password, $confirmPwd, $gender, $birthday) {
+        public function cRegister($firstname, $lastname, $email, $password, $confirm) {
 
-            if (empty($firstName) || empty($lastName) || empty($confirmPwd)) {
+            if (empty($firstname) || empty($lastname) || empty($confirm)) {
                 error_log('Error: empty parameters');
                 throw new Exception('Empty parameters passed to the form');
             }
@@ -63,55 +67,40 @@
                 throw new Exception('Password is not strong enough');
             }
 
-            if (!$this->isPasswordValid($password, $confirmPwd)) {
+            if (!$this->isPasswordValid($password, $confirm)) {
                 error_log('Error: passwords do not match');
                 throw new Exception('Passwords do not match');
             }
 
-            $this->firstName = trim($firstName);
-            $this->lastName = trim($lastName);
-            $this->userName = trim($userName);
+            $this->firstname = trim($firstname);
+            $this->lastname = trim($lastname);
             $this->email = trim($email);
             $this->password = password_hash(trim($password), PASSWORD_DEFAULT);
-
-            if ($gender !== null)
-                $this->gender = $gender;
-            if ( $birthday !== null ) 
-                $this->birthday = date('Y-m-d', strtotime($birthday));
         }
 
         // Getters
-        function getFirstName() { return $this->firstName; }
-        function getLastName() { return $this->lastName; }
-        function getUserName() { return $this->userName; }
+        function getFirstName() { return $this->firstname; }
+        function getLastName() { return $this->lastname; }
         function getEmail() { return $this->email; }
         function getPassword() { return $this->password; }
-        function getGender() { return $this->gender; }
-        function getBirthday() { return $this->birthday; }
         function getPermission() { return $this->permission; }
 
         function getUser() {
             return array(
                 'firstName' => $this->getFirstName(),
                 'lastName' => $this->getLastName(),
-                'userName' => $this->getUserName(),
                 'email' => $this->getEmail(),
                 'password' => $this->getPassword(),
-                'gender' => $this->getGender(),
-                'birthday' => $this->getBirthday(),
                 'permission' => $this->getPermission()
             );
         }
 
         // Setters
-        function setFirstName($firstName) { $this->firstName = $firstName; }
-        function setLastName($lastName) { $this->lastName = $lastName; }
-        function setUserName($userName) { $this->userName = $userName; }
+        function setFirstName($firstname) { $this->firstname = $firstname; }
+        function setLastName($lastname) { $this->lastname = $lastname; }
         function setEmail($email) { $this->email = $email; }
         function setPassword($password) { $this->password = $password; }
-        function setConfirmPwd($confirmPwd) { $this->password = $confirmPwd; }
-        function setGender($gender) { $this->gender = $gender; }
-        function setBirthday($birthday) { $this->birthday = $birthday; }
+        function setConfirmPwd($confirm) { $this->password = $confirm; }
         function setPermission($permission) { $this->permission = $permission; }
         
         

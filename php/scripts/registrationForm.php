@@ -13,12 +13,12 @@
 
     $dbManager = new dbManager();
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        
+    if ($_SESSION['serverStatus'] == 'POST') {
+        unset($_SESSION['serverStatus']);
+
         try { // we create the user here, if some parameters are invalid/empty we catch the exception
-            $user = new User(false, $_POST['email'], $_POST['password'],
-                             $_POST['firstName'], $_POST['lastName'], $_POST['userName'],
-                             $_POST['confirmPwd'], $_POST['gender'], $_POST['birthday'],);
+            $user = new User(false);
+            unset($_SESSION['postData']);
         }
         catch (Exception $e) {
             error_log($e->getMessage(), 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
