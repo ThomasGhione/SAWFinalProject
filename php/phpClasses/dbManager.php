@@ -124,19 +124,14 @@
         }
         
         function allUsers() {
-            
             $result = $this->dbQueryWithNoParams('SELECT * FROM users');
-            
             $color = true;
 
             echo "<table>
-                
                 <caption> <h2>All Users</h2> </caption>
-
                 <thead>
                     <tr><th>Firstname</th><th>Lastname</th><th>Email</th><th>Permission</th></tr>
                 </thead>
-
                 <tbody>
             ";
 
@@ -152,14 +147,41 @@
                     echo "<td>" . htmlspecialchars($row['permission']) . "</td>";
                 echo "</tr>";
 
-                $color = !$color;
-                    
+                $color = !$color;      
             }
 
             echo "</tbody>
                 </table>
             ";
+        }
 
+        function createUser($data) {
+            $result = $this->dbQueryWithParams("INSERT INTO users (firstname, lastname, email, password, permission) VALUES (?, ?, ?, ?, ?)", "sssss", [$data["firstname"], $data["lastname"], $data["email"], $data["password"], $data["permission"]]);
+            $stmt = $this->conn->prepare($result);
+            $password = password_hash($data["password"], PASSWORD_DEFAULT);
+            $stmt->bind_param("sssss", $data["firstname"], $data["lastname"], $data["email"], $password, $data["permission"]);
+            $stmt->execute();
+        }
+
+        function editUser($data) {
+            $result = $this->dbQueryWithParams("UPDATE users SET firstname=?, lastname=?, password=?, permission=? WHERE email=?", "s", [$data["firstname"], $data["lastname"], $data["password"], $data["permission"], $data["email"]]);
+            $stmt = $this->conn->prepare($result);
+            $password = password_hash($data["password"], PASSWORD_DEFAULT);
+            $stmt->bind_param("sssss", $data["firstname"], $data["lastname"], $data["email"], $password, $data["permission"]);
+            $stmt->execute();
+        }
+
+        function deleteUser($userEmail) {
+            $result = $this->dbQueryWithParams("DELETE FROM users WHERE email=?", "s", [$userEmail]);
+            $stmt = $this->conn->prepare($result);
+            $stmt->bind_param("s", $userEmail);
+            $stmt->execute();
+        }
+        function banUser($userEmail) {
+            $result = $this->dbQueryWithParams('UPDATE users SET permission = "banned" WHERE email = ?', 's', [$userEmail]);
+            $stmt = $this->conn->prepare($result);
+            $stmt->bind_param("s", $userEmail);
+            $stmt->execute();   
         }
     }
 ?>

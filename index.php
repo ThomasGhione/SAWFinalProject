@@ -36,6 +36,6 @@
     </main>
 
 
-    <?php include("./php/shared/footer.html") ?>
+    <?php include("./php/shared/footer.php") ?>
 </body>
 </html>

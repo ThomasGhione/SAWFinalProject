@@ -84,6 +84,6 @@
 
 
 
-    <?php include("shared/footer.html") ?>
+    <?php include("shared/footer.php") ?>
 </body>
 </html>
