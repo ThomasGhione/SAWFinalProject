@@ -1,8 +1,8 @@
 <?php
     require_once('../phpClasses/dbManager.php');
     require_once('../phpClasses/sessionManager.php');
+    require_once("../phpClasses/user.php");
     
-    $dbManager = new dbManager();
     $sessionManager = new sessionManager();
 
     // TODO Code to check if cookie is set
@@ -11,10 +11,14 @@
         exit;
     }
 
+    $dbManager = new dbManager();
+
     if ($_SESSION["serverStatus"] == 'POST') {
+        unset($_SESSION["serverStatus"]);
 
         try {
-            $user = new User(true, $_POST['email'], $_POST['password']);
+            $user = new User(true);
+            unset($_SESSION["postData"]);
         }
         catch (Exception $e) {
             error_log($e->getMessage(), 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
