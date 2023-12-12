@@ -12,7 +12,7 @@
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['serverStatus'] = 'POST';
-        $_SESSION['postData'] = $_POST['firstname'] . ' ' . $_POST['lastname'] . ' ' . $_POST['email'] . ' ' . $_POST['pass'] . ' ' . $_POST['confirm'];
+        $_SESSION['postData'] = $_POST['email'] . ' ' . $_POST['firstname'] . ' ' . $_POST['lastname'] . ' ' . $_POST['pass'] . ' ' . $_POST['confirm'];
         header('Location: ./scripts/registrationForm.php');
         exit;
     }
