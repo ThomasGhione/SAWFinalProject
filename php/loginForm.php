@@ -10,13 +10,6 @@
         exit;
     }
 
-    if ( $_SERVER["REQUEST_METHOD"] == "POST" ) {
-        $_SESSION["serverStatus"] = "POST";
-        $_SESSION["postData"] = $_POST["email"] . " " . $_POST["pass"];
-        header("Location: ./scripts/loginForm.php");
-        exit;
-    }
-
 ?>
 
 
@@ -48,7 +41,7 @@
                     echo "<p class='error'>&nbsp;</p>"; 
             ?>
 
-            <form action="login.php" method="post">
+            <form action="./scripts/login.php" method="post">
                 <div class='inputBox'> 
                     <label for='email'>E-Mail:</label>
                     <input required type="email" name="email" placeholder="E-Mail (required)">

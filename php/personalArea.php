@@ -6,7 +6,7 @@
 
     // TODO Code to check if cookie is set
     if ( !$sessionManager->isSessionSet() ) {
-        header('Location: ./login.php');
+        header('Location: ./loginForm.php');
         exit;
     }
 ?>

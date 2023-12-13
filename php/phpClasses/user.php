@@ -16,10 +16,8 @@
 
         function __construct ($login) {
             
-            $paramArr = explode( ' ', $_SESSION['postData']);
-            
-            $email = $paramArr[0];
-            $password = $paramArr[1];
+            $email = $_POST["email"];
+            $password = $_POST["pass"];
 
             if (empty($email) || empty($password)) {
                 error_log('Error: empty parameters');
@@ -34,9 +32,9 @@
             if ($login)
                 $this->cLogin($email, $password);
             else{
-                $firstname = $paramArr[2];
-                $lastname = $paramArr[3];
-                $confirm = $paramArr[4];
+                $firstname = $_POST["firstname"];
+                $lastname = $_POST["lastname"];
+                $confirm = $_POST["confirm"];
                 $this->cRegister($firstname, $lastname, $email, $password, $confirm);
             }
         }

@@ -13,17 +13,15 @@
 
     $dbManager = new dbManager();
 
-    if ($_SESSION["serverStatus"] == 'POST') {
-        unset($_SESSION["serverStatus"]);
+    if ( $_SERVER["REQUEST_METHOD"] == 'POST') {
 
         try {
             $user = new User(true);
-            unset($_SESSION["postData"]);
         }
         catch (Exception $e) {
             error_log($e->getMessage(), 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
             $_SESSION['error'] = $e->getMessage();
-            header('Location: ../registration.php');
+            header('Location: ../registrationForm.php');
         }
 
         if ($dbManager->loginUser($user)) {
@@ -42,7 +40,7 @@
     }
 
     // Covers both invalid request and invalid login 
-    header('Location: ../login.php');
+    header('Location: ../loginForm.php');
     exit;
 
 ?>

@@ -9,13 +9,6 @@
         header('Location: ./personalArea.php');
         exit;
     }
-
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $_SESSION['serverStatus'] = 'POST';
-        $_SESSION['postData'] = $_POST['email'] . ' ' . $_POST['firstname'] . ' ' . $_POST['lastname'] . ' ' . $_POST['pass'] . ' ' . $_POST['confirm'];
-        header('Location: ./scripts/registrationForm.php');
-        exit;
-    }
 ?>
 
 
@@ -45,7 +38,7 @@
             ?>
 
 
-            <form action="registration.php" method="post">
+            <form action="./scripts/registration.php" method="post">
                 
                 <div class='inputBox'>
                     <label for='firstname'>Firstname: </label>
@@ -74,7 +67,7 @@
 
                 <input type="submit" class='formButton' name="submit" value='Submit'>
 
-                <a class="formButton" href="/SAW/SAWFinalProject/php/login.php">Already a user?</a>
+                <a class="formButton" href="/SAW/SAWFinalProject/php/loginForm.php">Already a user?</a>
             </form>
 
 

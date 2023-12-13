@@ -22,8 +22,8 @@
                     echo '<a class="navButton" href="' . $root . '/php/adminTools/adminTools.php">Admin Tools</a>';
             }
             else {
-                echo '<a class="navButton" href="' . $root . '/php/registration.php">Register here!</a>';
-                echo '<a class="navButton" href="' . $root . '/php/login.php">Login</a>';
+                echo '<a class="navButton" href="' . $root . '/php/registrationForm.php">Register here!</a>';
+                echo '<a class="navButton" href="' . $root . '/php/loginForm.php">Login</a>';
             }
         ?>
 
