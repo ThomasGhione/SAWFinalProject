@@ -7,6 +7,7 @@
         private $email;
         private $password;
         private $permission;
+        private $remMeFlag;
         
         static private $emailregex = "/\S+@\S+\.\S+/";  // TODO correggere regex per email
 
@@ -29,8 +30,10 @@
                 throw new Exception('Email is not valid');
             }
 
-            if ($login)
-                $this->cLogin($email, $password);
+            if ($login) {
+                $remMeFlag = isset($_POST["rememberMe"]);
+                $this->cLogin($email, $password, $remMeFlag);
+            }
             else{
                 $firstname = $_POST["firstname"];
                 $lastname = $_POST["lastname"];
@@ -49,7 +52,8 @@
 
         // Constructor extensions
 
-        public function cLogin($email, $password) {
+        public function cLogin($email, $password, $remMeFlag) {
+            $this->remMeFlag = $remMeFlag;
             $this->email = trim($email);
             $this->password = trim($password);
         }
@@ -83,6 +87,7 @@
         function getEmail() { return $this->email; }
         function getPassword() { return $this->password; }
         function getPermission() { return $this->permission; }
+        function getRemMeFlag() { return $this->remMeFlag; }
 
         function getUser() {
             return array(
@@ -90,7 +95,8 @@
                 'lastName' => $this->getLastName(),
                 'email' => $this->getEmail(),
                 'password' => $this->getPassword(),
-                'permission' => $this->getPermission()
+                'permission' => $this->getPermission(),
+                'remMeFlag' => $this->getRemMeFlag()
             );
         }
 
@@ -101,6 +107,7 @@
         function setPassword($password) { $this->password = $password; }
         function setConfirmPwd($confirm) { $this->password = $confirm; }
         function setPermission($permission) { $this->permission = $permission; }
+        function setRemMeFlag($remMeFlag) { $this->remMeFlag = $remMeFlag; }
         
         
         

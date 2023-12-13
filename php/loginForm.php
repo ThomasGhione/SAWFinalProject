@@ -53,8 +53,8 @@
                 </div>
 
                 <div class="inputBox">
-                    <label for="rememberme">Remember Me:</label>
-                    <input type="checkbox" id="rememberme" name="RememberMe" placeholder="RememberMe">
+                    <label for="rememberMe">Remember Me:</label>
+                    <input type="checkbox" id="rememberMe" name="rememberMe" placeholder="RememberMe">
                 </div>
 
                 <input type="submit" class='formButton' name="submit" value="Login">
