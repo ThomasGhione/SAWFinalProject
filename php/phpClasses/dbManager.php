@@ -1,6 +1,7 @@
 <?php
 
     require_once('user.php');
+    require_once("cookieManager.php");
 
     class dbManager {  
     
@@ -79,21 +80,15 @@
 
             $result = $this->dbQueryWithParams('SELECT * FROM users WHERE email = ?', 's', [$user->getEmail()]);
 
-            if ($result->num_rows != 0) {
-                error_log('Error: email already in use', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
-                $_SESSION['error'] = 'Email already in use';
-                return false;
-            }
+            if ($result->num_rows != 0)
+                return $this->manageError("email already in use", "Email already in use");
 
             $paramArr = [$user->getEmail(), $user->getPassword(), $user->getFirstName(), $user->getLastName()];
  
-            $result = $this->dbQueryWithParams('INSERT INTO users (email, password, firstname, lastname, username, permission, pfp, gender, birthdate, description) VALUES (?, ?, ?, ?, null, "user", null, "notSpecified", null, null)', 'ssss', $paramArr);
+            $result = $this->dbQueryWithParams('INSERT INTO users (email, password, firstname, lastname, username, permission, remMeFlag, pfp, gender, birthdate, description) VALUES (?, ?, ?, ?, null, "user", false, null, "notSpecified", null, null)', 'ssss', $paramArr);
 
-            if ($result != 1) {
-                error_log('Error: cannot insert user into database', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
-                $_SESSION['error'] = 'Something went wrong, try again later';
-                return false;
-            }
+            if ($result != 1) 
+                return $this->manageError("cannot insert user into database", "Something went wrong, try again later");
 
             $_SESSION['success'] = 'Registration Completed, please login to access the website';
             return true;
@@ -103,26 +98,63 @@
 
             $result = $this->dbQueryWithParams('SELECT * FROM users WHERE email = ?', 's', [$user->getEmail()]);
 
-            if ( $result->num_rows != 1 ) {
-                error_log('Error: email not found', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
-                $_SESSION['error'] = 'Email not found';
-                return false;
-            }
+            if ( $result->num_rows != 1 ) 
+                return $this->manageError("email not found", "Email not found");
 
             $row = $result->fetch_assoc();
 
-            if (!password_verify($user->getPassword(), $row['password'])) {
-                error_log('Error: wrong password', 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
-                $_SESSION['error'] = 'Wrong password';
-                return false;
+            if (!password_verify($user->getPassword(), $row['password'])) 
+                return $this->manageError("wrong password", "Wrong password");
+
+
+            // TODO Work in progress 
+            if ($user->getRemMeFlag()) { 
+                $result = $this->dbQueryWithParams("UPDATE users SET remMeFlag = 1 WHERE email = ?", "s", $user->getEmail());
+
+                if ( $result != 1 ) 
+                    return $this->manageError("something went wrong when setting the 'remember me' flag", "Something went wrong, try again later");
+
+                $UID = password_hash(rand(), PASSWORD_DEFAULT);
+                $expDate = date("Y-m-d", time() + 31536000);
+
+                $paramArr = [$UID, $user->getEmail(), $expDate];
+
+                $result = $this->dbQueryWithParams("INSERT INTO remMeCookies (UID, email, ExpDate) VALUES (?, ?, ?)", "sss", $paramArr);
+
+                if ($result != 1) 
+                    return $this->manageError("something went wrong when inserting the new cookie data", "Something went wrong, try again later");
+
+                $cookieManager = new cookieManager();
+
+                $cookieValues = $UID . " " . $expDate;
+                $cookieManager->setCookie("remMeCookie", $cookieValues, $expDate);
             }
+
 
             $user->setPermission($row['permission']);
 
             $_SESSION['success'] = 'Login successful';
             return true;
         }
+
+        function addRememberMeCookieToDB($cookieManager) {
+
+        }
         
+        // Used for logout
+        // TODO Must be finished
+        function deleteRememberMeCookieFromDB($cookie, $email) {
+            
+            $cookieResult = $this->dbQueryWithParams("SELECT * FROM remMeCookies WHERE email = ?", "s", [$email]);
+            
+            // User doesn't have more set cookies
+            if ( $cookieResult->num_rows == 1 ) 
+                $result = $this->dbQueryWithParams("UPDATE users SET remMeFlag = 0 WHERE email = ?", "s", [$email]);
+            
+            $result = $this->dbQueryWithParams("");
+        }
+
+
         function allUsers() {
             $result = $this->dbQueryWithNoParams('SELECT * FROM users');
             $color = true;
@@ -155,6 +187,10 @@
             ";
         }
 
+
+        // TODO Da sistemare
+        // Admin tools methods
+
         function createUser($data) {
             $result = $this->dbQueryWithParams("INSERT INTO users (firstname, lastname, email, password, permission) VALUES (?, ?, ?, ?, ?)", "sssss", [$data["firstname"], $data["lastname"], $data["email"], $data["password"], $data["permission"]]);
             $stmt = $this->conn->prepare($result);
@@ -182,6 +218,22 @@
             $stmt = $this->conn->prepare($result);
             $stmt->bind_param("s", $userEmail);
             $stmt->execute();   
+        }
+
+
+
+        // TODO Creare queste funzioni per snellire altri metodi di questo codice
+
+        // Error methods
+
+        function manageError($logMessage, $userMessage) {
+            error_log("Error: " . $logMessage, 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
+            $_SESSION['error'] = $userMessage;
+            return false;
+        }
+
+        function manageFatalError() {
+
         }
     }
 ?>

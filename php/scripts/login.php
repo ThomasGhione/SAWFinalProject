@@ -2,6 +2,8 @@
     require_once('../phpClasses/dbManager.php');
     require_once('../phpClasses/sessionManager.php');
     require_once("../phpClasses/user.php");
+    require_once("../phpClasses/cookieManager.php");
+    
     
     $sessionManager = new sessionManager();
 

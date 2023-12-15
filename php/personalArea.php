@@ -28,6 +28,12 @@
             <a href="/SAW/SAWFinalProject/index.php"><img class="pfp" src="/SAW/SAWFinalProject/images/bestLogo.png" alt="Website Logo"></a>
 
             <?php echo '<p>Welcome ' . $_SESSION['email'] . '</p>';?>
+            <?php
+                if(isset($_COOKIE["remMeCookie"]))
+                    echo "Cookie data: " . $_COOKIE["remMeCookie"];
+            
+            
+            ?>
             
             <div class="infos">
                 <p>Username</p>
