@@ -157,7 +157,7 @@
 
         function allUsers() {
             $result = $this->dbQueryWithNoParams('SELECT * FROM users');
-            $color = true;
+            $colorFlag = true;
 
             echo "<table>
                 <caption> <h2>All Users</h2> </caption>
@@ -168,7 +168,7 @@
             ";
 
             while ( $row = $result->fetch_assoc() ){
-                if($color)
+                if($colorFlag)
                     echo "<tr class='oddRow'>";
                 else
                     echo "<tr class='evenRow'>";
@@ -179,7 +179,7 @@
                     echo "<td>" . htmlspecialchars($row['permission']) . "</td>";
                 echo "</tr>";
 
-                $color = !$color;      
+                $colorFlag = false;      
             }
 
             echo "</tbody>
@@ -227,13 +227,18 @@
         // Error methods
 
         function manageError($logMessage, $userMessage) {
-            error_log("Error: " . $logMessage, 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
-            $_SESSION['error'] = $userMessage;
+            error_log("Error: " . $logMessage, 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+            $_SESSION["error"] = $userMessage;
             return false;
         }
 
         function manageFatalError() {
-
+            $lastError = error_get_last();
+            if ($lastError["type"] === E_ERROR) { 
+                error_log("Fatal error: " . $lastError["message"], 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                $_SESSION["error"] = "Unexpected error occured, try again later";
+                return false; // fre non so perché tu l'abbia aggiunta in manageError ma nel dubbio la aggiungo anche io qui
+            }
         }
     }
 ?>
