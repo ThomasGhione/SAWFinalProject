@@ -1,7 +1,8 @@
 <?php
 
-    require_once('user.php');
+    require_once("user.php");
     require_once("cookieManager.php");
+    require_once("sessionManager.php");
 
     class dbManager {  
     
@@ -109,10 +110,12 @@
 
             // TODO Work in progress 
             if ($user->getRemMeFlag()) { 
-                $result = $this->dbQueryWithParams("UPDATE users SET remMeFlag = 1 WHERE email = ?", "s", $user->getEmail());
+                $result = $this->dbQueryWithParams("UPDATE users SET remMeFlag = 1 WHERE email = ?", "s", [$user->getEmail()]);
 
                 if ( $result != 1 ) 
                     return $this->manageError("something went wrong when setting the 'remember me' flag", "Something went wrong, try again later");
+
+                // TODO Chiedere alla prof se lo dobbiamo trattare come se fosse una password (ovvero salvare in locale una versione non hashata, mentre sul server deve essere hashato, o meno)
 
                 $UID = password_hash(rand(), PASSWORD_DEFAULT);
                 $expDate = date("Y-m-d", time() + 31536000);
@@ -126,7 +129,7 @@
 
                 $cookieManager = new cookieManager();
 
-                $cookieValues = $UID . " " . $expDate;
+                $cookieValues = $UID . " " . date("Y-m-d", time());
                 $cookieManager->setCookie("remMeCookie", $cookieValues, $expDate);
             }
 
@@ -142,16 +145,61 @@
         }
         
         // Used for logout
-        // TODO Must be finished
+        // TODO Must be finished, we need to add error checking and transaction managing
         function deleteRememberMeCookieFromDB($cookie, $email) {
             
             $cookieResult = $this->dbQueryWithParams("SELECT * FROM remMeCookies WHERE email = ?", "s", [$email]);
             
-            // User doesn't have more set cookies
+            // User doesn't have more set cookies (probably gonna be eliminated for average performance reasons)
             if ( $cookieResult->num_rows == 1 ) 
                 $result = $this->dbQueryWithParams("UPDATE users SET remMeFlag = 0 WHERE email = ?", "s", [$email]);
-            
-            $result = $this->dbQueryWithParams("");
+        
+            $cookieArr = explode(" ", $cookie);
+
+            // User can have more cookies in the database (more devices are used)
+            while ( $row = $cookieResult->fetch_assoc() ) {
+                if ( password_verify($cookieArr[0], $row["UID"]) ) {
+                    $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && UID = ?)", "ss", [$email, $row["UID"]]);
+                }
+            }
+        }
+
+
+        // TODO Non funzionante in quanto non gestisce correttamente il cookie scaduto, Add error checking nel caso il cookie venisse cancellato
+        function recoverSession($cookie, $session) {
+
+            $cookieArr = explode(" ", $cookie->getCookie("remMeCookie"));
+
+            $result = $this->dbQueryWithParams("SELECT * FROM remMeCookies WHERE UID = ?", "s", [$cookieArr[0]]);
+
+            // Se lo troviamo, allora dobbiamo controllare la data di scadenza del cookie, se questa non è valida allora si elimina il cookie
+            if( $result->num_rows == 1) {
+                $row = $result->fetch_assoc();
+
+                $dbExpDate = new DateTime($row["ExpDate"]);
+                $currentDate = new DateTime(date("Y-m-d", time()));
+                $cookieExpDate = new DateTime($cookieArr[1]);
+
+                // Calcoliamo l'intervallo di tempo in giorni che sta tra la data di creazione del cookie e la data corrente
+                $interval = $cookieExpDate->diff($currentDate)->days;
+                // Poi aggiungiamo quell'intervallo alla data di creazione del Cookie (P sta per "period", D sta per "days")
+                $cookieExpDate->add(new DateInterval("P{$interval}D"));
+
+                
+                if($cookieExpDate < $dbExpDate) {
+                    $result = $this->dbQueryWithParams("SELECT email, permission FROM users WHERE email = ?", "s", [$row["email"]]);
+                    $row = $result->fetch_assoc();
+                    
+                    $session->setSessionVariables($row["email"], $row["permission"]);
+                }
+                else {
+                    $this->deleteRememberMeCookieFromDB($cookie, $row["email"]);
+                    $cookie->deleteCookie("remMeCookie");
+                }
+            }
+
+
+            // Altrimenti la sessione non viene settata
         }
 
 
