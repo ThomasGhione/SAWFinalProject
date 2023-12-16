@@ -109,12 +109,15 @@
 
             // TODO Work in progress 
             if ($user->getRemMeFlag()) { 
-                $result = $this->dbQueryWithParams("UPDATE users SET remMeFlag = 1 WHERE email = ?", "s", $user->getEmail());
+                $result = $this->dbQueryWithParams("UPDATE users SET remMeFlag = 1 WHERE email = ?", "s", [$user->getEmail()]);
 
                 if ( $result != 1 ) 
                     return $this->manageError("something went wrong when setting the 'remember me' flag", "Something went wrong, try again later");
 
-                $UID = password_hash(rand(), PASSWORD_DEFAULT);
+                // TODO Chiedere alla prof se lo dobbiamo trattare come se fosse una password (ovvero salvare in locale una versione non hashata, mentre sul server deve essere hashato, o meno)
+                $randVal = rand();
+                
+                $UID = password_hash($randVal, PASSWORD_DEFAULT);
                 $expDate = date("Y-m-d", time() + 31536000);
 
                 $paramArr = [$UID, $user->getEmail(), $expDate];
@@ -126,7 +129,7 @@
 
                 $cookieManager = new cookieManager();
 
-                $cookieValues = $UID . " " . $expDate;
+                $cookieValues = $randVal . " " . $expDate;
                 $cookieManager->setCookie("remMeCookie", $cookieValues, $expDate);
             }
 
@@ -142,16 +145,23 @@
         }
         
         // Used for logout
-        // TODO Must be finished
+        // TODO Must be finished, we need to add error checking and transaction managing
         function deleteRememberMeCookieFromDB($cookie, $email) {
             
             $cookieResult = $this->dbQueryWithParams("SELECT * FROM remMeCookies WHERE email = ?", "s", [$email]);
             
-            // User doesn't have more set cookies
+            // User doesn't have more set cookies (probably gonna be eliminated for average performance reasons)
             if ( $cookieResult->num_rows == 1 ) 
                 $result = $this->dbQueryWithParams("UPDATE users SET remMeFlag = 0 WHERE email = ?", "s", [$email]);
-            
-            $result = $this->dbQueryWithParams("");
+        
+            $cookieArr = explode(" ", $cookie);
+
+            // User can have more cookies in the database (more devices are used)
+            while ( $row = $cookieResult->fetch_assoc() ) {
+                if ( password_verify($cookieArr[0], $row["UID"]) ) {
+                    $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && UID = ?)", "ss", [$email, $row["UID"]]);
+                }
+            }
         }
 
 

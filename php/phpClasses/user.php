@@ -9,7 +9,7 @@
         private $permission;
         private $remMeFlag;
         
-        static private $emailregex = "/\S+@\S+\.\S+/";  // TODO correggere regex per email
+        private $emailregex = "/\S+@\S+\.\S+/";  // TODO correggere regex per email
 
         /*function __construct ($login, $email, $password,
                              $firstName = null, $lastName = null, $userName = null,
