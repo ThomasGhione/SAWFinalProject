@@ -4,9 +4,9 @@
     require_once("../phpClasses/dbManager.php");
     $sessionManager = new sessionManager();
     $cookieManager = new cookieManager();
-    $dbManager = new dbManager();
 
     if ($cookieManager->isCookieSet("remMeCookie")) {
+        $dbManager = new dbManager();
         $dbManager->deleteRememberMeCookieFromDB($cookieManager->getCookie("remMeCookie"), $sessionManager->getEmail());
         $cookieManager->deleteCookie("remMeCookie");
     }
