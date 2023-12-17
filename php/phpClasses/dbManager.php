@@ -113,17 +113,22 @@
                 
                 // Checking if user already has cookies in DB, and then checking for expired cookies
                 if($row["remMeFlag"] === 1) {
-                    $result = $this->dbQueryWithParams("DELETE * from remMeCookies WHERE (email = ? && (STR_TO_DATE(ExpDate, '%Y-%m-%d') < CURDATE()))", "s", [$user->getEmail()]);
                     
+                    $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && (STR_TO_DATE(ExpDate, '%Y-%m-%d') < CURDATE()))", "s", [$user->getEmail()]);
+                    
+                    /*
                     // We're expecting to have at least one cookie deleted (we're checking also for cookies in other devices) since if a user that has a true remMeFlag in DB, and tries to login when never he logged out, that means he has an old cookie not deleted
                     if ( $result < 1 )
                         return $this->manageError("something went wrong in 'checkAndDeleteOldCookiesInDB' function during login process", "Something went wrong, try again later");
+                    */
                 }
                 
-                $result = $this->dbQueryWithParams("UPDATE users SET remMeFlag = 1 WHERE email = ?", "s", [$user->getEmail()]);
+                if (!$row["remMeFlag"]) {
+                    $result = $this->dbQueryWithParams("UPDATE users SET remMeFlag = 1 WHERE email = ?", "s", [$user->getEmail()]);
 
-                if ( $result != 1 ) 
-                    return $this->manageError("something went wrong when setting the 'remember me' flag", "Something went wrong, try again later");
+                    if ( $result != 1 ) 
+                        return $this->manageError("something went wrong when setting the 'remember me' flag", "Something went wrong in UPDATE users, try again later");
+                }
 
                 // TODO Chiedere alla prof se lo dobbiamo trattare come se fosse una password (ovvero salvare in locale una versione non hashata, mentre sul server deve essere hashato, o meno)
 
@@ -135,7 +140,7 @@
                 $result = $this->dbQueryWithParams("INSERT INTO remMeCookies (UID, email, ExpDate) VALUES (?, ?, ?)", "sss", $paramArr);
 
                 if ($result != 1) 
-                    return $this->manageError("something went wrong when inserting the new cookie data", "Something went wrong, try again later");
+                    return $this->manageError("something went wrong when inserting the new cookie data", "Something went wrong in INSERT INTO, try again later");
 
                 $cookieManager = new cookieManager();
 
@@ -168,7 +173,7 @@
 
             // User can have more cookies in the database (more devices are used)
             while ( $row = $cookieResult->fetch_assoc() ) {
-                if ( password_verify($cookieArr[0], $row["UID"]) ) {
+                if ( $cookieArr[0] == $row["UID"] ) {
                     $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && UID = ?)", "ss", [$email, $row["UID"]]);
                 }
             }
@@ -179,10 +184,10 @@
 
             $cookieArr = explode(" ", $cookie->getCookie("remMeCookie"));
 
-            $result = $this->dbQueryWithParams("SELECT * FROM remMeCookies WHERE UID = ?", "s", [$cookieArr[0]]);
+            $result = $this->dbQueryWithParams("SELECT * FROM remMeCookies WHERE (UID = ? && (STR_TO_DATE(ExpDate, '%Y-%m-%d') > CURDATE()))", "s", [$cookieArr[0]]);
 
             // Se lo troviamo, allora dobbiamo controllare la data di scadenza del cookie, se questa non è valida allora si elimina il cookie
-            if( $result->num_rows == 1) {
+            if( $result->num_rows == 1 ) {
                 $row = $result->fetch_assoc();
 
                 $dbExpDate = new DateTime($row["ExpDate"]);
