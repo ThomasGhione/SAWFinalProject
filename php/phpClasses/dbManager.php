@@ -108,8 +108,18 @@
                 return $this->manageError("wrong password", "Wrong password");
 
 
-            // TODO Work in progress 
+            // TODO Work in progress - Testing in progress 
             if ($user->getRemMeFlag()) { 
+                
+                // Checking if user already has cookies in DB, and then checking for expired cookies
+                if($row["remMeFlag"] === 1) {
+                    $result = $this->dbQueryWithParams("DELETE * from remMeCookies WHERE (email = ? && (STR_TO_DATE(ExpDate, '%Y-%m-%d') < CURDATE()))", "s", [$user->getEmail()]);
+                    
+                    // We're expecting to have at least one cookie deleted (we're checking also for cookies in other devices) since if a user that has a true remMeFlag in DB, and tries to login when never he logged out, that means he has an old cookie not deleted
+                    if ( $result < 1 )
+                        return $this->manageError("something went wrong in 'checkAndDeleteOldCookiesInDB' function during login process", "Something went wrong, try again later");
+                }
+                
                 $result = $this->dbQueryWithParams("UPDATE users SET remMeFlag = 1 WHERE email = ?", "s", [$user->getEmail()]);
 
                 if ( $result != 1 ) 
@@ -129,7 +139,7 @@
 
                 $cookieManager = new cookieManager();
 
-                $cookieValues = $UID . " " . date("Y-m-d", time());
+                $cookieValues = $UID . " " . $expDate;
                 $cookieManager->setCookie("remMeCookie", $cookieValues, $expDate);
             }
 
@@ -146,7 +156,7 @@
         
         // Used for logout
         // TODO Must be finished, we need to add error checking and transaction managing
-        function deleteRememberMeCookieFromDB($cookie, $email) {
+        function deleteNotExpiredRememberMeCookieFromDB($cookie, $email) {
             
             $cookieResult = $this->dbQueryWithParams("SELECT * FROM remMeCookies WHERE email = ?", "s", [$email]);
             
@@ -164,8 +174,7 @@
             }
         }
 
-
-        // TODO Non funzionante in quanto non gestisce correttamente il cookie scaduto, Add error checking nel caso il cookie venisse cancellato
+        // TODO Work in progress, check if this function is working
         function recoverSession($cookie, $session) {
 
             $cookieArr = explode(" ", $cookie->getCookie("remMeCookie"));
@@ -177,28 +186,15 @@
                 $row = $result->fetch_assoc();
 
                 $dbExpDate = new DateTime($row["ExpDate"]);
-                $currentDate = new DateTime(date("Y-m-d", time()));
                 $cookieExpDate = new DateTime($cookieArr[1]);
-
-                // Calcoliamo l'intervallo di tempo in giorni che sta tra la data di creazione del cookie e la data corrente
-                $interval = $cookieExpDate->diff($currentDate)->days;
-                // Poi aggiungiamo quell'intervallo alla data di creazione del Cookie (P sta per "period", D sta per "days")
-                $cookieExpDate->add(new DateInterval("P{$interval}D"));
-
                 
-                if($cookieExpDate < $dbExpDate) {
+                if($cookieExpDate == $dbExpDate) {
                     $result = $this->dbQueryWithParams("SELECT email, permission FROM users WHERE email = ?", "s", [$row["email"]]);
                     $row = $result->fetch_assoc();
                     
                     $session->setSessionVariables($row["email"], $row["permission"]);
                 }
-                else {
-                    $this->deleteRememberMeCookieFromDB($cookie, $row["email"]);
-                    $cookie->deleteCookie("remMeCookie");
-                }
             }
-
-
             // Altrimenti la sessione non viene settata
         }
 

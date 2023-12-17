@@ -41,7 +41,7 @@
                 <?php 
                     echo '<p>Welcome ' . $_SESSION['email'] . ", your permission is: " . $_SESSION["permission"] .  '</p>';
                     if(isset($_COOKIE["remMeCookie"]))
-                        echo "<p>Cookie UID: " . $_COOKIE["remMeCookie"] . "; cookie expiration date: " . $_COOKIE[""] . "</p>";
+                        echo "<p>Cookie UID: " . $_COOKIE["remMeCookie"];
                 ?>
                 
                 <p>The leading (maybe not) platform for open source projects.<p>
