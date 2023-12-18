@@ -133,9 +133,10 @@
                 // TODO Chiedere alla prof se lo dobbiamo trattare come se fosse una password (ovvero salvare in locale una versione non hashata, mentre sul server deve essere hashato, o meno)
 
                 $actTime = time();
-                $expDate = date("Y-m-d", $actTime + 60 * 60 * 7 * 24);
+                $oneWeek = 60 * 60 * 24 * 7;
+                $expDate = date("Y-m-d", $actTime + $oneWeek);
                 $salt = "superSecretSalt";
-                $UID = hash("sha256", ($actTime . $salt));
+                $UID = hash("sha512", (bin2hex(random_bytes(32)) . $actTime . $salt));
                 
 
                 $paramArr = [$UID, $user->getEmail(), $expDate];
@@ -148,7 +149,7 @@
                 $cookieManager = new cookieManager();
 
                 $cookieValues = $UID;
-                $cookieManager->setCookie("remMeCookie", $cookieValues, $expDate);
+                $cookieManager->setCookie("remMeCookie", $cookieValues, $oneWeek);
             }
 
 
