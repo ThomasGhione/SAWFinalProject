@@ -132,8 +132,11 @@
 
                 // TODO Chiedere alla prof se lo dobbiamo trattare come se fosse una password (ovvero salvare in locale una versione non hashata, mentre sul server deve essere hashato, o meno)
 
-                $UID = password_hash(rand(), PASSWORD_DEFAULT);
-                $expDate = date("Y-m-d", time() + 31536000);
+                $actTime = time();
+                $expDate = date("Y-m-d", $actTime + 60 * 60 * 7 * 24);
+                $salt = "superSecretSalt";
+                $UID = hash("sha256", ($actTime . $salt));
+                
 
                 $paramArr = [$UID, $user->getEmail(), $expDate];
 
@@ -144,7 +147,7 @@
 
                 $cookieManager = new cookieManager();
 
-                $cookieValues = $UID . " " . $expDate;
+                $cookieValues = $UID;
                 $cookieManager->setCookie("remMeCookie", $cookieValues, $expDate);
             }
 
@@ -165,24 +168,22 @@
             
             $cookieResult = $this->dbQueryWithParams("SELECT * FROM remMeCookies WHERE email = ?", "s", [$email]);
             
-            // User doesn't have more set cookies (probably gonna be eliminated for average performance reasons)
+            // User doesn't have more set cookies
             if ( $cookieResult->num_rows == 1 ) 
                 $result = $this->dbQueryWithParams("UPDATE users SET remMeFlag = 0 WHERE email = ?", "s", [$email]);
         
             $cookieArr = explode(" ", $cookie);
 
             // User can have more cookies in the database (more devices are used)
-            while ( $row = $cookieResult->fetch_assoc() ) {
-                if ( $cookieArr[0] == $row["UID"] ) {
+            while ( $row = $cookieResult->fetch_assoc() ) 
+                if ( $cookieArr[0] == $row["UID"] )
                     $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && UID = ?)", "ss", [$email, $row["UID"]]);
-                }
-            }
         }
 
         // TODO Work in progress, check if this function is working
         function recoverSession($cookie, $session) {
 
-            $cookieArr = explode(" ", $cookie->getCookie("remMeCookie"));
+            $cookieArr = explode(" ", $cookie);
 
             $result = $this->dbQueryWithParams("SELECT * FROM remMeCookies WHERE (UID = ? && (STR_TO_DATE(ExpDate, '%Y-%m-%d') > CURDATE()))", "s", [$cookieArr[0]]);
 
@@ -190,18 +191,15 @@
             if( $result->num_rows == 1 ) {
                 $row = $result->fetch_assoc();
 
-                $dbExpDate = new DateTime($row["ExpDate"]);
-                $cookieExpDate = new DateTime($cookieArr[1]);
-                
-                if($cookieExpDate == $dbExpDate) {
-                    $result = $this->dbQueryWithParams("SELECT email, permission FROM users WHERE email = ?", "s", [$row["email"]]);
-                    $row = $result->fetch_assoc();
+                $result = $this->dbQueryWithParams("SELECT email, permission FROM users WHERE email = ?", "s", [$row["email"]]);
+                $row = $result->fetch_assoc();
                     
-                    $session->setSessionVariables($row["email"], $row["permission"]);
-                }
+                $session->setSessionVariables($row["email"], $row["permission"]);
             }
+            
             // Altrimenti la sessione non viene settata
         }
+            
 
 
         function allUsers() {

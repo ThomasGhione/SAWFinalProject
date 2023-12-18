@@ -9,7 +9,7 @@
 
     if ( !$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) {
         $dbManager = new dbManager();
-        $dbManager->recoverSession($cookieManager, $sessionManager);
+        $dbManager->recoverSession($cookieManager->getCookie("remMeCookie"), $sessionManager);
     }
 
     // TODO Code to check if cookie is set
