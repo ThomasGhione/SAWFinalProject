@@ -6,11 +6,10 @@
 
     $sessionManager = new sessionManager();
     $cookieManager = new cookieManager();
+    $dbManager = new dbManager();
 
-    if ( !$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) {
-        $dbManager = new dbManager();
+    if ( !$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
         $dbManager->recoverSession($cookieManager->getCookie("remMeCookie"), $sessionManager);
-    }
 
     // TODO Code to check if cookie is set
 ?>
@@ -24,7 +23,7 @@
 </head>
 
 <body>
-    <?php include("./php/shared/nav.php") ?>
+    <?php include("./php/shared/nav.php"); ?>
 
     <div class="bg-image"></div>
 
@@ -41,13 +40,15 @@
                 <?php 
                     echo '<p>Welcome ' . $_SESSION['email'] . ", your permission is: " . $_SESSION["permission"] .  '</p>';
                     if(isset($_COOKIE["remMeCookie"]))
-                        echo "<p>Cookie UID: " . $_COOKIE["remMeCookie"];
+                        echo "<p>Cookie UID: " . $cookieManager->getCookie("remMeCookie") . "</p>";
+                    else
+                        echo "<p>Cookie does not exist</p>"
                 ?>
                 
                 <p>The leading (maybe not) platform for open source projects.<p>
                 <p>Here you can look at others's repos because we believe in open source projects.</p>
                 <p>(don't even think to make your repos as private)</p>
-                <a>Here's a cookie for you, just click on it: <i class="fa-solid fa-cookie fa-xl"></i></a> 
+                <a>Here's a cookie for you, just click on it: <span class="fa-solid fa-cookie fa-xl"></span></a> 
             </div>
         </section>
 

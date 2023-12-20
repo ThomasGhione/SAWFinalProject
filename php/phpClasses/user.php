@@ -17,8 +17,8 @@
 
         function __construct ($login) {
             
-            $email = $_POST["email"];
-            $password = $_POST["pass"];
+            $email = htmlspecialchars($_POST["email"]);
+            $password = htmlspecialchars($_POST["pass"]);
 
             if (empty($email) || empty($password)) {
                 error_log('Error: empty parameters');
@@ -35,9 +35,9 @@
                 $this->cLogin($email, $password, $remMeFlag);
             }
             else{
-                $firstname = $_POST["firstname"];
-                $lastname = $_POST["lastname"];
-                $confirm = $_POST["confirm"];
+                $firstname = htmlspecialchars($_POST["firstname"]);
+                $lastname = htmlspecialchars($_POST["lastname"]);
+                $confirm = htmlspecialchars($_POST["confirm"]);
                 $this->cRegister($firstname, $lastname, $email, $password, $confirm);
             }
         }

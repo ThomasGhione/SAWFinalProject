@@ -75,6 +75,7 @@
             return $result;
         }
 
+
         // User functions //
 
         function registerUser($user) {
@@ -135,7 +136,7 @@
                 $actTime = time();
                 $oneWeek = 60 * 60 * 24 * 7;
                 $expDate = date("Y-m-d", $actTime + $oneWeek);
-                $salt = "superSecretSalt";
+                $salt = "WeLoveRibaudo";
                 $UID = hash("sha512", (bin2hex(random_bytes(32)) . $actTime . $salt));
                 
 
@@ -148,8 +149,7 @@
 
                 $cookieManager = new cookieManager();
 
-                $cookieValues = $UID;
-                $cookieManager->setCookie("remMeCookie", $cookieValues, $oneWeek);
+                $cookieManager->setCookie("remMeCookie", $UID, $oneWeek);
             }
 
 
@@ -159,26 +159,34 @@
             return true;
         }
 
+
+        // DB Cookie Manipulation //
+
         function addRememberMeCookieToDB($cookieManager) {
 
         }
         
         // Used for logout
         // TODO Must be finished, we need to add error checking and transaction managing
-        function deleteNotExpiredRememberMeCookieFromDB($cookie, $email) {
-            
+        function deleteRememberMeCookieFromDB($cookie, $email) {
+
             $cookieResult = $this->dbQueryWithParams("SELECT * FROM remMeCookies WHERE email = ?", "s", [$email]);
             
             // User doesn't have more set cookies
             if ( $cookieResult->num_rows == 1 ) 
                 $result = $this->dbQueryWithParams("UPDATE users SET remMeFlag = 0 WHERE email = ?", "s", [$email]);
-        
-            $cookieArr = explode(" ", $cookie);
 
+            $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && UID = ?)", "ss", [$email, $cookie]);
+/*
             // User can have more cookies in the database (more devices are used)
-            while ( $row = $cookieResult->fetch_assoc() ) 
-                if ( $cookieArr[0] == $row["UID"] )
+            while ( $row = $cookieResult->fetch_assoc() ) {
+                
+                
+                if ( $cookieArr[0] == $row["UID"] ) {
                     $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && UID = ?)", "ss", [$email, $row["UID"]]);
+                }
+            }
+*/
         }
 
         // TODO Work in progress, check if this function is working
@@ -202,6 +210,7 @@
         }
             
 
+        // Admin Tools //
 
         function allUsers() {
             $result = $this->dbQueryWithNoParams('SELECT * FROM users');
@@ -235,10 +244,7 @@
             ";
         }
 
-
         // TODO Da sistemare
-        // Admin tools methods
-
         function createUser($data) {
             $result = $this->dbQueryWithParams("INSERT INTO users (firstname, lastname, email, password, permission) VALUES (?, ?, ?, ?, ?)", "sssss", [$data["firstname"], $data["lastname"], $data["email"], $data["password"], $data["permission"]]);
             $stmt = $this->conn->prepare($result);
@@ -272,7 +278,7 @@
 
         // TODO Creare queste funzioni per snellire altri metodi di questo codice
 
-        // Error methods
+        // Error methods //
 
         function manageError($logMessage, $userMessage) {
             error_log("Error: " . $logMessage, 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
