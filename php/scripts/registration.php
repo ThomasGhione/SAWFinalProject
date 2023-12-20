@@ -1,11 +1,17 @@
 <?php 
+    require_once("./errInitialize.php");
     require_once('../phpClasses/dbManager.php');
+    require_once("../phpClasses/cookieManager.php");
     require_once('../phpClasses/sessionManager.php');
     require_once('../phpClasses/user.php');
 
     $sessionManager = new sessionManager();
+    $cookieManager = new cookieManager();
+    $dbManager = new dbManager();
     
-    // TODO Code to check if cookie is set
+    if ( !$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
+        $dbManager->recoverSession($cookieManager->getCookie("remMeCookie"), $sessionManager);
+
     if ( $sessionManager->isSessionSet() ) {
         header('Location: ../personalArea.php');
         exit;
