@@ -16,6 +16,9 @@
         header("Location: ./loginForm.php");
         exit;
     }
+
+    // The following code sets user data obtained from database
+    $currentUser = new loggedUser($sessionManager->getEmail());
 ?>
 
 
@@ -32,20 +35,14 @@
 
     <div class="main_personalarea">
         <column id="left_column">
-            
-            <!-- The following code will set user data obtained from database -->
-            <?php 
-            
-                $currentUser = new loggedUser($sessionManager->getEmail());
-            
-            ?>
         
             <a href="/SAW/SAWFinalProject/index.php"><img class="pfp" src="/SAW/SAWFinalProject/images/bestLogo.png" alt="Website Logo"></a>
 
-            <?php echo "<p>Welcome " . $_SESSION["email"] . "</p>";?>
-            <?php
-                if(isset($_COOKIE["remMeCookie"]))
-                    echo "Cookie data: " . $_COOKIE["remMeCookie"];
+            <?php 
+                if ($currentUser->getUsername() == "")
+                    echo "<p>Welcome " . $currentUser->getEmail() . "</p>";
+                else
+                    echo "<p>Welcome " . $currentUser->getUsername() . "</p>";
             ?>
             
             <div class="infos">

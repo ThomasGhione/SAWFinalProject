@@ -67,7 +67,7 @@
             return $result;
         }
 
-        // To be used only for queries without params (lighter on resources because we don't need to prepare the statement)
+        // To be used ONLY for queries without params (lighter on resources because statements are not necessary)
         function dbQueryWithoutParams($stmtString) {
             try {
                 if (($result = $this->conn->query($stmtString)) == false) {
@@ -95,7 +95,7 @@
                 }
     
                 $paramArr = [$user->getEmail(), $user->getPassword(), $user->getFirstName(), $user->getLastName()];
-                $result = $this->dbQueryWithParams('INSERT INTO users (email, password, firstname, lastname, username, permission, remMeFlag, pfp, gender, birthdate, description) VALUES (?, ?, ?, ?, null, "user", false, null, "notSpecified", null, null)', 'ssss', $paramArr);
+                $result = $this->dbQueryWithParams('INSERT INTO users (email, password, firstname, lastname, username, permission, pfp, gender, birthdate, description) VALUES (?, ?, ?, ?, null, "user", null, "notSpecified", null, null)', 'ssss', $paramArr);
     
                 if ($result != 1) {
                     error_log("cannot insert user into database");
@@ -125,7 +125,7 @@
     
                 $row = $result->fetch_assoc();
     
-                if (!password_verify($user->getPassword(), $row['password'])) {
+                if (!password_verify($user->getPassword(), $row["password"])) {
                     error_log("Wrong password");
                     throw new Exception("Wrong password");
                 }
@@ -133,17 +133,7 @@
                 // TODO Work in progress - Testing in progress 
                 if ($user->getRemMeFlag()) { 
                     
-                    if ($row["remMeFlag"] === 1) // Checking if user already has cookies in DB, and then checking for expired cookies
-                        $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && (STR_TO_DATE(ExpDate, '%Y-%m-%d') < CURDATE()))", "s", [$user->getEmail()]);
-                    
-                    if (!$row["remMeFlag"]) {
-                        $result = $this->dbQueryWithParams("UPDATE users SET remMeFlag = 1 WHERE email = ?", "s", [$user->getEmail()]);
-    
-                        if ($result != 1) {
-                            error_log("Something went wrong when setting the 'remember me' flag");
-                            throw new Exception("Something went wrong in UPDATE users, try again later");
-                        }
-                    }
+                    $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && (STR_TO_DATE(ExpDate, '%Y-%m-%d') < CURDATE()))", "s", [$user->getEmail()]);
     
                     $actTime = time();
                     $oneWeek = 60 * 60 * 24 * 7;
@@ -186,15 +176,11 @@
         // TODO Must be finished, we need to add error checking and transaction managing
         function deleteRememberMeCookieFromDB($cookie, $email) {
 
-            $cookieResult = $this->dbQueryWithParams("SELECT * FROM remMeCookies WHERE email = ?", "s", [$email]);
-            
-            if ($cookieResult->num_rows == 1) // User doesn't have more set cookies
-                $result = $this->dbQueryWithParams("UPDATE users SET remMeFlag = 0 WHERE email = ?", "s", [$email]);
-
+            // TODO Add error checking
             $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && UID = ?)", "ss", [$email, $cookie]);
+
         }
 
-        // TODO Work in progress, check if this function is working
         function recoverSession($cookie, $session) {
 
             $cookieArr = explode(" ", $cookie);

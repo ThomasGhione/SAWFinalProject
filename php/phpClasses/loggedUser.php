@@ -1,7 +1,5 @@
 <?php
 
-    require("./dbManager.php");
-
     class loggedUser {
 
         private $firstname;
@@ -16,74 +14,97 @@
         function __construct ($email) {
             $dbManager = new dbManager();
 
-            $dbManager->dbQueryWithParams("SELECT * FROM users WHERE users = ?", "s", [$email]);
+            // TODO Missing error checking
+            $result = $dbManager->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$email]);
 
+            $row = $result->fetch_assoc();
 
-        }
-
-        function setFirstname() {
-
-        }
-
-        function setLastname() {
+            $this->setFirstname(htmlspecialchars($row["firstname"]));
+            $this->setLastname(htmlspecialchars($row["lastname"]));
+            $this->setEmail(htmlspecialchars($row["email"]));
             
-        }
+            if ($row["username"] != NULL)
+                $this->setUsername(htmlspecialchars($row["username"]));
 
-        function setEmail() {
+            if ($row["pfp"] != NULL)
+                $this->setPfp(htmlspecialchars($row["pfp"]));
+
+            $this->setGender(htmlspecialchars($row["gender"]));
             
+            if ($row["birthday"] != NULL)
+                $this->setBirthday(htmlspecialchars($row["birthday"]));
+
+            if ($row["description"] != NULL)
+                $this->setDescription(htmlspecialchars($row["description"]));
         }
 
-        function setUsername() {
-            
+
+        // Setter methods
+        function setFirstname($firstname) {
+            $this->firstname = $firstname;
         }
 
-        function setPfp() {
-            
+        function setLastname($lastname) {
+            $this->lastname = $lastname;
         }
 
-        function setGender() {
-            
+        function setEmail($email) {
+            $this->email = $email;
         }
 
-        function setBirthday() {
-
+        function setUsername($username) {
+            $this->username = $username;
         }
 
-        function setDescription() {
-
+        function setPfp($pfp) {
+            $this->pfp = $pfp;
         }
 
+        function setGender($gender) {
+            $this->gender = $gender;
+        }
+
+        function setBirthday($birthday) {
+            $this->birthday = $birthday;
+        }
+
+        function setDescription($description) {
+            $this->description = $description;
+        }
+
+    
+        // Getter methods
 
         function getFirstname() {
-
+            return $this->firstname;
         }
 
         function getLastname() {
-            
+            return $this->lastname;
         }
 
         function getEmail() {
-            
+            return $this->email;
         }
 
         function getUsername() {
-            
+            return $this->username;
         }
 
         function getPfp() {
-            
+            return $this->pfp;
         }
 
         function getGender() {
-            
+            return $this->gender;
         }
 
         function getBirthday() {
-
+            return $this->birthday;
         }
 
         function getDescription() {
-            
+            return $this->description;
         }
 
     }
