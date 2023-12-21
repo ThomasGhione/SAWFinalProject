@@ -8,7 +8,7 @@
     $cookieManager = new cookieManager();
     $dbManager = new dbManager();
 
-    if ( !$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
+    if (!$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
         $dbManager->recoverSession($cookieManager->getCookie("remMeCookie"), $sessionManager);
 
     // TODO Code to check if cookie is set
@@ -39,7 +39,7 @@
                 
                 <?php 
                     echo '<p>Welcome ' . $_SESSION['email'] . ", your permission is: " . $_SESSION["permission"] .  '</p>';
-                    if(isset($_COOKIE["remMeCookie"]))
+                    if (isset($_COOKIE["remMeCookie"]))
                         echo "<p>Cookie UID: " . $cookieManager->getCookie("remMeCookie") . "</p>";
                     else
                         echo "<p>Cookie does not exist</p>"

@@ -21,14 +21,14 @@
             if ($sessionManager->isSessionSet()) {
                 echo "<a class='navButton' href='" . $root . "/php/personalArea.php'>Personal Area</a>";
                 echo "<a class='blankSpace'></a>";
-                echo '<a class="navButton" href="' . $root . '/php/scripts/logout.php">Logout</a>';
+                echo "<a class='navButton' href='" . $root . "/php/scripts/logout.php'>Logout</a>";
                 if ($sessionManager->isAdmin()) 
-                    echo '<a class="navButton" href="' . $root . '/php/adminTools/adminTools.php">Admin Tools</a>';
+                    echo "<a class='navButton' href='" . $root . "/php/adminTools/adminTools.php'>Admin Tools</a>";
             }
             else {
-                echo '<a class="navButton" href="' . $root . '/php/registrationForm.php">Register here!</a>';
+                echo "<a class='navButton' href='" . $root . "/php/registrationForm.php'>Register here!</a>";
                 echo "<a class='blankSpace'></a>";
-                echo '<a class="navButton" href="' . $root . '/php/loginForm.php">Login</a>';
+                echo "<a class='navButton' href='" . $root . "/php/loginForm.php'>Login</a>";
             }
         ?>
 
@@ -39,7 +39,10 @@
 
 
         <!-- placeholder -->
-        <?php if ($sessionManager->isSessionSet()) echo '<button alt="Your profile">ph</button>'; ?>
+        <?php
+            if ($sessionManager->isSessionSet())
+                echo "<button alt='Your profile'>ph</button>";
+        ?>
     </div>
 
 </nav>

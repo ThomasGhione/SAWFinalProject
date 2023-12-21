@@ -1,18 +1,18 @@
 <?php
     require_once("./scripts/errInitialize.php");
     require_once("./phpClasses/cookieManager.php");
-    require_once('./phpClasses/sessionManager.php');
+    require_once("./phpClasses/sessionManager.php");
     require_once("./phpClasses/dbManager.php");
 
     $sessionManager = new sessionManager();
     $cookieManager = new cookieManager();
     $dbManager = new dbManager();
 
-    if ( !$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
+    if (!$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
         $dbManager->recoverSession($cookieManager->getCookie("remMeCookie"), $sessionManager);
 
-    if ( !$sessionManager->isSessionSet() ) {
-        header('Location: ./loginForm.php');
+    if (!$sessionManager->isSessionSet()) {
+        header("Location: ./loginForm.php");
         exit;
     }
 ?>
@@ -33,12 +33,10 @@
         <column id="left_column">
             <a href="/SAW/SAWFinalProject/index.php"><img class="pfp" src="/SAW/SAWFinalProject/images/bestLogo.png" alt="Website Logo"></a>
 
-            <?php echo '<p>Welcome ' . $_SESSION['email'] . '</p>';?>
+            <?php echo "<p>Welcome " . $_SESSION["email"] . "</p>";?>
             <?php
                 if(isset($_COOKIE["remMeCookie"]))
                     echo "Cookie data: " . $_COOKIE["remMeCookie"];
-            
-            
             ?>
             
             <div class="infos">

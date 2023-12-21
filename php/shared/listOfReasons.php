@@ -7,7 +7,7 @@
     $cookieManager = new cookieManager();
     $dbManager = new dbManager();
 
-    if ( !$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
+    if (!$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
         $dbManager->recoverSession($cookieManager->getCookie("remMeCookie"), $sessionManager);
 ?>
 

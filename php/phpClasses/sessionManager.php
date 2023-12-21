@@ -9,11 +9,11 @@
         /* Getter methods*/
 
         function getEmail() {
-            return $_SESSION['email'];
+            return $_SESSION["email"];
         }
 
         function getPermission() {
-            return $_SESSION['permission'];
+            return $_SESSION["permission"];
         }
 
         function getSessionVariable($name) {
@@ -23,11 +23,11 @@
         /* Setter methods */
 
         function setEmail($email) {
-            $_SESSION['email'] = $email;
+            $_SESSION["email"] = $email;
         }
 
         function setPermission($permission) {
-            $_SESSION['permission'] = $permission;
+            $_SESSION["permission"] = $permission;
         }
 
 
@@ -46,11 +46,11 @@
 
 
         function isSessionSet() {
-            return isset($_SESSION['email']);
+            return isset($_SESSION["email"]);
         }
 
         function isAdmin() {
-            return isset($_SESSION['permission']) && ($_SESSION['permission'] == 'admin');
+            return isset($_SESSION["permission"]) && ($_SESSION["permission"] == "admin");
         }
 
 
@@ -66,11 +66,11 @@
         }
 
         function isSessionExpired() { // TODO check if this works
-            return isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 1800);
+            return isset($_SESSION["LAST_ACTIVITY"]) && (time() - $_SESSION["LAST_ACTIVITY"] > 1800);
         }
 
         function updateSession() { // TODO check if this works 
-            $_SESSION['LAST_ACTIVITY'] = time();
+            $_SESSION["LAST_ACTIVITY"] = time();
         }
 
     }

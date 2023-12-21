@@ -8,11 +8,11 @@
     $sessionManager = new cookieManager();
     $dbManager = new dbManager();
 
-    // if ( !$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
+    // if (!$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
     //     $dbManager->recoverSession($cookieManager->getCookie("remMeCookie"), $sessionManager);
     //
-    // if ( !$sessionManager->isSessionSet() || !$sessionManager->isAdmin() ) {
-    //     header('Location: ../../index.php');
+    // if (!$sessionManager->isSessionSet() || !$sessionManager->isAdmin()) {
+    //     header("Location: ../../index.php");
     //     exit;
     // }
 ?>
@@ -20,11 +20,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php require_once('../shared/commonHead.php'); ?>
+    <?php require_once("../shared/commonHead.php"); ?>
     <title>OpenHub - Admin Tools Page</title>
 </head>
 <body>
-    <?php require_once('../shared/nav.php'); ?>
+    <?php require_once("../shared/nav.php"); ?>
 
      // TODO Complete page for admin 
     <div class="admin-menu">
@@ -45,6 +45,6 @@
         <button onclick="window.location.href = 'manageNewsletter.php';">Manage Newsletter</button>
     </div>
     
-    <?php require_once('../shared/footer.php')?>
+    <?php require_once("../shared/footer.php")?>
 </body>
 </html>

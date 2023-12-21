@@ -70,7 +70,7 @@
         // To be used only for queries without params (lighter on resources because we don't need to prepare the statement)
         function dbQueryWithoutParams($stmtString) {
             try {
-                if (($result = $this->conn->query($stmtString)) === false) {
+                if (($result = $this->conn->query($stmtString)) == false) {
                     error_log("Error: cannot execute the following query -> " . $stmtString, 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Server error");
                 }
@@ -202,7 +202,7 @@
             $result = $this->dbQueryWithParams("SELECT * FROM remMeCookies WHERE (UID = ? && (STR_TO_DATE(ExpDate, '%Y-%m-%d') > CURDATE()))", "s", [$cookieArr[0]]);
 
             
-            if($result->num_rows == 1) { // Se lo troviamo, allora dobbiamo controllare la data di scadenza del cookie, se questa non è valida allora si elimina il cookie
+            if ($result->num_rows == 1) { // Se lo troviamo, allora dobbiamo controllare la data di scadenza del cookie, se questa non è valida allora si elimina il cookie
                 $row = $result->fetch_assoc();
 
                 $result = $this->dbQueryWithParams("SELECT email, permission FROM users WHERE email = ?", "s", [$row["email"]]);

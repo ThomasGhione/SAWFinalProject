@@ -23,18 +23,18 @@
 
             try {                
                 if (empty($email) || empty($password)) {
-                    error_log('Error: empty parameters');
-                    throw new Exception('Empty parameters passed to the form');
+                    error_log("Error: empty parameters");
+                    throw new Exception("Empty parameters passed to the form");
                 }
                 if (!$this->isEmailValid()) {
-                    error_log('Error: email is not valid');
-                    throw new Exception('Email is not valid');
+                    error_log("Error: email is not valid");
+                    throw new Exception("Email is not valid");
                 }
             }
             catch (Exception $e) {
-                error_log($e->getMessage(), 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
-                $_SESSION['error'] = $e->getMessage();
-                header('Location: ../loginForm.php');
+                error_log($e->getMessage(), 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                $_SESSION["error"] = $e->getMessage();
+                header("Location: ../loginForm.php");
                 exit;
             }
 
@@ -70,22 +70,22 @@
 
             try {
                 if (empty($firstname) || empty($lastname) || empty($confirm)) {
-                    error_log('Error: empty parameters');
-                    throw new Exception('Empty parameters passed to the form');
+                    error_log("Error: empty parameters");
+                    throw new Exception("Empty parameters passed to the form");
                 }
                 if ($this->isPasswordWeak($password)) {
-                    error_log('Error: password is not strong enough');
-                    throw new Exception('Password is not strong enough');
+                    error_log("Error: password is not strong enough");
+                    throw new Exception("Password is not strong enough");
                 }
                 if (!$this->isPasswordValid($password, $confirm)) {
-                    error_log('Error: passwords do not match');
-                    throw new Exception('Passwords do not match');
+                    error_log("Error: passwords do not match");
+                    throw new Exception("Passwords do not match");
                 }
             }
             catch (Exception $e) {
-                error_log($e->getMessage(), 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
-                $_SESSION['error'] = $e->getMessage();
-                header('Location: ../loginForm.php');
+                error_log($e->getMessage(), 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                $_SESSION["error"] = $e->getMessage();
+                header("Location: ../loginForm.php");
                 exit;
             }
 
@@ -105,12 +105,12 @@
 
         function getUser() {
             return array(
-                'firstName' => $this->getFirstName(),
-                'lastName' => $this->getLastName(),
-                'email' => $this->getEmail(),
-                'password' => $this->getPassword(),
-                'permission' => $this->getPermission(),
-                'remMeFlag' => $this->getRemMeFlag()
+                "firstName" => $this->getFirstName(),
+                "lastName" => $this->getLastName(),
+                "email" => $this->getEmail(),
+                "password" => $this->getPassword(),
+                "permission" => $this->getPermission(),
+                "remMeFlag" => $this->getRemMeFlag()
             );
         }
 
@@ -128,7 +128,7 @@
         // Aux methods
     
         function getFullName($user) {
-            return $user->getFirstName() . ' ' . $user->getLastName();
+            return $user->getFirstName() . " " . $user->getLastName();
         }
     
         function isPasswordWeak($password) {
