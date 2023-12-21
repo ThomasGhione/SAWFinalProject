@@ -1,4 +1,5 @@
 <?php
+    require_once("./errInitialize.php");
     require_once("../phpClasses/sessionManager.php");
     require_once("../phpClasses/cookieManager.php");
     require_once("../phpClasses/dbManager.php");

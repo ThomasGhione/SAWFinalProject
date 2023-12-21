@@ -21,14 +21,8 @@
 
     if ( $_SERVER["REQUEST_METHOD"] == 'POST') {
 
-        try {
-            $user = new User(true);
-        }
-        catch (Exception $e) {
-            error_log($e->getMessage(), 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
-            $_SESSION['error'] = $e->getMessage();
-            header('Location: ../registrationForm.php');
-        }
+        $user = new User(true);
+
 
         if ($dbManager->loginUser($user)) {
             // Code to set session and cookie if remember me is set

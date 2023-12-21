@@ -9,27 +9,19 @@
     $cookieManager = new cookieManager();
     $dbManager = new dbManager();
     
-    if ( !$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
+    if (!$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
         $dbManager->recoverSession($cookieManager->getCookie("remMeCookie"), $sessionManager);
 
-    if ( $sessionManager->isSessionSet() ) {
+    if ($sessionManager->isSessionSet()) {
         header('Location: ../personalArea.php');
         exit;
     }
 
-    $dbManager = new dbManager();
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        try { // we create the user here, if some parameters are invalid/empty we catch the exception
-            $user = new User(false);
-        }
-        catch (Exception $e) {
-            error_log($e->getMessage(), 3, '/SAW/SAWFinalProject/texts/errorLog.txt');
-            $_SESSION['error'] = $e->getMessage();
-            header('Location: ../registrationForm.php');
-        }
-        
+        $user = new User(false);        
+
         // TODO check whether the user is already registered
         if ($dbManager->registerUser($user)) {
             header('Location: ../loginForm.php');
