@@ -40,8 +40,8 @@
                     unset($_SESSION["error"]);
                 }
                 elseif (isset($_SESSION['success'])) {
-                    echo "<p class='success'>" . $_SESSION['success'] . "</p>";
-                    unset($_SESSION['success']);
+                    echo "<p class='success'>" . $_SESSION["success"] . "</p>";
+                    unset($_SESSION["success"]);
                 }
                 else
                     echo "<p class='error'>&nbsp;</p>"; 
@@ -67,7 +67,7 @@
             </form>
 
 <!--
-            <form method='post' action="./scripts/loginForm.php">
+            <form method="post" action="./scripts/loginForm.php">
                 <div class="inputBox">
                     <label for="email">E-Mail:</label>
                     <input required type="email" id="email" name="email" placeholder="Email"> 

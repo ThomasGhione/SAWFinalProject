@@ -273,7 +273,7 @@
             $stmt->execute();
         }
         function banUser($userEmail) {
-            $result = $this->dbQueryWithParams('UPDATE users SET permission = "banned" WHERE email = ?', 's', [$userEmail]);
+            $result = $this->dbQueryWithParams("UPDATE users SET permission = 'banned' WHERE email = ?", "s", [$userEmail]);
             $stmt = $this->conn->prepare($result);
             $stmt->bind_param("s", $userEmail);
             $stmt->execute();   

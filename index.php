@@ -38,7 +38,7 @@
                 <h2>WE PRESENT YOU OPENHUB</h2>
                 
                 <?php 
-                    echo '<p>Welcome ' . $_SESSION['email'] . ", your permission is: " . $_SESSION["permission"] .  '</p>';
+                    echo "<p>Welcome " . $_SESSION["email"] . ", your permission is: " . $_SESSION["permission"] .  "</p>";
                     if (isset($_COOKIE["remMeCookie"]))
                         echo "<p>Cookie UID: " . $cookieManager->getCookie("remMeCookie") . "</p>";
                     else
