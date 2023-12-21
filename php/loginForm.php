@@ -65,27 +65,6 @@
 
                 <input type="submit" class="formButton" name="submit" value="Login">
             </form>
-
-<!--
-            <form method="post" action="./scripts/loginForm.php">
-                <div class="inputBox">
-                    <label for="email">E-Mail:</label>
-                    <input required type="email" id="email" name="email" placeholder="Email"> 
-                </div>
-    
-                <div class="inputBox">
-                    <label for="password">Password:</label>
-                    <input required type="password" id="password" name="password" placeholder="Password">
-                </div>
-    
-                <div class="inputBox">
-                    <label for="rememberme">Remember Me:</label>
-                    <input type="checkbox" id="rememberme" name="RememberMe" placeholder="RememberMe">
-                </div>
-    
-                <button type="submit" class="formButton">Log in</button><br> 
-            </form>
--->
         </fieldset>
 
     </main>

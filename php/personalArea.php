@@ -3,6 +3,7 @@
     require_once("./phpClasses/cookieManager.php");
     require_once("./phpClasses/sessionManager.php");
     require_once("./phpClasses/dbManager.php");
+    require_once("./phpClasses/loggedUser.php");
 
     $sessionManager = new sessionManager();
     $cookieManager = new cookieManager();
@@ -31,6 +32,14 @@
 
     <div class="main_personalarea">
         <column id="left_column">
+            
+            <!-- The following code will set user data obtained from database -->
+            <?php 
+            
+                $currentUser = new loggedUser($sessionManager->getEmail());
+            
+            ?>
+        
             <a href="/SAW/SAWFinalProject/index.php"><img class="pfp" src="/SAW/SAWFinalProject/images/bestLogo.png" alt="Website Logo"></a>
 
             <?php echo "<p>Welcome " . $_SESSION["email"] . "</p>";?>
@@ -51,8 +60,11 @@
                 <p>badge2</p>
                 <p>badge3</p>
             </div>
+            
+            <a class="personalAreaButton" href="./editProfile.php">Edit your profile</a>
+
         </column>
-        
+         
         <column id="right_column">
 
             <section class="first_section">

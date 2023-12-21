@@ -134,3 +134,24 @@
     border: 5px solid black;
     border-radius: 10px;
 }
+
+
+/* General data */
+
+.personalAreaButton {
+    background-color: #A4B8C4;
+    padding: 6px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    border: 2px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.personalAreaButton:hover {
+    filter: brightness(125%);
+}
+
+.personalAreaButton:active {
+    filter: brightness(80%);
+}
