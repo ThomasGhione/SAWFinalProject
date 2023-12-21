@@ -44,14 +44,7 @@
 
         <button onclick="window.location.href = 'manageNewsletter.php';">Manage Newsletter</button>
     </div>
-
-    
-<<<<<<< HEAD
-    <?php require_once('./shared/footer.php')?>
-=======
-    
     
     <?php require_once('../shared/footer.php')?>
->>>>>>> bf5bbd538b2d53c59e08b61c643b14892dd7f2a9
 </body>
 </html>
