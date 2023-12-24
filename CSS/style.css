@@ -91,7 +91,7 @@ a:link, a:visited {
 
 /* general */
 
-.main_container {
+.mainContainer {
     position: relative;
     display: flex;
     justify-content: space-evenly;
@@ -100,7 +100,7 @@ a:link, a:visited {
     /*border-inline: 20px solid black;*/
 }
 
-.main_container::before {
+.mainContainer::before {
     content: "";
     position: absolute;
     top: 0;
@@ -115,20 +115,10 @@ a:link, a:visited {
     background-size: cover;
 }
 
-.main_container, .main_container::before {
+.mainContainer, .mainContainer::before {
     margin: -8px;
 }
 
-/*
-.bg-image {
-    background-image: url("../images/homeBackGround.jpg");
-    filter: blur(8px);
-    height: 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-*/
 
 .column {
     height: auto;
@@ -167,7 +157,7 @@ fieldset {
 
 /* third column */
 
-.register_section {
+.formSection {
     display: flex;
     align-items: center;
     justify-content: center;

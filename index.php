@@ -25,7 +25,7 @@
 
     <div class="bg-image"></div>
 
-    <main class="main_container">
+    <main class="mainContainer">
 
         <section class="column">
             <img src="./images/bestLogo.png" alt="BESTLOGO">

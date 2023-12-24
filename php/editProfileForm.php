@@ -11,8 +11,8 @@
     if (!$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
         $dbManager->recoverSession($cookieManager->getCookie("remMeCookie"), $sessionManager);
 
-    if ($sessionManager->isSessionSet()) {
-        header("Location: ./personalArea.php");
+    if (!$sessionManager->isSessionSet()) {
+        header("Location: ./loginForm.php");
         exit;
     }
 
@@ -31,7 +31,7 @@
     
     <main class="mainContainer">
 
-        <fieldset class="formSection">
+        <fieldset class="register_section">
             <h2>Log in here:</h2>
                         
             <?php

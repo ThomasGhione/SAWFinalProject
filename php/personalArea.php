@@ -36,9 +36,13 @@
     <div class="main_personalarea">
         <column id="left_column">
         
-            <a href="/SAW/SAWFinalProject/index.php"><img class="pfp" src="/SAW/SAWFinalProject/images/bestLogo.png" alt="Website Logo"></a>
-
             <?php 
+                if (!($pfpHref = ($currentUser->getPfp())))
+                    $pfpHref = "default.jpg";
+                
+                echo "<img class='pfp' src='/SAW/SAWFinalProject/images/pfps/$pfpHref' alt='Your profile picture'>";
+
+            
                 if ($currentUser->getUsername() == "")
                     echo "<p>Welcome " . $currentUser->getEmail() . "</p>";
                 else

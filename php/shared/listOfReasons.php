@@ -24,7 +24,7 @@
 
     <div class="bg-image"></div>
 
-    <main class="main_container">
+    <main class="mainContainer">
 
         <p>Thanks for watching</p>
 

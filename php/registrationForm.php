@@ -29,8 +29,8 @@
 
     <div class="bg-image"></div>
 
-    <main class=main_container>
-        <fieldset class="register_section">
+    <main class="mainContainer">
+        <fieldset class="formSection">
             <h2>Sign up here:</h2>
             
 

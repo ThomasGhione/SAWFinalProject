@@ -39,7 +39,7 @@
 <body>
     <?php require_once("../shared/nav.php"); ?>
     
-    <main class="main_container">
+    <main class="mainContainer">
         
         
 
