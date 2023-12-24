@@ -62,7 +62,7 @@
                 <p>badge3</p>
             </div>
             
-            <a class="personalAreaButton" href="./editProfile.php">Edit your profile</a>
+            <a class="personalAreaButton" href="./update_profile_form.php">Edit your profile</a>
 
         </column>
          

@@ -13,7 +13,7 @@
         $dbManager->recoverSession($cookieManager->getCookie("remMeCookie"), $sessionManager);
 
     if ($sessionManager->isSessionSet()) {
-        header("Location: ../personalArea.php");
+        header("Location: ../show_profile.php");
         exit;
     }
 

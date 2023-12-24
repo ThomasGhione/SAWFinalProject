@@ -12,7 +12,7 @@
         $dbManager->recoverSession($cookieManager->getCookie("remMeCookie"), $sessionManager);
 
     if ($sessionManager->isSessionSet()) {
-        header("Location: ./personalArea.php");
+        header("Location: ./show_profile.php");
         exit;
     }
 
@@ -55,7 +55,7 @@
                 
                 <div class="inputBox">
                     <label for="pass">Password:</label>
-                    <input type="password" name="pass" placeholder="Password (required)">
+                    <input required type="password" name="pass" placeholder="Password (required)">
                 </div>
 
                 <div class="inputBox">

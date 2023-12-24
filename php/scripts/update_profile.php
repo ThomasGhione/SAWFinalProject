@@ -12,29 +12,26 @@
     if (!$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
         $dbManager->recoverSession($cookieManager->getCookie("remMeCookie"), $sessionManager);
 
-    if ($sessionManager->isSessionSet()) {
-        header("Location: ../show_profile.php");
+    if (!$sessionManager->isSessionSet()) {
+        header("Location: ../loginForm.php");
         exit;
     }
 
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // TODO Servirà un try-catch
 
-        $user = new User(true);
+        $string = "";
 
-        if ($dbManager->loginUser($user)) { // if remember me is set the following code sets session and cookie
-            
-            $sessionManager->setSessionVariables($user->getEmail(), $user->getPermission());
-
-            header("Location: ../show_profile.php");
-            exit;
-        }
-    }
+        if ($dbManager->editUser()) 
+            $_SESSION["success"] = "Your changes were applied successfully!";
+        else 
+            $_SESSION["error"] = "Something went wrong, try again now, if the problem persists contact admin";
+    }    
     else // invalid request
         $_SESSION["error"] = "Invalid request";
     
-        
-    header("Location: ../loginForm.php"); // Covers both invalid request and invalid login 
+    header("Location: ../update_profile_form.php"); // Covers both invalid request and invalid login 
     exit;
 
 ?>

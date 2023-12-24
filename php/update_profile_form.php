@@ -31,7 +31,7 @@
     
     <main class="mainContainer">
 
-        <fieldset class="register_section">
+        <fieldset class="formSection">
             <h2>Log in here:</h2>
                         
             <?php
@@ -47,23 +47,25 @@
                     echo "<p class='error'>&nbsp;</p>"; 
             ?>
 
-            <form action="./scripts/login.php" method="post">
-                <div class="inputBox"> 
-                    <label for="email">E-Mail:</label>
-                    <input required type="email" name="email" placeholder="E-Mail (required)">
+            <form action="./scripts/editProfile.php" method="post">
+                <div class="inputBox">
+                    <label for="firstname">Firstname: </label>
+                    <input type="text" id="firstname" name="firstname" placeholder="Firstname (required)">
                 </div>
                 
                 <div class="inputBox">
-                    <label for="pass">Password:</label>
-                    <input type="password" name="pass" placeholder="Password (required)">
+                    <label for="lastname">Lastname: </label>
+                    <input type="text" id="lastname" name="lastname" placeholder="Lastname (required)">
                 </div>
 
                 <div class="inputBox">
-                    <label for="rememberMe">Remember Me:</label>
-                    <input type="checkbox" id="rememberMe" name="rememberMe" placeholder="RememberMe">
+                    <label for="email">Email: </label>
+                    <input type="email" id="email" name="email" placeholder="Email (required)">
                 </div>
 
-                <input type="submit" class="formButton" name="submit" value="Login">
+                <!-- TODO we should be able to edit all user's data -->
+
+                <input type="submit" class="formButton" name="submit" value="Edit">
             </form>
         </fieldset>
 
