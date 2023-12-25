@@ -166,6 +166,54 @@
         }
 
 
+        function editUser($email, $sessionManager) {
+
+            // Sets data names and data 
+            $dataTypeToUpdate = "";
+            $dataToUpdate = array(); 
+    
+            foreach ($_POST as $dataName => $data) {
+                if ($data != NULL) {
+                    if ($dataName == "email") { // Following code checks if email was changed, if so, it checks if email is valid, and changes session data 
+
+                        $result = $this->dbQueryWithParams("SELECT email FROM users WHERE email = ?", "s", [$data]);
+
+                        if ($result->num_rows == 1) {
+                            $_SESSION["error"] = "Email already exists";
+                            return false; 
+                        }
+
+                        $sessionManager->setEmail($data);
+                    }
+                    
+                    $dataTypeToUpdate .= " " . $dataName . " = ?,";
+                    array_push($dataToUpdate, trim(htmlspecialchars($data)));
+                }
+            }
+
+            // Following code cleans data to be used in query function
+            $dataTypeToUpdate = str_replace(", submit = ?,", "", $dataTypeToUpdate);
+            array_pop($dataToUpdate);
+
+            // Adds last value to be used in query function
+            array_push($dataToUpdate, $email); 
+
+
+            // Sets data types for query function            
+            $dataCount = "";
+            
+            for ($i = count($dataToUpdate); $i > 0; $i-- ) 
+                $dataCount .= "s";
+
+            error_log("dataTypeToUpdate: " . $dataTypeToUpdate);
+            error_log("dataToUpdate: " . implode(", ", $dataToUpdate));
+
+            // TODO Check result
+            $result = $this->dbQueryWithParams("UPDATE users SET" . $dataTypeToUpdate . " WHERE email = ?", $dataCount, $dataToUpdate);
+
+            return true;
+        }
+ 
         // DB Cookie Manipulation //
 
         function addRememberMeCookieToDB($cookieManager) {
@@ -236,7 +284,7 @@
         }
 
         // TODO Da sistemare
-        function createUser($data) {
+        function adCreateUser($data) {
             $result = $this->dbQueryWithParams("INSERT INTO users (firstname, lastname, email, password, permission) VALUES (?, ?, ?, ?, ?)", "sssss", [$data["firstname"], $data["lastname"], $data["email"], $data["password"], $data["permission"]]);
             $stmt = $this->conn->prepare($result);
             $password = password_hash($data["password"], PASSWORD_DEFAULT);
@@ -244,7 +292,7 @@
             $stmt->execute();
         }
 
-        function editUser($data) {
+        function adEditUser($data) {
             $result = $this->dbQueryWithParams("UPDATE users SET firstname=?, lastname=?, password=?, permission=? WHERE email=?", "s", [$data["firstname"], $data["lastname"], $data["password"], $data["permission"], $data["email"]]);
             $stmt = $this->conn->prepare($result);
             $password = password_hash($data["password"], PASSWORD_DEFAULT);
@@ -252,13 +300,13 @@
             $stmt->execute();
         }
 
-        function deleteUser($userEmail) {
+        function adDeleteUser($userEmail) {
             $result = $this->dbQueryWithParams("DELETE FROM users WHERE email=?", "s", [$userEmail]);
             $stmt = $this->conn->prepare($result);
             $stmt->bind_param("s", $userEmail);
             $stmt->execute();
         }
-        function banUser($userEmail) {
+        function adBanUser($userEmail) {
             $result = $this->dbQueryWithParams("UPDATE users SET permission = 'banned' WHERE email = ?", "s", [$userEmail]);
             $stmt = $this->conn->prepare($result);
             $stmt->bind_param("s", $userEmail);

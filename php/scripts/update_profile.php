@@ -19,11 +19,9 @@
 
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // TODO Servirà un try-catch
+        // TODO Servirà un try-catch, controllare numero di dati in arrivo in post, nella versione minimale ci saranno 4 valori
 
-        $string = "";
-
-        if ($dbManager->editUser()) 
+        if ($dbManager->editUser($sessionManager->getEmail(), $sessionManager))
             $_SESSION["success"] = "Your changes were applied successfully!";
         else 
             $_SESSION["error"] = "Something went wrong, try again now, if the problem persists contact admin";

@@ -32,7 +32,7 @@
     <main class="mainContainer">
 
         <fieldset class="formSection">
-            <h2>Log in here:</h2>
+            <h2>Edit your profile here:</h2>
                         
             <?php
                 if (isset($_SESSION["error"])) {
@@ -47,20 +47,20 @@
                     echo "<p class='error'>&nbsp;</p>"; 
             ?>
 
-            <form action="./scripts/editProfile.php" method="post">
+            <form action="./scripts/update_profile.php" method="post">
                 <div class="inputBox">
                     <label for="firstname">Firstname: </label>
-                    <input type="text" id="firstname" name="firstname" placeholder="Firstname (required)">
+                    <input type="text" id="firstname" name="firstname" placeholder="Firstname">
                 </div>
                 
                 <div class="inputBox">
                     <label for="lastname">Lastname: </label>
-                    <input type="text" id="lastname" name="lastname" placeholder="Lastname (required)">
+                    <input type="text" id="lastname" name="lastname" placeholder="Lastname">
                 </div>
 
                 <div class="inputBox">
                     <label for="email">Email: </label>
-                    <input type="email" id="email" name="email" placeholder="Email (required)">
+                    <input type="email" id="email" name="email" placeholder="Email">
                 </div>
 
                 <!-- TODO we should be able to edit all user's data -->

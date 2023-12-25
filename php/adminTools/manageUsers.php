@@ -19,11 +19,11 @@
     //???
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (isset($_POST["banUser"]))
-            $dbManager->banUser($_POST["ban"]);
+            $dbManager->adBanUser($_POST["ban"]);
         elseif (isset($_POST["editUser"]))
-            $dbManager->editUser($_POST["unban"]);
+            $dbManager->adEditUser($_POST["unban"]);
         elseif (isset($_POST["deleteUser"]))
-            $dbManager->deleteUser($_POST["delete"]);
+            $dbManager->adDeleteUser($_POST["delete"]);
     }
     
     //???
