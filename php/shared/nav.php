@@ -5,7 +5,7 @@
     ?>
 
     <div class="left_nav">
-        <a href="<?php echo $root; ?>/index.php"><img class="navLogo" src="<?php echo $root; ?>/images/bestLogo.png" alt="Website Logo"></a>
+        <a href="<?php echo $root; ?>/index.php"><img class="navImg" src="<?php echo $root; ?>/images/bestLogo.png" alt="Website Logo"></a>
         <a class="navButton">Homepage</a>
         <a class="blankSpace"></a>
         <a class="navButton">Dashboard</a>
@@ -40,9 +40,17 @@
 
         <!-- placeholder -->
         <?php
-            if ($sessionManager->isSessionSet())
-                echo "<button alt='Your profile'>ph</button>";
+            if ($sessionManager->isSessionSet()) {
+                $result = $dbManager->dbQueryWithParams("SELECT pfp FROM users WHERE email = ?", "s", [$sessionManager->getEmail()]);
+                
+                $row = $result->fetch_assoc();
+
+                if ($row["pfp"] == NULL) 
+                    echo "<img class='navImg' src='/SAW/SAWFinalProject/images/pfps/default.jpg'></img>";
+                else
+                    echo "<img class='navImg' src='/SAW/SAWFinalProject/images/pfps/ " . $sessionManager->getEmail() . "'></img>";
+            }
         ?>
     </div>
 
-</nav>
+</nav> 
