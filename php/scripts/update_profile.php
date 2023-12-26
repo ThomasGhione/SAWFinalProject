@@ -23,8 +23,6 @@
 
         if ($dbManager->editUser($sessionManager->getEmail(), $sessionManager))
             $_SESSION["success"] = "Your changes were applied successfully!";
-        else 
-            $_SESSION["error"] = "Something went wrong, try again now, if the problem persists contact admin";
     }    
     else // invalid request
         $_SESSION["error"] = "Invalid request";

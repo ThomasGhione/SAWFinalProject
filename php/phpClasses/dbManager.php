@@ -168,6 +168,22 @@
 
         function editUser($email, $sessionManager) {
 
+            // Following code checks number of arguments used in POST, probabily it can be improved
+            $count = 0;
+            
+            foreach ($_POST as $dataName => $data) 
+                if ($data != "") ++$count;
+            
+            if ($count < 2) {
+                $_SESSION["error"] = "Choose at least one field to edit";
+                return false;
+            }
+
+            if ($count > 4) {
+                $_SESSION["error"] = "Invalid request";
+                return false;
+            }
+
             // Sets data names and data 
             $dataTypeToUpdate = "";
             $dataToUpdate = array(); 
@@ -184,6 +200,10 @@
                         }
 
                         $sessionManager->setEmail($data);
+
+                        // Following code updates all remember me cookies of current email with the new one, 
+                        // TODO ask to professor if we should delete them instead of updating them
+                        $result = $this->dbQueryWithParams("UPDATE remMeCookies SET email = ? WHERE email = ?", "ss", [$data, $email]);
                     }
                     
                     $dataTypeToUpdate .= " " . $dataName . " = ?,";
