@@ -95,12 +95,16 @@
                 }
     
                 $paramArr = [$user->getEmail(), $user->getPassword(), $user->getFirstName(), $user->getLastName()];
-                $result = $this->dbQueryWithParams('INSERT INTO users (email, password, firstname, lastname, username, permission, pfp, gender, birthdate, description) VALUES (?, ?, ?, ?, null, "user", null, "notSpecified", null, null)', 'ssss', $paramArr);
+                $result = $this->dbQueryWithParams('INSERT INTO users (email, password, firstname, lastname, username, permission, pfp, gender, birthday, description) VALUES (?, ?, ?, ?, null, "user", null, "notSpecified", null, null)', 'ssss', $paramArr);
     
                 if ($result != 1) {
                     error_log("cannot insert user into database");
                     throw new Exception("Something went wrong, please try again later");
                 }
+
+                // Creates a new directory for user's repos 
+                $email = $user->getEmail();
+                mkdir("/SAW/SAWFinalProject/repos/$email");
             }
             catch (Exception $e) {
                 error_log($e->getMessage(), 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
@@ -168,47 +172,38 @@
 
         function editUser($email, $sessionManager) {
 
-            // Following code checks number of arguments used in POST, probabily it can be improved
-            $count = 0;
-            
-            foreach ($_POST as $dataName => $data) 
-                if ($data != "") ++$count;
-            
-            if ($count < 2) {
-                $_SESSION["error"] = "Choose at least one field to edit";
-                return false;
-            }
-
-            if ($count > 4) {
-                $_SESSION["error"] = "Invalid request";
-                return false;
-            }
-
             // Sets data names and data 
             $dataTypeToUpdate = "";
             $dataToUpdate = array(); 
-    
+            $modifiedEmail = 0;
+
+            if (isset($_POST["email"]))
+                $modifiedEmail = 1;
+
             foreach ($_POST as $dataName => $data) {
-                if ($data != NULL) {
-                    if ($dataName == "email") { // Following code checks if email was changed, if so, it checks if email is valid, and changes session data 
-
-                        $result = $this->dbQueryWithParams("SELECT email FROM users WHERE email = ?", "s", [$data]);
-
-                        if ($result->num_rows == 1) {
-                            $_SESSION["error"] = "Email already exists";
-                            return false; 
-                        }
-
-                        $sessionManager->setEmail($data);
-
-                        // Following code updates all remember me cookies of current email with the new one, 
-                        // TODO ask to professor if we should delete them instead of updating them
-                        $result = $this->dbQueryWithParams("UPDATE remMeCookies SET email = ? WHERE email = ?", "ss", [$data, $email]);
-                    }
+                if (!empty($data)) {
                     
                     $dataTypeToUpdate .= " " . $dataName . " = ?,";
                     array_push($dataToUpdate, trim(htmlspecialchars($data)));
                 }
+            }
+
+
+            if ($modifiedEmail) { // Following code checks if email was changed, if so, it checks if email is valid, and changes session data 
+
+                $result = $this->dbQueryWithParams("SELECT email FROM users WHERE email = ?", "s", [$data]);
+
+                if ($result->num_rows == 1) {
+                    
+                    $_SESSION["error"] = "Email already exists";
+                    return false; 
+                }
+
+                $sessionManager->setEmail($data);
+
+                // Following code updates all remember me cookies of current email with the new one, 
+                // TODO ask to professor if we should delete them instead of updating them
+                $result = $this->dbQueryWithParams("UPDATE remMeCookies SET email = ? WHERE email = ?", "ss", [$data, $email]);
             }
 
             // Following code cleans data to be used in query function
@@ -225,15 +220,59 @@
             for ($i = count($dataToUpdate); $i > 0; $i-- ) 
                 $dataCount .= "s";
 
-            error_log("dataTypeToUpdate: " . $dataTypeToUpdate);
-            error_log("dataToUpdate: " . implode(", ", $dataToUpdate));
-
             // TODO Check result
             $result = $this->dbQueryWithParams("UPDATE users SET" . $dataTypeToUpdate . " WHERE email = ?", $dataCount, $dataToUpdate);
 
             return true;
         }
  
+
+        // DB Repos Manipulation //
+
+        // TODO Add try catch statments checks
+        function addNewRepo ($email) {
+            
+            $reposName = htmlspecialchars($_POST["reposName"]);
+            $fileName = htmlspecialchars($_FILES["fileUpload"]["name"]);
+            $pathLocation = "/SAW/SAWFinalProject/repos/$email/$reposName";
+            $currentDate = date("Y-m-d", time());
+
+            // TODO Check results
+            $result = $this->dbQueryWithParams("INSERT INTO repos (Name, Owner, CreationDate, LastModified, RepoLocation) VALUES (?, ?, ?, ?, ?)", "sssss", [$reposName, $email, $currentDate, $currentDate, $pathLocation]);
+
+            $pathLocationForMKDir = "/opt/lampp/htdocs" . $pathLocation;
+
+            // TODO Check errors in mkdir 
+            if (!mkdir($pathLocationForMKDir, 0777)) {
+                $error = error_get_last();
+                error_log($error["message"] . " Current value in pathLocation is: " . $pathLocation);
+                /*error_log("Something went wrong when creating the new directory into its new location", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");*/
+                $_SESSION["error"] = "Something went wrong (mkdir)";
+                return false;
+            }
+
+            $tempPath = $_FILES["fileUpload"]["tmp_name"];
+
+            $destinationPath = $pathLocationForMKDir;
+            
+            // The following code will be modified to support try-catch
+            if(!move_uploaded_file($tempPath, $destinationPath)) {
+                error_log("Something went wrong when transferring the file into its new location", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                $_SESSION["error"] = "Something went wrong, try again later";
+                return false;
+            }
+
+            return true;
+        }
+
+        function editRepo ($email) {
+
+        }
+
+        function deleteRepo ($email) {
+
+        }
+
         // DB Cookie Manipulation //
 
         function addRememberMeCookieToDB($cookieManager) {

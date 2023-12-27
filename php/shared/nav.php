@@ -37,8 +37,6 @@
         <span class="fa fa-search" aria-hidden="true"> </span>
         <input type="text" id="search_bar" placeholder="Search repos or users..." name="search_bar" maxlength="128">   
 
-
-        <!-- placeholder -->
         <?php
             if ($sessionManager->isSessionSet()) {
                 $result = $dbManager->dbQueryWithParams("SELECT pfp FROM users WHERE email = ?", "s", [$sessionManager->getEmail()]);
@@ -46,9 +44,11 @@
                 $row = $result->fetch_assoc();
 
                 if ($row["pfp"] == NULL) 
-                    echo "<img class='navImg' src='/SAW/SAWFinalProject/images/pfps/default.jpg'></img>";
+                    $currentPfp = "default.jpg";
                 else
-                    echo "<img class='navImg' src='/SAW/SAWFinalProject/images/pfps/ " . $sessionManager->getEmail() . "'></img>";
+                    $currentPfp = $sessionManager->getEmail();
+
+                echo "<a href=$root/php/show_profile.php><img class='navImg' src='$root/images/pfps/$currentPfp'></img></a>";
             }
         ?>
     </div>

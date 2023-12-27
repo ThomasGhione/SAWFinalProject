@@ -19,7 +19,24 @@
 
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // TODO Servirà un try-catch, controllare numero di dati in arrivo in post, nella versione minimale ci saranno 4 valori
+        // TODO Servirà un try-catch
+
+        // Following code checks number of arguments used in POST, probabily it can be improved
+        $count = 0;
+            
+        foreach ($_POST as $dataName => $data) 
+            if (empty($data)) ++$count;
+        
+        if ($count < 2) {
+            $_SESSION["error"] = "Choose at least one field to edit";
+            return false;
+        }
+
+        if ($count > 4) {
+            $_SESSION["error"] = "Invalid request";
+            return false;
+        }
+
 
         if ($dbManager->editUser($sessionManager->getEmail(), $sessionManager))
             $_SESSION["success"] = "Your changes were applied successfully!";

@@ -35,18 +35,11 @@
             <div class="second_column">
                 <h2>WE PRESENT YOU OPENHUB</h2>
                 
-                <?php 
-                    echo "<p>Welcome " . $_SESSION["email"] . ", your permission is: " . $_SESSION["permission"] .  "</p>";
-                    if (isset($_COOKIE["remMeCookie"]))
-                        echo "<p>Cookie UID: " . $cookieManager->getCookie("remMeCookie") . "</p>";
-                    else
-                        echo "<p>Cookie does not exist</p>"
-                ?>
-                
                 <p>The leading (maybe not) platform for open source projects.<p>
                 <p>Here you can look at others's repos because we believe in open source projects.</p>
                 <p>(don't even think to make your repos as private)</p>
-                <a>Here's a cookie for you, just click on it: <span class="fa-solid fa-cookie fa-xl"></span></a> 
+                <br>
+                <p>Here's a cookie for you, just click on it: <span class="fa-solid fa-cookie fa-xl"></span></p> 
             </div>
         </section>
 

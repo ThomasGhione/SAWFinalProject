@@ -35,26 +35,19 @@
 
     <div class="main_personalarea">
         <column id="left_column">
-        
-            <?php 
-                if (!($pfpHref = ($currentUser->getPfp())))
-                    $pfpHref = "default.jpg";
-                
-                echo "<img class='pfp' src='/SAW/SAWFinalProject/images/pfps/$pfpHref' alt='Your profile picture'>";
 
-            
-                if ($currentUser->getUsername() == "")
-                    echo "<p>Welcome " . $currentUser->getEmail() . "</p>";
-                else
-                    echo "<p>Welcome " . $currentUser->getUsername() . "</p>";
-            ?>
-            
             <div class="infos">
-                <p>Username</p>
-                <p>email</p>
-                <p>job</p>
-            </div>
+                <?php 
+                    if (!($pfpHref = ($currentUser->getPfp())))
+                        $pfpHref = "default.jpg";
+                
+                    echo "<img class='pfp' src='/SAW/SAWFinalProject/images/pfps/$pfpHref' alt='Your profile picture'>";
 
+                    echo "<p>Welcome " . $currentUser->getFirstname() . " " . $currentUser->getLastname() . "</p>";
+                    echo "<br>";
+                    echo "<i class='fa-solid fa-square-envelope'>" . " " . $currentUser->getEmail() . "</i>";
+                ?>
+            </div>
 
             <div class="list_of_badges">                
                 <p>badge1</p>
@@ -63,6 +56,8 @@
             </div>
             
             <a class="personalAreaButton" href="./update_profile_form.php">Edit your profile</a>
+            <a class="personalAreaButton" href="./addNewRepoForm.php">Add a new repo here!</a>
+
 
         </column>
          
