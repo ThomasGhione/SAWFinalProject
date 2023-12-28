@@ -20,15 +20,15 @@
     if ($_SERVER["REQUEST_METHOD"] != "POST") 
         $_SESSION["error"] = "Invalid request";
     else { // Following code checks the number of arguments used in POST, it can be improved... probably :3
-        $count = 0;
+        $emptyCount = 0;
             
         foreach ($_POST as $dataName => $data) 
-            if (empty($data)) ++$count;
+            if (!empty($_POST[$dataName])) ++$count;
 
         try {
             if ($count < 2) {
                 error_log("User must choose at least 1 field to edit", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
-                throw new Exception("Please choose at least 1 field to edit");
+                throw new Exception("Please choose at least 1 field to edit, number of empty values = $count");
             }
             if ($count > 4) {
                 error_log("Invalid request", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");

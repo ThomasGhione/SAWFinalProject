@@ -15,7 +15,7 @@
             $dbManager = new dbManager();
             $result = $dbManager->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$email]);
             try {
-                if ($result == 0) {
+                if ($result->num_rows == 0) {
                     error_log("Query failed", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong. Please try again later");
                 }
@@ -69,21 +69,4 @@
         function getDescription() { return $this->description; }
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ?>

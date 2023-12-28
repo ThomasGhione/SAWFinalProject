@@ -100,9 +100,11 @@
                     throw new Exception("Something went wrong, please try again later");
                 }
 
+                // TODO Add exceptions for mkdir and chmod
                 // Creates a new directory for user's repos 
                 $email = $user->getEmail();
-                mkdir("/SAW/SAWFinalProject/repos/$email");
+                mkdir("../../repos/$email");
+                chmod("../../repos/$email", 0777);
             }
             catch (Exception $e) {
                 $_SESSION["error"] = $e->getMessage();
@@ -131,7 +133,6 @@
                     throw new Exception("Wrong password. please try again");
                 }
     
-                // TODO Work in progress - Testing in progress 
                 if ($user->getRemMeFlag()) { 
                     $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && (STR_TO_DATE(ExpDate, '%Y-%m-%d') < CURDATE()))", "s", [$user->getEmail()]);
     
@@ -170,10 +171,7 @@
             // Sets data names and data 
             $dataTypeToUpdate = "";
             $dataToUpdate = array(); 
-            $modifiedEmail = 0;
-
-            if (isset($_POST["email"]))
-                $modifiedEmail = 1;
+            $isEmailModified = !empty($_POST["email"]);
 
             foreach ($_POST as $dataName => $data) {
                 if (!empty($data)) {
@@ -182,9 +180,10 @@
                 }
             }
 
-
-            if ($modifiedEmail) { // Following code checks if email was changed, if so, it checks if email is valid, and changes session data 
-                $result = $this->dbQueryWithParams("SELECT email FROM users WHERE email = ?", "s", [$data]);
+            if ($isEmailModified) { // Following code checks if email was changed, if so, it checks if email is valid, if so it changes session data and everything related to that email 
+                $newEmail = htmlspecialchars($_POST["email"]);
+                
+                $result = $this->dbQueryWithParams("SELECT email FROM users WHERE email = ?", "s", [$newEmail]);
                 
                 try {
                     if ($result->num_rows == 1) {
@@ -197,17 +196,18 @@
                     return false;
                 }
 
-                $sessionManager->setEmail($data);
+                $sessionManager->setEmail($newEmail);
 
-                //  updates all remember me cookies of current email with the new one, 
-                // TODO ask a professor if we should delete them instead of updating them
-                $result = $this->dbQueryWithParams("UPDATE remMeCookies SET email = ? WHERE email = ?", "ss", [$data, $email]);
+                // Updates all remember me cookies from current email to the new one, 
+                // TODO ask if should delete them instead of updating them
+                $result = $this->dbQueryWithParams("UPDATE remMeCookies SET email = ? WHERE email = ?", "ss", [$newEmail, $email]);
+                $result = $this->dbQueryWithParams("UPDATE repos SET Owner = ? WHERE Owner = ?", "ss", [$newEmail, $email]);
+                rename("../../repos/$email", "../../repos/$newEmail");
             }
 
             // cleans data to be used in query function
             $dataTypeToUpdate = str_replace(", submit = ?,", "", $dataTypeToUpdate);
             array_pop($dataToUpdate);
-
             array_push($dataToUpdate, $email); // Adds last value to be used in query function
 
             // Sets data types for query function            
@@ -236,18 +236,19 @@
             $pathLocationForMKDir = "/opt/lampp/htdocs" . $pathLocation;
 
             try {
-                if (!mkdir($pathLocationForMKDir)) {
+                if (!mkdir("../../repos/$email/$reposName")) {
                     $error = error_get_last();
                     error_log($error["message"] . " Current value in pathLocation is: " . $pathLocation);
                     /*error_log("Something went wrong when creating the new directory into its new location", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");*/
-                    throw new Exception("Something went wrong (mkdir), try again later");
+                    throw new Exception("Something went wrong, try again later");
                 }
+
+                chmod("../../repos/$email/$reposName", 0777);
     
                 $tempPath = $_FILES["fileUpload"]["tmp_name"];
 
-                $destinationPath = $pathLocationForMKDir;
 
-                if (!move_uploaded_file($tempPath, $destinationPath)) {
+                if (!move_uploaded_file($tempPath, "../../repos/$email/$reposName/ . $fileName")) {
                     error_log("Something went wrong while transferring the file into its new location", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
