@@ -96,7 +96,7 @@
                 $result = $this->dbQueryWithParams('INSERT INTO users (email, password, firstname, lastname, username, permission, pfp, gender, birthday, description) VALUES (?, ?, ?, ?, null, "user", null, "notSpecified", null, null)', 'ssss', $paramArr);
     
                 if ($result != 1) {
-                    error_log("cannot insert user into database", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("cannot insert user into database (1 expected)", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong, please try again later");
                 }
 
@@ -133,11 +133,10 @@
     
                 // TODO Work in progress - Testing in progress 
                 if ($user->getRemMeFlag()) { 
-                    
                     $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && (STR_TO_DATE(ExpDate, '%Y-%m-%d') < CURDATE()))", "s", [$user->getEmail()]);
     
                     $actTime = time();
-                    $oneWeek = 60 * 60 * 24 * 7;
+                    $oneWeek = 604800; // 60 * 60 * 24 * 7 = 604800 seconds = 1 week
                     $expDate = date("Y-m-d", $actTime + $oneWeek);
                     $salt = "WeLoveRibaudo";
                     $UID = hash("sha512", (bin2hex(random_bytes(32)) . $actTime . $salt));
@@ -146,7 +145,7 @@
                     $result = $this->dbQueryWithParams("INSERT INTO remMeCookies (UID, email, ExpDate) VALUES (?, ?, ?)", "sss", $paramArr);
     
                     if ($result != 1) {
-                        error_log("Something went wrong in INSERT INTO, try again later", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                        error_log("Something went wrong in INSERT INTO (1 expected), try again later", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
                         throw new Exception("Something went wrong when inserting the new cookie data");
                     }
     
@@ -185,7 +184,6 @@
 
 
             if ($modifiedEmail) { // Following code checks if email was changed, if so, it checks if email is valid, and changes session data 
-
                 $result = $this->dbQueryWithParams("SELECT email FROM users WHERE email = ?", "s", [$data]);
                 
                 try {
@@ -201,12 +199,12 @@
 
                 $sessionManager->setEmail($data);
 
-                // Following code updates all remember me cookies of current email with the new one, 
+                //  updates all remember me cookies of current email with the new one, 
                 // TODO ask a professor if we should delete them instead of updating them
                 $result = $this->dbQueryWithParams("UPDATE remMeCookies SET email = ? WHERE email = ?", "ss", [$data, $email]);
             }
 
-            // Following code cleans data to be used in query function
+            // cleans data to be used in query function
             $dataTypeToUpdate = str_replace(", submit = ?,", "", $dataTypeToUpdate);
             array_pop($dataToUpdate);
 
@@ -278,18 +276,29 @@
         
         // Used for logout
         // TODO Must be finished, we need to add error checking and transaction managing
-        function deleteRememberMeCookieFromDB($cookie, $email) {
-            // TODO Add error checking
+        function deleteRememberMeCookieFromDB($cookie, $email) {    
             $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && UID = ?)", "ss", [$email, $cookie]);
+            
+            try {
+                if ($result != 1) {
+                    error_log("Couldn't delete the cookie from the database (0 found)", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Something went wrong, try again later");
+                }
+            }
+            catch (Exception $e) {
+                $_SESSION["error"] = $e->getMessage();
+                return false;
+            }
+
+            return true;
         }
 
         function recoverSession($cookie, $session) {
-
-            $cookieArr = explode(" ", $cookie);
+            $cookieArr = explode(" ", $cookie); // boom!
 
             $result = $this->dbQueryWithParams("SELECT * FROM remMeCookies WHERE (UID = ? && (STR_TO_DATE(ExpDate, '%Y-%m-%d') > CURDATE()))", "s", [$cookieArr[0]]);
             
-            if ($result->num_rows == 1) { // Se lo troviamo, allora dobbiamo controllare la data di scadenza del cookie, se questa non è valida allora si elimina il cookie
+            if ($result->num_rows == 1) { // if we find it then we check when its expiring date, if it's not valid we delete it
                 $row = $result->fetch_assoc();
 
                 $result = $this->dbQueryWithParams("SELECT email, permission FROM users WHERE email = ?", "s", [$row["email"]]);
@@ -298,7 +307,7 @@
                 $session->setSessionVariables($row["email"], $row["permission"]);
             }
             
-            // Altrimenti la sessione non viene settata
+            // otherwise session won't be set
         }
             
 

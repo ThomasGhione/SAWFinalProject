@@ -17,8 +17,7 @@
         exit;
     }
 
-    // The following code sets user data obtained from database
-    $currentUser = new loggedUser($sessionManager->getEmail());
+    $currentUser = new loggedUser($sessionManager->getEmail()); // sets user data obtained from database
 ?>
 
 
@@ -96,10 +95,8 @@
                 <p>...</p>
             </div>
 
-
         </column>
     </div>
-
 
 
     <?php include("shared/footer.php") ?>

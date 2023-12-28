@@ -33,7 +33,6 @@
         <fieldset class="formSection">
             <h2>Sign up here:</h2>
             
-
             <?php
                 if (isset($_SESSION["error"])) {
                     echo "<p class='error'>" . $_SESSION["error"] . "</p>";

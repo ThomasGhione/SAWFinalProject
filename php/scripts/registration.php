@@ -17,25 +17,25 @@
         exit;
     }
 
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
+    try {
+        if ($_SERVER["REQUEST_METHOD"] != "POST") { // invalid request
+            error_log("Invalid request", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+            throw new Exception("Something went wrong, please try again later");
+        }         
+        
         $user = new User(false);        
 
         // TODO check whether the user is already registered
-        if ($dbManager->registerUser($user)) {
-            header("Location: ../loginForm.php");
-            exit;
-        }
-        else { // invalid registration
-            header("Location: ../registrationForm.php");
-            exit;
-        }
+
+        header("Location: " .($dbManager->registerUser($user)
+            ? "../loginForm.php"         // valid registration
+            : "../registrationForm.php") // invalid registration
+        );
+        exit;
     }
-    else { // invalid request
-        // TODO Al posto di usare solo un errore per l'utente, restituire anche un log_error
-        $_SESSION["error"] = "Something went wrong, please retry later";
-        header ("Location: ../registrationForm.php");
+    catch (Exception $e) { // invalid request
+        $_SESSION["error"] = $e->getMessage();
+        header("Location: ../registrationForm.php");
         exit;
     }
 
