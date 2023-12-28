@@ -13,9 +13,18 @@
 
         function __construct ($email) {
             $dbManager = new dbManager();
-
-            // TODO Missing error checking
             $result = $dbManager->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$email]);
+            try {
+                if ($result == false) {
+                    error_log("Query failed", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Something went wrong. Please try again later");
+                }
+            }
+            catch (Exception $e) {
+                $_SESSION["error"] = $e->getMessage();
+                header("Location: ../loginForm.php");
+                exit;
+            }
 
             $row = $result->fetch_assoc();
 
@@ -40,72 +49,24 @@
 
 
         // Setter methods
-        function setFirstname($firstname) {
-            $this->firstname = $firstname;
-        }
-
-        function setLastname($lastname) {
-            $this->lastname = $lastname;
-        }
-
-        function setEmail($email) {
-            $this->email = $email;
-        }
-
-        function setUsername($username) {
-            $this->username = $username;
-        }
-
-        function setPfp($pfp) {
-            $this->pfp = $pfp;
-        }
-
-        function setGender($gender) {
-            $this->gender = $gender;
-        }
-
-        function setBirthday($birthday) {
-            $this->birthday = $birthday;
-        }
-
-        function setDescription($description) {
-            $this->description = $description;
-        }
-
+        function setFirstname($firstname) { $this->firstname = $firstname; }
+        function setLastname($lastname) { $this->lastname = $lastname; }
+        function setEmail($email) { $this->email = $email; }
+        function setUsername($username) { $this->username = $username; }
+        function setPfp($pfp) { $this->pfp = $pfp; }
+        function setGender($gender) { $this->gender = $gender; }
+        function setBirthday($birthday) { $this->birthday = $birthday; }
+        function setDescription($description) { $this->description = $description; }
     
         // Getter methods
-
-        function getFirstname() {
-            return $this->firstname;
-        }
-
-        function getLastname() {
-            return $this->lastname;
-        }
-
-        function getEmail() {
-            return $this->email;
-        }
-
-        function getUsername() {
-            return $this->username;
-        }
-
-        function getPfp() {
-            return $this->pfp;
-        }
-
-        function getGender() {
-            return $this->gender;
-        }
-
-        function getBirthday() {
-            return $this->birthday;
-        }
-
-        function getDescription() {
-            return $this->description;
-        }
+        function getFirstname() { return $this->firstname; }
+        function getLastname() { return $this->lastname; }
+        function getEmail() { return $this->email; }
+        function getUsername() { return $this->username; }
+        function getPfp() { return $this->pfp; }
+        function getGender() { return $this->gender; }
+        function getBirthday() { return $this->birthday; }
+        function getDescription() { return $this->description; }
 
     }
 

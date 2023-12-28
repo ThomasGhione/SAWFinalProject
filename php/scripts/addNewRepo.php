@@ -17,8 +17,9 @@
     }
 
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        
+    if ($_SERVER["REQUEST_METHOD"] != "POST") 
+        $_SESSION["error"] = "Invalid request";
+    else {
         $errorFlag = 0;
 
         $fileType = $_FILES["fileUpload"]["type"];
@@ -34,18 +35,14 @@
             $errorFlag = 1;
         }
 
-
         if (!$errorFlag && $dbManager->addNewRepo($email)) {
             header("Location: ../show_profile.php");
             exit;
         }
     
     }
-    else 
-        $_SESSION["error"] = "Invalid request";
 
     header("Location: ../addNewRepoForm.php");
     exit;
-
 
 ?>

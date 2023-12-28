@@ -84,21 +84,19 @@
         // User functions //
 
         function registerUser($user) {
-
             $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$user->getEmail()]);
-
 
             try {
                 if ($result->num_rows != 0) {
-                    error_log("email already in use");
-                    throw new Exception("email already in use");
+                    error_log("Email already in use", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Email already in use");
                 }
     
                 $paramArr = [$user->getEmail(), $user->getPassword(), $user->getFirstName(), $user->getLastName()];
                 $result = $this->dbQueryWithParams('INSERT INTO users (email, password, firstname, lastname, username, permission, pfp, gender, birthday, description) VALUES (?, ?, ?, ?, null, "user", null, "notSpecified", null, null)', 'ssss', $paramArr);
     
                 if ($result != 1) {
-                    error_log("cannot insert user into database");
+                    error_log("cannot insert user into database", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong, please try again later");
                 }
 
@@ -107,7 +105,6 @@
                 mkdir("/SAW/SAWFinalProject/repos/$email");
             }
             catch (Exception $e) {
-                error_log($e->getMessage(), 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
                 $_SESSION["error"] = $e->getMessage();
                 header("Location: ../loginForm.php");
                 exit;
@@ -123,15 +120,15 @@
             
             try {
                 if ($result->num_rows != 1) {
-                    error_log("Email not found");
-                    throw new Exception("Email not found");
+                    error_log("Email not found", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Email not found, please try again");
                 }
     
                 $row = $result->fetch_assoc();
     
                 if (!password_verify($user->getPassword(), $row["password"])) {
-                    error_log("Wrong password");
-                    throw new Exception("Wrong password");
+                    error_log("Wrong password", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Wrong password. please try again");
                 }
     
                 // TODO Work in progress - Testing in progress 
@@ -149,8 +146,8 @@
                     $result = $this->dbQueryWithParams("INSERT INTO remMeCookies (UID, email, ExpDate) VALUES (?, ?, ?)", "sss", $paramArr);
     
                     if ($result != 1) {
-                        error_log("Something went wrong when inserting the new cookie data");
-                        throw new Exception("Something went wrong in INSERT INTO, try again later");
+                        error_log("Something went wrong in INSERT INTO, try again later", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                        throw new Exception("Something went wrong when inserting the new cookie data");
                     }
     
                     $cookieManager = new cookieManager();
@@ -158,7 +155,6 @@
                 }
             }
             catch (Exception $e) {
-                error_log($e->getMessage(), 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
                 $_SESSION["error"] = $e->getMessage();
                 header("Location: ../loginForm.php");
                 exit;
@@ -182,7 +178,6 @@
 
             foreach ($_POST as $dataName => $data) {
                 if (!empty($data)) {
-                    
                     $dataTypeToUpdate .= " " . $dataName . " = ?,";
                     array_push($dataToUpdate, trim(htmlspecialchars($data)));
                 }
@@ -192,17 +187,22 @@
             if ($modifiedEmail) { // Following code checks if email was changed, if so, it checks if email is valid, and changes session data 
 
                 $result = $this->dbQueryWithParams("SELECT email FROM users WHERE email = ?", "s", [$data]);
-
-                if ($result->num_rows == 1) {
-                    
-                    $_SESSION["error"] = "Email already exists";
-                    return false; 
+                
+                try {
+                    if ($result->num_rows == 1) {
+                        error_log("Email already exists", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                        throw new Exception("Email already exists, please try again");
+                    }
+                }
+                catch (Exception $e) {
+                    $_SESSION["error"] = $e->getMessage();
+                    return false;
                 }
 
                 $sessionManager->setEmail($data);
 
                 // Following code updates all remember me cookies of current email with the new one, 
-                // TODO ask to professor if we should delete them instead of updating them
+                // TODO ask a professor if we should delete them instead of updating them
                 $result = $this->dbQueryWithParams("UPDATE remMeCookies SET email = ? WHERE email = ?", "ss", [$data, $email]);
             }
 
@@ -210,14 +210,11 @@
             $dataTypeToUpdate = str_replace(", submit = ?,", "", $dataTypeToUpdate);
             array_pop($dataToUpdate);
 
-            // Adds last value to be used in query function
-            array_push($dataToUpdate, $email); 
-
+            array_push($dataToUpdate, $email); // Adds last value to be used in query function
 
             // Sets data types for query function            
             $dataCount = "";
-            
-            for ($i = count($dataToUpdate); $i > 0; $i-- ) 
+            for ($i = count($dataToUpdate); $i > 0; $i--) 
                 $dataCount .= "s";
 
             // TODO Check result
@@ -229,9 +226,7 @@
 
         // DB Repos Manipulation //
 
-        // TODO Add try catch statments checks
         function addNewRepo ($email) {
-            
             $reposName = htmlspecialchars($_POST["reposName"]);
             $fileName = htmlspecialchars($_FILES["fileUpload"]["name"]);
             $pathLocation = "/SAW/SAWFinalProject/repos/$email/$reposName";
@@ -242,23 +237,25 @@
 
             $pathLocationForMKDir = "/opt/lampp/htdocs" . $pathLocation;
 
-            // TODO Check errors in mkdir 
-            if (!mkdir($pathLocationForMKDir, 0777)) {
-                $error = error_get_last();
-                error_log($error["message"] . " Current value in pathLocation is: " . $pathLocation);
-                /*error_log("Something went wrong when creating the new directory into its new location", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");*/
-                $_SESSION["error"] = "Something went wrong (mkdir)";
-                return false;
+            try {
+                if (!mkdir($pathLocationForMKDir)) {
+                    $error = error_get_last();
+                    error_log($error["message"] . " Current value in pathLocation is: " . $pathLocation);
+                    /*error_log("Something went wrong when creating the new directory into its new location", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");*/
+                    throw new Exception("Something went wrong (mkdir), try again later");
+                }
+    
+                $tempPath = $_FILES["fileUpload"]["tmp_name"];
+
+                $destinationPath = $pathLocationForMKDir;
+
+                if (!move_uploaded_file($tempPath, $destinationPath)) {
+                    error_log("Something went wrong while transferring the file into its new location", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Something went wrong, try again later");
+                }
             }
-
-            $tempPath = $_FILES["fileUpload"]["tmp_name"];
-
-            $destinationPath = $pathLocationForMKDir;
-            
-            // The following code will be modified to support try-catch
-            if(!move_uploaded_file($tempPath, $destinationPath)) {
-                error_log("Something went wrong when transferring the file into its new location", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
-                $_SESSION["error"] = "Something went wrong, try again later";
+            catch (Exception $e) {
+                $_SESSION["error"] = $e->getMessage();
                 return false;
             }
 
@@ -282,10 +279,8 @@
         // Used for logout
         // TODO Must be finished, we need to add error checking and transaction managing
         function deleteRememberMeCookieFromDB($cookie, $email) {
-
             // TODO Add error checking
             $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && UID = ?)", "ss", [$email, $cookie]);
-
         }
 
         function recoverSession($cookie, $session) {
@@ -293,7 +288,6 @@
             $cookieArr = explode(" ", $cookie);
 
             $result = $this->dbQueryWithParams("SELECT * FROM remMeCookies WHERE (UID = ? && (STR_TO_DATE(ExpDate, '%Y-%m-%d') > CURDATE()))", "s", [$cookieArr[0]]);
-
             
             if ($result->num_rows == 1) { // Se lo troviamo, allora dobbiamo controllare la data di scadenza del cookie, se questa non è valida allora si elimina il cookie
                 $row = $result->fetch_assoc();

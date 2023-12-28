@@ -15,24 +15,21 @@
                              $firstName = null, $lastName = null, $userName = null,
                              $confirmPwd = null, $gender = null, $birthday = null) {*/
 
-        function __construct ($login) {
-            
+        function __construct ($login) {            
             $email = htmlspecialchars($_POST["email"]);
             $password = htmlspecialchars($_POST["pass"]);
 
-
             try {                
                 if (empty($email) || empty($password)) {
-                    error_log("Error: empty parameters");
-                    throw new Exception("Empty parameters passed to the form");
+                    error_log("Empty parameters have been passed to the form", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Empty parameters have been passed to the form. Please try again");
                 }
                 if (!$this->isEmailValid()) {
-                    error_log("Error: email is not valid");
-                    throw new Exception("Email is not valid");
+                    error_log("Invalid email", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Invalid email. Please try again");
                 }
             }
             catch (Exception $e) {
-                error_log($e->getMessage(), 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
                 $_SESSION["error"] = $e->getMessage();
                 header("Location: ../loginForm.php");
                 exit;
@@ -67,23 +64,21 @@
         }
 
         public function cRegister($firstname, $lastname, $email, $password, $confirm) {
-
             try {
                 if (empty($firstname) || empty($lastname) || empty($confirm)) {
-                    error_log("Error: empty parameters");
-                    throw new Exception("Empty parameters passed to the form");
+                    error_log("Empty parameters have been passed to the form", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Empty parameters have been passed to the form. Please try again later");
                 }
                 if ($this->isPasswordWeak($password)) {
-                    error_log("Error: password is not strong enough");
-                    throw new Exception("Password is not strong enough");
+                    error_log("Password isn't strong enough", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Password isn't strong enough, please choose a stronger password"); //TODO this message isn't precise enough
                 }
                 if (!$this->isPasswordValid($password, $confirm)) {
-                    error_log("Error: passwords do not match");
-                    throw new Exception("Passwords do not match");
+                    error_log("Passwords don't match", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Passwords don't match");
                 }
             }
             catch (Exception $e) {
-                error_log($e->getMessage(), 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
                 $_SESSION["error"] = $e->getMessage();
                 header("Location: ../loginForm.php");
                 exit;
