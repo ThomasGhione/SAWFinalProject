@@ -1,10 +1,10 @@
 <?php 
-    $root = $_SERVER["DOCUMENT_ROOT"];
+    $root = $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/php";
     
-    require_once("$root/SAW/SAWFinalProject/php/scripts/errInitialize.php");
-    require_once("$root/SAW/SAWFinalProject/php/phpClasses/dbManager.php");
-    require_once("$root/SAW/SAWFinalProject/php/phpClasses/sessionManager.php");
-    require_once("$root/SAW/SAWFinalProject/php/phpClasses/cookieManager.php");
+    require_once("$root/scripts/errInitialize.php");
+    require_once("$root/phpClasses/dbManager.php");
+    require_once("$root/phpClasses/sessionManager.php");
+    require_once("$root/phpClasses/cookieManager.php");
 
     $sessionManager = new sessionManager();
     $cookieManager = new cookieManager();
