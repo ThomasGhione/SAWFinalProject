@@ -314,7 +314,9 @@
         // Search Area tools //
 
         function searchUsers($userQuery) {
-            $result = $this->dbQueryWithParams("SELECT email, firstname, lastname FROM users WHERE (email = ? || firstname = ? || lastname = ?)", "sss", [$userQuery, $userQuery, $userQuery]);
+            
+            $userQuery = "%" . $userQuery . "%";
+            $result = $this->dbQueryWithParams("SELECT email, firstname, lastname FROM users WHERE (email LIKE ? OR firstname LIKE ? OR lastname LIKE ?)", "sss", [$userQuery, $userQuery, $userQuery]);
 
             echo "
                 <table>
