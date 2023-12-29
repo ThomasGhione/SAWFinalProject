@@ -318,36 +318,73 @@
             $userQuery = "%" . $userQuery . "%";
             $result = $this->dbQueryWithParams("SELECT email, firstname, lastname FROM users WHERE (email LIKE ? OR firstname LIKE ? OR lastname LIKE ?)", "sss", [$userQuery, $userQuery, $userQuery]);
 
-            echo "
-                <table>
-                <caption> Users found </caption>
-                <thead>
-                    <tr><th>Email</th><th>Firstname</th><th>Lastname</th></tr>
-                </thead>
-                <tbody>
-            ";
+            if (!$result->num_rows) 
+                echo "<h2>No users were found with these values</h2>";
+            else {
+                echo "
+                    <table>
+                    <caption> Users found </caption>
+                    <thead>
+                        <tr><th>Email</th><th>Firstname</th><th>Lastname</th></tr>
+                    </thead>
+                    <tbody>
+                ";
 
-            for ($colorFlag = true; $row = $result->fetch_assoc(); $colorFlag = !$colorFlag) {
-            
-                if ($colorFlag)
-                    echo "<tr class='oddRow'>";
-                else
-                    echo "<tr class='evenRow'>";
-            
-                echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["firstname"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["lastname"]) . "</td>";
+                for ($colorFlag = true; $row = $result->fetch_assoc(); $colorFlag = !$colorFlag) {
+                
+                    if ($colorFlag)
+                        echo "<tr class='oddRow'>";
+                    else
+                        echo "<tr class='evenRow'>";
+                
+                    echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
+                    echo "<td>" . htmlspecialchars($row["firstname"]) . "</td>";
+                    echo "<td>" . htmlspecialchars($row["lastname"]) . "</td>";
 
-                echo "</tr>";
-            }
+                    echo "</tr>";
+                }
 
-            echo "</tbody>
-                </table>
-            ";            
+                echo "</tbody>
+                    </table>
+                ";     
+            }       
         }
 
         function searchRepos($repoQuery) {
+                        
+            $repoQuery = "%" . $repoQuery . "%";
+            $result = $this->dbQueryWithParams("SELECT Name, Owner, CreationDate, LastModified FROM repos WHERE (Owner LIKE ? OR Name LIKE ?)", "ss", [$repoQuery, $repoQuery]);
 
+            if (!$result->num_rows) 
+                echo "<h2>No repos were found with these values</h2>";
+            else {
+                echo "
+                    <table>
+                    <caption> Users found </caption>
+                    <thead>
+                        <tr><th>Email</th><th>Firstname</th><th>Lastname</th></tr>
+                    </thead>
+                    <tbody>
+                ";
+
+                for ($colorFlag = true; $row = $result->fetch_assoc(); $colorFlag = !$colorFlag) {
+                
+                    if ($colorFlag)
+                        echo "<tr class='oddRow'>";
+                    else
+                        echo "<tr class='evenRow'>";
+                
+                    echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
+                    echo "<td>" . htmlspecialchars($row["firstname"]) . "</td>";
+                    echo "<td>" . htmlspecialchars($row["lastname"]) . "</td>";
+
+                    echo "</tr>";
+                }
+
+                echo "</tbody>
+                    </table>
+                ";
+            }        
         }
 
 

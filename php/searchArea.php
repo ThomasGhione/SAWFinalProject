@@ -1,5 +1,7 @@
 <?php 
     require("./shared/initializePage.php");
+
+    $doSearch = !empty($_POST["searchBar"]);
 ?>
 
 <!DOCTYPE html>
@@ -17,9 +19,13 @@
 
     <main class="mainContainer">
 
-        <?php
-            $dbManager->searchUsers($_POST["searchBar"]);
-        ?>
+        <section class="column">
+            <?php if ($doSearch) $dbManager->searchUsers($_POST["searchBar"]); ?>
+        </section>
+
+        <section class="column">
+            <?php if ($doSearch) $dbManager->searchRepos($_POST["searchBar"]); ?>
+        </section>
 
     </main>
 
