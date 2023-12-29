@@ -34,7 +34,7 @@
 
         <a class="blankSpace"></a>
         
-        <form action="<?php echo $root; ?>/php/search_area.php" method="post">
+        <form action="<?php echo $root; ?>/php/searchArea.php" method="post">
             <div class="searchBox">
                 <div class="inputBox">
                     <label for="searchBar">Search: </label>

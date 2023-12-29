@@ -239,7 +239,6 @@
                 if (!mkdir("../../repos/$email/$reposName")) {
                     $error = error_get_last();
                     error_log($error["message"] . " Current value in pathLocation is: " . $pathLocation);
-                    /*error_log("Something went wrong when creating the new directory into its new location", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");*/
                     throw new Exception("Something went wrong, try again later");
                 }
 
@@ -312,13 +311,52 @@
         }
             
 
+        // Search Area tools //
+
+        function searchUsers($userQuery) {
+            $result = $this->dbQueryWithParams("SELECT email, firstname, lastname FROM users WHERE (email = ? || firstname = ? || lastname = ?)", "sss", [$userQuery, $userQuery, $userQuery]);
+
+            echo "
+                <table>
+                <caption> <h2>Users found</h2> </caption>
+                <thead>
+                    <tr><th>Email</th><th>Firstname</th><th>Lastname</th></tr>
+                </thead>
+                <tbody>
+            ";
+
+            for ($colorFlag = true; $row = $result->fetch_assoc(); $colorFlag = !$colorFlag) {
+            
+                if ($colorFlag)
+                    echo "<tr class='oddRow'>";
+                else
+                    echo "<tr class='evenRow'>";
+            
+                echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["firstname"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["lastname"]) . "</td>";
+
+                echo "</tr>";
+            }
+
+            echo "</tbody>
+                </table>
+            ";            
+        }
+
+        function searchRepos($repoQuery) {
+
+        }
+
+
         // Admin Tools //
 
         function allUsers() {
             
             $result = $this->dbQueryWithoutParams("SELECT * FROM users");
            
-            echo "<table>
+            echo "
+                <table>
                 <caption> <h2>All Users</h2> </caption>
                 <thead>
                     <tr><th>Firstname</th><th>Lastname</th><th>Email</th><th>Permission</th></tr>

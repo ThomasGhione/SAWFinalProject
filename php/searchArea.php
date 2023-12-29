@@ -7,6 +7,8 @@
 
 <head>
     <?php require("./shared/commonHead.php"); ?>
+
+    <link rel="stylesheet" type="text/css" href="../CSS/tableStyle.css">
     <title>OpenHub - Search Area</title>
 </head>
 
@@ -15,7 +17,9 @@
 
     <main class="mainContainer">
 
-
+        <?php
+            $dbManager->searchUsers($_POST["searchBar"]);
+        ?>
 
     </main>
 

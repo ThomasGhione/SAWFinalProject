@@ -1,6 +1,16 @@
-.allUsersTable {
+table {
     border-collapse: collapse;
     border: 1px solid black;
+}
+
+caption {
+    margin-bottom: 20px;
+}
+
+th {
+    font-weight: bold;
+    background-color: beige;
+    border-bottom: 1px solid black;
 }
 
 .evenRow {
@@ -11,7 +21,8 @@
     background-color: lightgray;
 }
 
-.allUsersTable, td, th {
+table, td, th {
     padding: 5px;
     text-align: center;
+    border-left: 1px solid black;
 }
