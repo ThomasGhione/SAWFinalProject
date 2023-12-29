@@ -318,7 +318,7 @@
 
             echo "
                 <table>
-                <caption> <h2>Users found</h2> </caption>
+                <caption> Users found </caption>
                 <thead>
                     <tr><th>Email</th><th>Firstname</th><th>Lastname</th></tr>
                 </thead>

@@ -1,16 +1,17 @@
 table {
     border-collapse: collapse;
-    border: 1px solid black;
 }
 
 caption {
-    margin-bottom: 20px;
+    padding: 15px;
+    font-size: 30px;
+    font-weight: bolder;
+    background-color: bisque;
 }
 
 th {
     font-weight: bold;
     background-color: beige;
-    border-bottom: 1px solid black;
 }
 
 .evenRow {
@@ -21,8 +22,18 @@ th {
     background-color: lightgray;
 }
 
+
+/* Common data */
+
+td, th {
+    border: 1px solid black;
+}
+
 table, td, th {
     padding: 5px;
     text-align: center;
-    border-left: 1px solid black;
+}
+
+table, caption {
+    border: 2px solid black;
 }
