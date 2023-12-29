@@ -1,4 +1,5 @@
 <?php
+    // TODO aggiungere initializePage.php
     require_once("../scripts/errInitialize.php");
     require_once("../phpClasses/dbManager.php");
     require_once("../phpClasses/cookieManager.php");

@@ -1,15 +1,5 @@
 <?php 
-    require_once("./php/scripts/errInitialize.php");
-    require_once("./php/phpClasses/sessionManager.php");
-    require_once("./php/phpClasses/cookieManager.php");
-    require_once("./php/phpClasses/dbManager.php");
-
-    $sessionManager = new sessionManager();
-    $cookieManager = new cookieManager();
-    $dbManager = new dbManager();
-
-    if (!$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
-        $dbManager->recoverSession($cookieManager->getCookie("remMeCookie"), $sessionManager);
+    require("./php/shared/initializePage.php");
 ?>
 
 <!DOCTYPE html>
@@ -21,9 +11,7 @@
 </head>
 
 <body>
-    <?php include("./php/shared/nav.php"); ?>
-
-    <div class="bg-image"></div>
+    <?php require("./php/shared/nav.php"); ?>
 
     <main class="mainContainer">
 

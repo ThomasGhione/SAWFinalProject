@@ -1,0 +1,69 @@
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    
+    /* Dovrà essere cambiato */
+    background-image: linear-gradient(180deg, #C8D3D5, #6E8387);
+}
+
+nav > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+}
+
+.navImg {
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+    border-radius: 100%;
+}
+
+.navImg:hover {
+    filter: brightness(125%);
+}
+
+.left_nav > button {
+    margin: 0px 3px;
+}
+
+.right_nav > button {
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+    border-radius: 100%;
+}
+
+.blankSpace {
+    margin: 5px;
+}
+
+.navButton {
+    background-color: #A4B8C4;
+    padding: 6px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    border: 2px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.navButton:hover {
+    filter: brightness(125%);
+}
+
+.navButton:active {
+    filter: brightness(80%);
+}
+
+a:link, a:visited {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.searchBox {
+    display: flex;
+    flex-direction: column;
+}

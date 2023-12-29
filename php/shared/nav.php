@@ -33,9 +33,17 @@
         ?>
 
         <a class="blankSpace"></a>
+        
+        <form action="<?php echo $root; ?>/php/search_area.php" method="post">
+            <div class="searchBox">
+                <div class="inputBox">
+                    <label for="searchBar">Search: </label>
+                    <input type="text" class="searchBar" name="searchBar" placeholder="Search repos or users..." name="search_bar" maxlength="128">   
+                </div>
 
-        <span class="fa fa-search" aria-hidden="true"> </span>
-        <input type="text" id="search_bar" placeholder="Search repos or users..." name="search_bar" maxlength="128">   
+                <input class="formButton" type="submit" value="Search">
+            </div>
+        </form>
 
         <?php
             if ($sessionManager->isSessionSet()) {

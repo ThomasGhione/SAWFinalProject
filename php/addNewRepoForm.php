@@ -54,7 +54,7 @@
                 </div> 
 
                 <div class="inputBox">
-                    <label for="">Upload your file (only .zip files are accepted): </label>
+                    <label for="fileUpload">Upload your file (only .zip files are accepted): </label>
                     <input required type="file" id="fileUpload" name="fileUpload">
                 </div>
 

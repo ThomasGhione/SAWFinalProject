@@ -1,21 +1,10 @@
-<?php
-    require_once("./scripts/errInitialize.php");
-    require_once("./phpClasses/cookieManager.php");
-    require_once("./phpClasses/sessionManager.php");
-    require_once("./phpClasses/dbManager.php");
-
-    $sessionManager = new sessionManager();
-    $cookieManager = new cookieManager();
-    $dbManager = new dbManager();
-
-    if (!$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
-        $dbManager->recoverSession($cookieManager->getCookie("remMeCookie"), $sessionManager);
+<?php 
+    require("./shared/initializePage.php");
 
     if (!$sessionManager->isSessionSet()) {
         header("Location: ./loginForm.php");
         exit;
     }
-
 ?>
 
 
