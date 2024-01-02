@@ -93,7 +93,7 @@
                 }
     
                 $paramArr = [$user->getEmail(), $user->getPassword(), $user->getFirstName(), $user->getLastName()];
-                $result = $this->dbQueryWithParams('INSERT INTO users (email, password, firstname, lastname, username, permission, pfp, gender, birthday, description) VALUES (?, ?, ?, ?, null, "user", null, "notSpecified", null, null)', 'ssss', $paramArr);
+                $result = $this->dbQueryWithParams('INSERT INTO users (email, password, firstname, lastname, username, permission, pfp, gender, birthday, description, newsLetter) VALUES (?, ?, ?, ?, null, "user", null, "notSpecified", null, null, false)', 'ssss', $paramArr);
     
                 if ($result != 1) {
                     error_log("cannot insert user into database (1 expected)", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
@@ -104,7 +104,7 @@
                 // Creates a new directory for user's repos 
                 $email = $user->getEmail();
                 mkdir("../../repos/$email");
-                chmod("../../repos/$email", 0777);
+                chmod("../../repos/$email", 0766);
             }
             catch (Exception $e) {
                 $_SESSION["error"] = $e->getMessage();
@@ -242,7 +242,7 @@
                     throw new Exception("Something went wrong, try again later");
                 }
 
-                chmod("../../repos/$email/$reposName", 0777);
+                chmod("../../repos/$email/$reposName", 0766);
     
                 $tempPath = $_FILES["fileUpload"]["tmp_name"];
 

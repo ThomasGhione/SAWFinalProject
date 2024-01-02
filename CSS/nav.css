@@ -66,4 +66,8 @@ a:link, a:visited {
 .searchBox {
     display: flex;
     flex-direction: column;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-left: 3px solid black;
+    border-right: 3px solid black;
 }
