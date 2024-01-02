@@ -93,7 +93,7 @@
                 }
     
                 $paramArr = [$user->getEmail(), $user->getPassword(), $user->getFirstName(), $user->getLastName()];
-                $result = $this->dbQueryWithParams('INSERT INTO users (email, password, firstname, lastname, username, permission, pfp, gender, birthday, description, newsLetter) VALUES (?, ?, ?, ?, null, "user", null, "notSpecified", null, null, false)', 'ssss', $paramArr);
+                $result = $this->dbQueryWithParams('INSERT INTO users (email, password, firstname, lastname, username, permission, pfp, gender, birthday, description, newsletter) VALUES (?, ?, ?, ?, null, "user", null, "notSpecified", null, null, false)', 'ssss', $paramArr);
     
                 if ($result != 1) {
                     error_log("cannot insert user into database (1 expected)", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
@@ -167,6 +167,8 @@
 
 
         function editUser($email, $sessionManager) {
+            
+            // TODO Check if $_POST isset 
 
             // Sets data names and data 
             $dataTypeToUpdate = "";
@@ -232,8 +234,6 @@
 
             // TODO Check results
             $result = $this->dbQueryWithParams("INSERT INTO repos (Name, Owner, CreationDate, LastModified, RepoLocation) VALUES (?, ?, ?, ?, ?)", "sssss", [$reposName, $email, $currentDate, $currentDate, $pathLocation]);
-
-            $pathLocationForMKDir = "/opt/lampp/htdocs" . $pathLocation;
 
             try {
                 if (!mkdir("../../repos/$email/$reposName")) {
