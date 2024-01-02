@@ -6,7 +6,7 @@
     require_once("../phpClasses/sessionManager.php");
 
     $sessionManager = new sessionManager();
-    $sessionManager = new cookieManager();
+    $cookieManager = new cookieManager();
     $dbManager = new dbManager();
 
     // if (!$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
@@ -22,7 +22,7 @@
 <html lang="en">
 <head>
     <?php require_once("../shared/commonHead.php"); ?>
-    <link rel="stylesheet" type="text/css" href="allUsersStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../CSS/tableStyle.css">
     <title>OpenHub - All Users Page</title>
 </head>
 <body>

@@ -22,8 +22,10 @@
                 echo "<a class='navButton' href='" . $root . "/php/show_profile.php'>Personal Area</a>";
                 echo "<a class='blankSpace'></a>";
                 echo "<a class='navButton' href='" . $root . "/php/scripts/logout.php'>Logout</a>";
-                if ($sessionManager->isAdmin()) 
+                if ($sessionManager->isAdmin()) {
+                    echo "<a class='blankSpace'></a>";
                     echo "<a class='navButton' href='" . $root . "/php/adminTools/adminTools.php'>Admin Tools</a>";
+                }
             }
             else {
                 echo "<a class='navButton' href='" . $root . "/php/registrationForm.php'>Register here!</a>";

@@ -180,7 +180,7 @@
                 }
             }
 
-            if ($isEmailModified) { // Following code checks if email was changed, if so, it checks if email is valid, if so it changes session data and everything related to that email 
+            if ($isEmailModified) { // Following code checks if email has changed, if so, it checks if email is valid, if so it changes session data and everything related to that email 
                 $newEmail = htmlspecialchars($_POST["email"]);
                 
                 $result = $this->dbQueryWithParams("SELECT email FROM users WHERE email = ?", "s", [$newEmail]);
@@ -422,6 +422,42 @@
                 </table>
             ";
         }
+
+        function allSubbedToNewsletter() {
+            $result = $this->dbQueryWithoutParams("SELECT * FROM users WHERE newsletter = 1");
+           
+            echo "
+                <table>
+                <caption> <h2>All Users</h2> </caption>
+                <thead>
+                    <tr><th>Firstname</th><th>Lastname</th><th>Email</th></tr><tr><th>Send Email</th></tr>
+                </thead>
+                <tbody>
+            ";
+
+
+            for ($colorFlag = true; $row = $result->fetch_assoc(); $colorFlag = !$colorFlag) {
+                
+                if ($colorFlag)
+                    echo "<tr class='oddRow'>";
+                else
+                    echo "<tr class='evenRow'>";
+                
+                echo "<td>" . htmlspecialchars($row["firstname"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["lastname"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
+
+                echo "<td><input type='checkbox' name='userCheckbox[]' value='" . htmlspecialchars($row["email"]) . "'></td>";
+                // echo "<label for = 'userCheckbox[]'>Send Email</label></td>";
+
+                echo "</tr>";
+            }
+
+            echo "</tbody>
+                </table>
+            ";
+        }
+
 
         // TODO Da sistemare
         function adCreateUser($data) {

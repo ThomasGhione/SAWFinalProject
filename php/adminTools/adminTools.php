@@ -19,20 +19,19 @@
      // TODO Complete page for admin 
     <div class="admin-menu">
         <h2>Admin Menu</h2>
-        
-        <button onclick="window.location.href = 'allAdmins.php';">All Admins</button>
-        <button onclick="window.location.href = 'manageAdmins.php';">Manage Admins</button>
-        
-        <button onclick="window.location.href = 'allUsers.php';">All Users</button>
-        <button onclick="window.location.href = 'manageUsers.php';">Manage Users</button> <!-- ban, change infos, etc...-->
-        
-        <button onclick="window.location.href = 'allBannedUsers.php';">All Banned Users</button>
-        
-        <button onclick="window.location.href = 'allRepos.php';">All Repos</button>
-        <button onclick="window.location.href = 'allSponsors.php';">All Sponsors</button>
-        <button onclick="window.location.href = 'allBadges.php';">All Badges</button>
 
-        <button onclick="window.location.href = 'manageNewsletter.php';">Manage Newsletter</button>
+        <a class="navButton" href="/SAW/SAWFinalProject/php/adminTools/allAdmins.php">All Admins</a>
+        <a class="navButton" href="/SAW/SAWFinalProject/php/adminTools/manageAdmins.php">Manage Admins</a>
+
+        <a class="navButton" href="/SAW/SAWFinalProject/php/adminTools/allUsers.php">All Users</a>
+        <a class="navButton" href="/SAW/SAWFinalProject/php/adminTools/manageUsers.php">manageUsers</a>
+        <a class="navButton" href="/SAW/SAWFinalProject/php/adminTools/allBannedUsers.php">All Banned Users</a>
+
+        <a class="navButton" href="/SAW/SAWFinalProject/php/adminTools/allRepos.php">All repos</a>
+        <a class="navButton" href="/SAW/SAWFinalProject/php/adminTools/allSponsors.php">All Sponsors</a>
+        <a class="navButton" href="/SAW/SAWFinalProject/php/adminTools/allBadges.php">All Badges</a>
+
+        <a class="navButton" href="/SAW/SAWFinalProject/php/adminTools/manageNewsletter.php">Manage Newsletter</a>
     </div>
     
     <?php require_once("../shared/footer.php")?>
