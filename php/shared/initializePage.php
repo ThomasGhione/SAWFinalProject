@@ -1,7 +1,7 @@
 <?php 
     $root = $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/php";
     
-    require_once("$root/scripts/errInitialize.php");
+    require_once("$root/shared/errInitialize.php");
     require_once("$root/phpClasses/dbManager.php");
     require_once("$root/phpClasses/sessionManager.php");
     require_once("$root/phpClasses/cookieManager.php");

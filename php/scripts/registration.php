@@ -1,16 +1,7 @@
 <?php 
-    require_once("./errInitialize.php");
-    require_once("../phpClasses/dbManager.php");
-    require_once("../phpClasses/cookieManager.php");
-    require_once("../phpClasses/sessionManager.php");
-    require_once("../phpClasses/user.php");
+    require("../shared/initializePage.php");    
 
-    $sessionManager = new sessionManager();
-    $cookieManager = new cookieManager();
-    $dbManager = new dbManager();
-    
-    if (!$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
-        $dbManager->recoverSession($cookieManager->getCookie("remMeCookie"), $sessionManager);
+    require_once("../phpClasses/user.php");
 
     if ($sessionManager->isSessionSet()) {
         header("Location: ../show_profile.php");
@@ -24,8 +15,6 @@
         }         
         
         $user = new User(false);        
-
-        // TODO check whether the user is already registered
 
         header("Location: " .($dbManager->registerUser($user)
             ? "../loginForm.php"         // valid registration

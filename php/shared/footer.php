@@ -10,7 +10,10 @@
         <a href="<?php echo $root?>/php/shared/listOfReasons.php">Click here to see why</a>
         
         <!-- TODO Add control for joining newsletter -->
-        <a href="<?php echo $root?>/php/scripts/addNewsletter.php"> - Click here to join our newsletter!</a>
+        <?php
+            if (!$_SESSION["newsletter"])
+                echo "<a href='$root/php/scripts/manageUserInNewsletter.php?sub='" . "true" . "'> - Click here to join our newsletter!</a>";
+        ?>
     </address>
     
 </footer>

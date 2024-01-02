@@ -30,12 +30,17 @@
             $_SESSION["permission"] = $permission;
         }
 
+        function setNewsletter($newsletter) {
+            $_SESSION["newsletter"] = $newsletter;
+        }
+
 
         /* Methods */
 
-        function setSessionVariables($email, $permission) {
+        function setSessionVariables($email, $permission, $newsletter) {
             $this->setEmail($email);
             $this->setPermission($permission);
+            $this->setNewsletter($newsletter);
         }
 
         function endSession() {

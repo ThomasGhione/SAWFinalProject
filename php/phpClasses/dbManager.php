@@ -161,6 +161,7 @@
             }
 
             $user->setPermission($row["permission"]);
+            $user->setNewsletter($row["newsletter"]);
             $_SESSION["success"] = "Login successful";
             return true;
         }

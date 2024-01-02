@@ -8,6 +8,7 @@
         private $password;
         private $permission;
         private $remMeFlag;
+        private $newsletter;
         
         private $emailregex = "/\S+@\S+\.\S+/";  // TODO correggere regex per email
 
@@ -97,6 +98,7 @@
         function getPassword() { return $this->password; }
         function getPermission() { return $this->permission; }
         function getRemMeFlag() { return $this->remMeFlag; }
+        function getNewsletter() { return $this->newsletter; }
 
         function getUser() {
             return array(
@@ -105,7 +107,8 @@
                 "email" => $this->getEmail(),
                 "password" => $this->getPassword(),
                 "permission" => $this->getPermission(),
-                "remMeFlag" => $this->getRemMeFlag()
+                "remMeFlag" => $this->getRemMeFlag(),
+                "newsletter" => $this->getNewsletter()
             );
         }
 
@@ -117,6 +120,7 @@
         function setConfirmPwd($confirm) { $this->password = $confirm; }
         function setPermission($permission) { $this->permission = $permission; }
         function setRemMeFlag($remMeFlag) { $this->remMeFlag = $remMeFlag; }
+        function setNewsletter($newsletter) {$this->newsletter = $newsletter; }
         
         
         

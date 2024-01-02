@@ -10,6 +10,7 @@
         private $gender;
         private $birthday;
         private $description;
+        private $newsletter;
 
         function __construct ($email) {
             $dbManager = new dbManager();
@@ -45,6 +46,8 @@
 
             if ($row["description"] != NULL)
                 $this->setDescription(htmlspecialchars($row["description"]));
+
+            $this->setNewsletter(htmlspecialchars($row["newsletter"]));
         }
 
 
@@ -57,6 +60,7 @@
         function setGender($gender) { $this->gender = $gender; }
         function setBirthday($birthday) { $this->birthday = $birthday; }
         function setDescription($description) { $this->description = $description; }
+        function setNewsletter($newsletter) { $this->newsletter = $newsletter; }
     
         // Getter methods
         function getFirstname() { return $this->firstname; }
@@ -67,6 +71,7 @@
         function getGender() { return $this->gender; }
         function getBirthday() { return $this->birthday; }
         function getDescription() { return $this->description; }
+        function getNewsletter() { return $this->newsletter; }
 
     }
 ?>

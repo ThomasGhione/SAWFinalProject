@@ -1,6 +1,6 @@
 <?php
     
-    // To create this script we used:
+    // To create this class we used:
     // - The official documentation on github: 'https://github.com/PHPMailer/PHPMailer'
     // - An article from IONOS: 'https://www.ionos.it/digitalguide/e-mail/tecnica-e-mail/phpmailer/'
     // - An article from mailtrap.io: 'https://mailtrap.io/blog/phpmailer-gmail/'
@@ -12,10 +12,12 @@
     require "../externalTools/PHPMailer\src\PHPMailer.php";
     require "../externalTools/PHPMailer\src\SMTP.php";
 
-    class manageNewsletter {
+    class newsletterManager {
         private $mail;
 
         function __construct() {
+            // TODO Aggiungere try-catch sul costruttore, guarda al file sendEmail.php per capire di più cosa fare
+            
             $mail = new PHPMailer (true);
             $mail->isSMTP();
             $mail->Host = "smtp.gmail.com";  //gmail SMTP server
@@ -28,43 +30,46 @@
             $mail->Port = 465;                    //SMTP port
             $mail->SMTPSecure = "ssl";
         }
+
+        function __destruct() {
+            $this->mail->smtpClose();
+        }
         
         function sendNewsletter() {
-            
+            // TODO Aggiungere Try-Catch al metodo, vedere sendEmail.php in scripts per capire di più
+            // TODO CONTROLLARE EVENTUALI DATI VUOTI
+
             $selectedUsers = [];
 
             foreach ($_POST["sendEmail"] as $selectedEmail) 
                 array_push($selectedUsers, $selectedEmail);
             $message = $_POST["message"];
+
+            foreach($selectedUsers as $email) {
+                $this->mail->clearAddresses();
+                $this->mail->addAddress($email);
+                $this->mail->isHTML(true);
+                $this->mail->Subject = "OpenHub - New Mail Received";
+                $this->mail->Body = $message;
+                $this->mail->send();
+            }
+
+            return true;
         }
 
         function setNewsletter($dbManager, $email, $set) {
-            // TODO Check errors on $result
+            // TODO Check errors on both $result and add Try-Catch
             
             $result = $dbManager->dbQueryWithParams("SELECT newsletter FROM users WHERE email = ?", "s", [$email]); 
             $row = $result->fetch_assoc();
             $isSubbed = $row["newsletter"];
 
-            // Following code adds user to the newsletter
-            if ($set && !$isSubbed) {
-                
-            }
-            elseif (!$set && $isSubbed) {  // Following code deletes user from the newsletter
-            
-            }
+            if ($set && !$isSubbed)
+                $addFlag = true;    // Default: user wants to join newsletter
+            elseif (!$set && $isSubbed)
+                $addFlag = false;   // Otherwise: user wants to abandon newsletter
 
-
-            // TODO Add errors in case something is wrong
-
-            /*
-            if ($row["newsletter"]) {
-                
-            } 
-            else {
-                $result = $dbManager->dbQueryWithParams("UPDATE users SET newsletter = 1", "s", [$email]);
-            }
-            */
-
+            $result = $dbManager->dbQueryWithParams("UPDATE users SET newsletter = ? WHERE email = ?", "ss", [$addFlag, $email]);
         }
     }
 

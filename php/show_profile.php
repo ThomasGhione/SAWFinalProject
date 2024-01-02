@@ -47,8 +47,28 @@
             
             <a class="personalAreaButton" href="./update_profile_form.php">Edit your profile</a>
             <a class="personalAreaButton" href="./addNewRepoForm.php">Add a new repo here!</a>
+            
+            <?php
+                
+                if (!$currentUser->getNewsletter())
+                    echo "<a class='personalAreaButton' href='./scripts/manageUserInNewsletter.php?sub=" . "true" . "'>Subscribe to our newsletter!</a>";
+                else
+                    echo "<a class='personalAreaButton' href='./scripts/manageUserInNewsletter.php?sub=" . "false" . "'>Unsubscribe from our newsletter!</a>";
 
-
+                if (isset($_SESSION["error"])) {
+                    echo "<p class='error'>" . $_SESSION["error"] . "</p>";
+                    unset($_SESSION["error"]);
+                }
+                elseif (isset($_SESSION['success'])) {
+                    echo "<p class='success'>" . $_SESSION["success"] . "</p>";
+                    unset($_SESSION["success"]);
+                }
+                else
+                    echo "<p class='error'>&nbsp;</p>"; 
+            
+            ?>
+            
+            <a class="personalAreaButton" href="./scripts/manageUserInNewsletter.php?sub='false'">Unsubscribe from our newsletter</a>
         </column>
          
         <column id="right_column">
