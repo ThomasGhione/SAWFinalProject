@@ -17,16 +17,14 @@
     <title>OpenHub - Admin Tools Page</title>
 </head>
 <body>
-    <?php require_once("../shared/nav.php"); 
+    <?php require_once("../shared/nav.php") ?> 
     
-    echo " <main class='mainContainer'>";
+    <main class="mainContainer">
+        <section class="column">
+            <?php $dbManager->manageSubbedToNewsletter() ?>
+        </section>
+    </main>
 
-    echo "<section class='column'>";
-        $dbManager->allSubbedToNewsletter();
-    echo "</section>";
-
-    echo "</main>";
-
-    require_once("../shared/footer.php"); ?>
+    <?php require_once("../shared/footer.php") ?>
 </body>
 </html>

@@ -34,7 +34,7 @@
                 error_log("Invalid request", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("Invalid request");
             }
-            if (!$dbManager->editUser($sessionManager->getEmail(), $sessionManager)) {
+            if (!$dbManager->editProfile($sessionManager->getEmail(), $sessionManager)) {
                 error_log("Something went wrong while editing user", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("Something went wrong while editing user. Please try again later");
             }

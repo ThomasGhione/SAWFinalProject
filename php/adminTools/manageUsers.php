@@ -1,51 +1,28 @@
 <?php 
-    // TODO aggiungere initializePage.php
-    require_once("../scripts/errInitialize.php");
-    require_once("../phpClasses/dbManager.php");
-    require_once("../phpClasses/cookieManager.php");
-    require_once("../phpClasses/sessionManager.php");
+    require("../shared/initializePage.php");
 
-    $sessionManager = new sessionManager();
-    $sessionManager = new cookieManager();
-    $dbManager = new dbManager();
-
-    // if ( !$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
-    //     $dbManager->recoverSession($cookieManager->getCookie("remMeCookie"), $sessionManager);
-    //
-    // if ( !$sessionManager->isSessionSet() || !$sessionManager->isAdmin() ) {
-    //     header('Location: ../../index.php');
+    // if (!$sessionManager->isSessionSet() || !$sessionManager->isAdmin()) {
+    //     header("Location: ../../index.php");
     //     exit;
     // }
-
-    //???
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (isset($_POST["banUser"]))
-            $dbManager->adBanUser($_POST["ban"]);
-        elseif (isset($_POST["editUser"]))
-            $dbManager->adEditUser($_POST["unban"]);
-        elseif (isset($_POST["deleteUser"]))
-            $dbManager->adDeleteUser($_POST["delete"]);
-    }
-    
-    //???
-    $dbManager->allUsers();
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <?php require_once("../shared/commonHead.php"); ?>
-    <link rel="stylesheet" type="text/css" href="allUsersStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../CSS/tableStyle.css">
     <title>OpenHub - All Users Page</title>
 </head>
 <body>
-    <?php require_once("../shared/nav.php"); ?>
+    <?php require_once("../shared/nav.php") ?>
     
     <main class="mainContainer">
-        
-        
-
+        <?php $dbManager->manageUsers() ?>
     </main>
 
-    <?php require_once("../shared/footer.php")?>
+    <?php require_once("../shared/footer.php") ?>
 </body>
 </html>
