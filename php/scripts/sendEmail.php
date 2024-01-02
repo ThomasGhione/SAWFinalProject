@@ -18,9 +18,16 @@
             // TODO CONTROLLARE EVENTUALI DATI VUOTI
 
             $selectedUsers = [];
-            foreach ($_POST["sendEmail"] as $selectedEmail) {
-                array_push($selectedUsers, $selectedEmail);
+            
+            /*
+            if (!isset($_POST)) {
+                error_log(admin);
+                throw new Exception(utente);
             }
+            */
+
+            foreach ($_POST["sendEmail"] as $selectedEmail) 
+                array_push($selectedUsers, $selectedEmail);
 
             $message = $_PAST["message"];
 
@@ -47,22 +54,22 @@
                 $mail->send();
             }
 
-            // Send mail   
-            if (!$mail->send()) {
-                echo 'Email not sent an error was encountered: ' . $mail->ErrorInfo;
-            } else {
-                echo 'Message has been sent.';
-            }
-
             $mail->smtpClose();
 
+            $_SESSION["success"] = "All mails sended correctly";
+            header("Location: ../adminTools/manageNewsletter.php");
     
         } catch (Exception $e) {
+            // TODO MISSING ERROR CHECKING, COMPLETE IT
+            $_SESSION["error"] = "";
             echo "Mailer Error: ".$mail->ErrorInfo;
+            header("Location: ,,/adminTools/manageNewsletter.php");
         }
     }
     else {
         // TODO MISSING ERROR CHECKING FOR OTHER REQUESTS
+        $_SESSION["error"] = "";
+        header("Location: ../adminTools/manageNewsletter.php");
     }
 
 
