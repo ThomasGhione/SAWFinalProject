@@ -29,7 +29,7 @@
             foreach ($_POST["sendEmail"] as $selectedEmail) 
                 array_push($selectedUsers, $selectedEmail);
 
-            $message = $_PAST["message"];
+            $message = $_POST["message"];
 
 
             // Tentativo di creazione di una nuova istanza della classe PHPMailer
