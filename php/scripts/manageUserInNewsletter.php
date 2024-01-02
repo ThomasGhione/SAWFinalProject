@@ -16,7 +16,7 @@
         
         $sub = ($_GET["sub"] === "true");
         
-        if ($newsletterManager->setNewsletter($dbManager, $sessionManager->getEmail(), $sub)) {
+        if ($newsletterManager->setNewsletter($dbManager, $sessionManager, $sessionManager->getEmail(), $sub)) {
             if ($sub) 
                 $_SESSION["success"] = "You are now subscribed to the newsletter";
             else 

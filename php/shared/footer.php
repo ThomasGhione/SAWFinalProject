@@ -11,7 +11,7 @@
         
         <!-- TODO Add control for joining newsletter -->
         <?php
-            if (!$_SESSION["newsletter"])
+            if (isset($_SESSION["newsletter"]) && !$_SESSION["newsletter"])
                 echo "<a href='$root/php/scripts/manageUserInNewsletter.php?sub='" . "true" . "'> - Click here to join our newsletter!</a>";
         ?>
     </address>

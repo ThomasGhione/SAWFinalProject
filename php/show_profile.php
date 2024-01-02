@@ -55,6 +55,9 @@
                 else
                     echo "<a class='personalAreaButton' href='./scripts/manageUserInNewsletter.php?sub=" . "false" . "'>Unsubscribe from our newsletter!</a>";
 
+                echo "<a>Current value in newsletter is: " . $currentUser->getNewsletter() . "</a>";
+
+
                 if (isset($_SESSION["error"])) {
                     echo "<p class='error'>" . $_SESSION["error"] . "</p>";
                     unset($_SESSION["error"]);
@@ -67,8 +70,6 @@
                     echo "<p class='error'>&nbsp;</p>"; 
             
             ?>
-            
-            <a class="personalAreaButton" href="./scripts/manageUserInNewsletter.php?sub='false'">Unsubscribe from our newsletter</a>
         </column>
          
         <column id="right_column">

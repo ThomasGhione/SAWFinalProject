@@ -8,11 +8,12 @@
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
 
-    require "../externalTools/PHPMailer\src\Exception.php";
-    require "../externalTools/PHPMailer\src\PHPMailer.php";
-    require "../externalTools/PHPMailer\src\SMTP.php";
+    require "../externalTools/PHPMailer/src/Exception.php";
+    require "../externalTools/PHPMailer/src/PHPMailer.php";
+    require "../externalTools/PHPMailer/src/SMTP.php";
 
     class newsletterManager {
+
         private $mail;
 
         function __construct() {
@@ -25,14 +26,10 @@
             // to view proper logging details for success and error messages
             // $mail->SMTPDebug = 1;
             $mail->Host = "smtp.gmail.com";  //gmail SMTP server
-            $mail->Username = "simo64.tomasella@gmail.com";   //email
-            $mail->Password = "xzdp wpbc maja tpge" ;   //16 character obtained from app password created
+            $mail->Username = "Tiananmen2002ChinaIsGoodChinaIsLife@gmail.com";   //email
+            $mail->Password = "ynrk wasi eryl yhms" ;   //16 character obtained from app password created
             $mail->Port = 465;                    //SMTP port
             $mail->SMTPSecure = "ssl";
-        }
-
-        function __destruct() {
-            $this->mail->smtpClose();
         }
         
         function sendNewsletter() {
@@ -57,7 +54,7 @@
             return true;
         }
 
-        function setNewsletter($dbManager, $email, $set) {
+        function setNewsletter($dbManager, $sessionManager, $email, $set) {
             // TODO Check errors on both $result and add Try-Catch
             
             $result = $dbManager->dbQueryWithParams("SELECT newsletter FROM users WHERE email = ?", "s", [$email]); 
@@ -70,6 +67,8 @@
                 $addFlag = false;   // Otherwise: user wants to abandon newsletter
 
             $result = $dbManager->dbQueryWithParams("UPDATE users SET newsletter = ? WHERE email = ?", "ss", [$addFlag, $email]);
+
+            $sessionManager->setNewsletter(!$isSubbed);
         }
     }
 
