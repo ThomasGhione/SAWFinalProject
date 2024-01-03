@@ -283,6 +283,50 @@
             }        
         }
 
+        // DB Repos Manipulation //
+
+        function addNewRepo ($email) {
+            $reposName = htmlspecialchars($_POST["reposName"]);
+            $fileName = htmlspecialchars($_FILES["fileUpload"]["name"]);
+            $pathLocation = "/SAW/SAWFinalProject/repos/$email/$reposName";
+            $currentDate = date("Y-m-d", time());
+        
+            // TODO Check results
+            $result = $this->dbQueryWithParams("INSERT INTO repos (Name, Owner, CreationDate, LastModified, RepoLocation) VALUES (?, ?, ?, ?, ?)", "sssss", [$reposName, $email, $currentDate, $currentDate, $pathLocation]);
+        
+            try {
+                if (!mkdir("../../repos/$email/$reposName")) {
+                    $error = error_get_last();
+                    error_log($error["message"] . " Current value in pathLocation is: " . $pathLocation);
+                    throw new Exception("Something went wrong, try again later");
+                }
+        
+                chmod("../../repos/$email/$reposName", 0766);
+            
+                $tempPath = $_FILES["fileUpload"]["tmp_name"];
+        
+        
+                if (!move_uploaded_file($tempPath, "../../repos/$email/$reposName/ . $fileName")) {
+                    error_log("Something went wrong while transferring the file into its new location", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Something went wrong, try again later");
+                }
+            }
+            catch (Exception $e) {
+                        $_SESSION["error"] = $e->getMessage();
+                        return false;
+            }
+        
+            return true;
+        }
+        
+        function editRepo ($email) {
+        
+        }
+        
+        function deleteRepo ($email) {
+        
+        }
+
 
         // Error methods //
 

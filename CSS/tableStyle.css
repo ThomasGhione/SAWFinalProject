@@ -1,24 +1,22 @@
 table {
     border-collapse: collapse;
-}
-
-caption {
-    padding: 15px;
-    font-size: 30px;
-    font-weight: bolder;
-    background-color: bisque;
+    border-spacing: 0;
+    border-radius: 10px;
+    border: 1px solid lightslategray;
+    overflow: hidden;
 }
 
 th {
     font-weight: bold;
-    background-color: beige;
+    background-color: white;
+    white-space: nowrap;
 }
 
-.evenRow {
+tr:nth-child(even) {
     background-color: white;
 }
 
-.oddRow {
+tr:nth-child(odd) {
     background-color: lightgray;
 }
 
@@ -26,7 +24,11 @@ th {
 /* Common data */
 
 td, th {
-    border: 1px solid black;
+    border-right: 1px solid gray;
+}
+
+td:last-child, th:last-child {
+    border-right: none;
 }
 
 table, td, th {
@@ -34,6 +36,48 @@ table, td, th {
     text-align: center;
 }
 
-table, caption {
-    border: 2px solid black;
+
+/* JQuery Datatables style */
+
+.dataTables_filter input {
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin: 5px 0;
+}
+
+.dataTables_length select {
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin: 5px 0;
+}
+
+.dataTables_wrapper .dataTables_scroll .dataTables_scrollHeadInner table {
+    background-color: #f2f2f2;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    color: #333;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 5px 10px;
+    margin-right: 5px;
+}
+
+.dataTables_wrapper .dataTables_info {
+    color: #333;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, 
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    color: #fff;
+    border: 1px solid #ccc;
+    background-color: #333;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.previous,
+.dataTables_wrapper .dataTables_paginate .paginate_button.next {
+    background-image: linear-gradient(180deg, #C8D3D5, #6E8387);
 }
