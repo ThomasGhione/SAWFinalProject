@@ -66,7 +66,7 @@
             elseif (!$set && $isSubbed)
                 $addFlag = false;   // Otherwise: user wants to abandon newsletter
 
-            $result = $dbManager->dbQueryWithParams("UPDATE users SET newsletter = ? WHERE email = ?", "ss", [$addFlag, $email]);
+            $result = $dbManager->dbQueryWithParams("UPDATE users SET newsletter = ? WHERE email = ?", "is", [$addFlag, $email]);
 
             $sessionManager->setNewsletter(!$isSubbed);
         }

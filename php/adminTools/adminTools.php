@@ -16,7 +16,6 @@
 <body>
     <?php require_once("../shared/nav.php"); ?>
 
-     // TODO Complete page for admin 
     <div class="admin-menu">
         
         <h2>Admin Menu</h2>

@@ -1,5 +1,7 @@
 <?php
 
+    // TODO Questa file verrà probabilmente eliminato
+
     // To create this script we used:
     // - The official documentation on github: 'https://github.com/PHPMailer/PHPMailer'
     // - An article from IONOS: 'https://www.ionos.it/digitalguide/e-mail/tecnica-e-mail/phpmailer/'

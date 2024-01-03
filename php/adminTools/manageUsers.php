@@ -1,10 +1,10 @@
 <?php 
     require("../shared/initializePage.php");
 
-    // if (!$sessionManager->isSessionSet() || !$sessionManager->isAdmin()) {
-    //     header("Location: ../../index.php");
-    //     exit;
-    // }
+    if (!$sessionManager->isSessionSet() || !$sessionManager->isAdmin()) {
+        header("Location: ../../index.php");
+        exit;
+    }
 ?>
 
 

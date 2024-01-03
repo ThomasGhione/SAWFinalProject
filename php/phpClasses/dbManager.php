@@ -397,7 +397,7 @@
                 <table>
                 <caption> <h2>All Users</h2> </caption>
                 <thead>
-                    <tr><th>Firstname</th><th>Lastname</th><th>Email</th><th>Permission</th></tr>
+                    <tr><th>Firstname</th><th>Lastname</th><th>Email</th><th>Permission</th><th>Delete User</th><th>Edit User</th></tr>
                 </thead>
                 <tbody>
             ";
@@ -413,6 +413,8 @@
                 echo "<td>" . htmlspecialchars($row["lastname"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["permission"]) . "</td>";
+                echo "<td><a href='./adminScripts/deleteUser.php?email='" . urlencode(htmlspecialchars($row["email"])) . "'><i class='fa-solid fa-trash'></i></a></td>";
+                echo "<td><a href='./editUserForm.php?email='" . urlencode(htmlspecialchars($row["email"])) . "'><i class='fa-solid fa-pencil'></i></a></td>";
 
                 echo "</tr>";
             }
@@ -491,6 +493,31 @@
             ";
         }
 
+        function deleteUser($userEmail) {
+            
+            // TODO Controllare funzionamento
+            
+            $this->conn->begin_transaction();
+
+            try {
+                $result = $this->dbQueryWithParams("DELETE FROM users WHERE email=?", "s", [$userEmail]);
+
+                if ($result != 1) {
+                    error_log("Something went wrong when deleting a user, probably user wasn't defined, see final error: " . error_get_last(), 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Something went wrong when trying to delete user, see log file to know more");
+                }
+            } 
+            catch (Exception $e) {
+                $this->conn->rollback();
+                
+                $_SESSION["error"] = $e->getMessage();
+                
+                return false;
+            }
+            
+            return true;
+        }
+
 
         // TODO Da sistemare
         function createUser($data) {
@@ -509,12 +536,7 @@
             $stmt->execute();
         }
 
-        function deleteUser($userEmail) {
-            $result = $this->dbQueryWithParams("DELETE FROM users WHERE email=?", "s", [$userEmail]);
-            $stmt = $this->conn->prepare($result);
-            $stmt->bind_param("s", $userEmail);
-            $stmt->execute();
-        }
+
         function banUser($userEmail) {
             $result = $this->dbQueryWithParams("UPDATE users SET permission = 'banned' WHERE email = ?", "s", [$userEmail]);
             $stmt = $this->conn->prepare($result);
