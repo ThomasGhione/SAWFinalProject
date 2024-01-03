@@ -21,7 +21,7 @@
     
     <main class="mainContainer">
         <section class="column">
-            <?php $dbManager->manageSubbedToNewsletter() ?>
+            <?php $dbManagerAdmin->manageSubbedToNewsletter() ?>
         </section>
     </main>
 

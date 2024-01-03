@@ -1,6 +1,6 @@
 <?php
 
-    // TODO Questa file verrà probabilmente eliminato
+    // TODO Questo file verrà probabilmente eliminato
 
     // To create this script we used:
     // - The official documentation on github: 'https://github.com/PHPMailer/PHPMailer'
@@ -16,7 +16,6 @@
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         try {
-            
             // TODO CONTROLLARE EVENTUALI DATI VUOTI
 
             $selectedUsers = [];
@@ -34,20 +33,19 @@
             $message = $_POST["message"];
 
 
-            // Tentativo di creazione di una nuova istanza della classe PHPMailer
-            $mail = new PHPMailer (true);
+            $mail = new PHPMailer (true);                     // trying to create a new PHPMailer instance 
             $mail->isSMTP();
-            $mail->Host = "smtp.gmail.com";  //gmail SMTP server
+            $mail->Host = "smtp.gmail.com";                   // gmail SMTP server
             $mail->SMTPAuth = true;
             //to view proper logging details for success and error messages
             // $mail->SMTPDebug = 1;
-            $mail->Host = "smtp.gmail.com";  //gmail SMTP server
+            $mail->Host = "smtp.gmail.com";                   //gmail SMTP server
             $mail->Username = "simo64.tomasella@gmail.com";   //email
-            $mail->Password = "xzdp wpbc maja tpge" ;   //16 character obtained from app password created
-            $mail->Port = 465;                    //SMTP port
+            $mail->Password = "xzdp wpbc maja tpge" ;         //16 character obtained from app password created
+            $mail->Port = 465;                                //SMTP port
             $mail->SMTPSecure = "ssl";
             
-            foreach($selectedUsers as $email) {
+            foreach ($selectedUsers as $email) {
                 $mail->clearAddresses();
                 $mail->addAddress($email);
                 $mail->isHTML(true);

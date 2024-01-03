@@ -20,7 +20,7 @@
     <?php require_once("../shared/nav.php") ?>
     
     <main class="mainContainer">
-        <?php $dbManager->manageUsers() ?>
+        <?php $dbManagerAdmin->manageUsers() ?>
     </main>
 
     <?php require_once("../shared/footer.php") ?>

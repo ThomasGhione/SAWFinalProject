@@ -18,18 +18,24 @@
 
         function __construct() {
             // TODO Aggiungere try-catch sul costruttore, guarda al file sendEmail.php per capire di più cosa fare
-            
-            $mail = new PHPMailer (true);
-            $mail->isSMTP();
-            $mail->Host = "smtp.gmail.com";  //gmail SMTP server
-            $mail->SMTPAuth = true;
-            // to view proper logging details for success and error messages
-            // $mail->SMTPDebug = 1;
-            $mail->Host = "smtp.gmail.com";  //gmail SMTP server
-            $mail->Username = "Tiananmen2002ChinaIsGoodChinaIsLife@gmail.com";   //email
-            $mail->Password = "ynrk wasi eryl yhms" ;   //16 character obtained from app password created
-            $mail->Port = 465;                    //SMTP port
-            $mail->SMTPSecure = "ssl";
+            try {
+                $mail = new PHPMailer (true);
+                $mail->isSMTP();
+                $mail->Host = "smtp.gmail.com";  //gmail SMTP server
+                $mail->SMTPAuth = true;
+                // to view proper logging details for success and error messages
+                // $mail->SMTPDebug = 1;
+                $mail->Host = "smtp.gmail.com";                                      //gmail SMTP server
+                $mail->Username = "Tiananmen2002ChinaIsGoodChinaIsLife@gmail.com";   //email
+                $mail->Password = "ynrk wasi eryl yhms" ;                            //16 character obtained from app password created
+                $mail->Port = 465;                                                   //SMTP port
+                $mail->SMTPSecure = "ssl";
+            }
+            catch (Exception $e) {
+                $_SESSION["error"] = "";
+                echo "newsletterManager error: ".$mail->ErrorInfo;
+                header("Location: ,,/adminTools/manageNewsletter.php");
+            }
         }
         
         function sendNewsletter() {
