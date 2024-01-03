@@ -7,13 +7,13 @@
     class dbManager {  
     
         // TODO Might be static in the future
-        static private $dbServer = "localhost";
-        static private $username = "root";
-        static private $password = "";
-        static private $dbName = "DatabaseSAWFinalProject";
+        private $dbServer = "localhost";
+        private $username = "root";
+        private $password = "";
+        private $dbName = "DatabaseSAWFinalProject";
         
         // TODO correggere regex per email
-        static private $emailregex = "/^[_a-z0-9.-]+@[a-z0-9-]+(.[a-z]{2,3})$/";
+        private $emailregex = "/^[_a-z0-9.-]+@[a-z0-9-]+(.[a-z]{2,3})$/";
 
 
         protected $conn;

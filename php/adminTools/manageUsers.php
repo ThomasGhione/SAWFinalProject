@@ -43,6 +43,10 @@
 
     <script>
 
+        function confirmDelete() {
+            return confirm("Are you sure to delete this user?");
+        }
+
         $(document).ready( function () {
             $('#table-manageUsers').DataTable();
         } );

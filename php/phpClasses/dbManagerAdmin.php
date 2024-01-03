@@ -81,7 +81,7 @@
                 echo "<td>" . htmlspecialchars($row["lastname"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["permission"]) . "</td>";
-                echo "<td><a href='./adminScripts/deleteUser.php?email=" . urlencode(htmlspecialchars($row["email"])) . "'><i class='fa-solid fa-trash'></i></a></td>";
+                echo "<td><a href='./adminScripts/deleteUser.php?email=" . urlencode(htmlspecialchars($row["email"])) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'></i></a></td>";
                 echo "<td><a href='./editUserForm.php?email=" . urlencode(htmlspecialchars($row["email"])) . "'><i class='fa-solid fa-pencil'></i></a></td>";
 
                 echo "</tr>";
@@ -167,6 +167,15 @@
                     error_log("Something went wrong when deleting a user, probably user wasn't defined, see final error: " . error_get_last(), 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong when trying to delete user, see log file to know more");
                 }
+                
+                $dirPath = $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/repos/$userEmail";
+                $files = glob($dirPath . "/*"); // Ottiene tutti i file
+
+                foreach ($files as $file) {
+                    unlink();
+                }
+
+                rmdir();
             } 
             catch (Exception $e) {
                 $this->conn->rollback();
