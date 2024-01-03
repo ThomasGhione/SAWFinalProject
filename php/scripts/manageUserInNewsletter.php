@@ -17,10 +17,12 @@
             
             $sub = ($_GET["sub"] === "true");
             
-            if ($newsletterManager->setNewsletter($dbManager, $sessionManager, $sessionManager->getEmail(), $sub)) 
-                $_SESSION = ($sub)
-                    ? "You are now subscribed to the newsletter"
-                    : "You are now unsubscribed from the newsletter";
+            if ($newsletterManager->setNewsletter($dbManager, $sessionManager, $sessionManager->getEmail(), $sub))
+
+                $_SESSION = "You are now" . ($sub
+                    ? "subscribed to"
+                    : "unsubscribed from")
+                        . " the newsletter";
         }
     }
     catch (Exception $e) { // If user tries to manipulate the link in a bad way, it triggers this error

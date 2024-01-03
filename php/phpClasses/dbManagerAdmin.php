@@ -74,7 +74,7 @@
                 <tbody>
             ";
 
-            while($row = $result->fetch_assoc()) {
+            while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
                 
                 echo "<td>" . htmlspecialchars($row["firstname"]) . "</td>";

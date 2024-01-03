@@ -9,28 +9,35 @@
     require_once("../../phpClasses/dbManagerAdmin.php");
     $dbManagerAdmin = new dbManagerAdmin();
 
-
-
     
-    if (isset($_GET["email"])) {
+    try {
+        if (!isset($_GET["email"])) {
+            error_log("Bad method used or email not set", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+            throw new Exception("Bad method used or email not set");
+        }
+
         $email = urldecode($_GET["email"]);
 
-        if (filter_var($email, FILTER_VALIDATE_EMAIL)){
-            
-            if ($email == $sessionManager->getEmail()) {
-                $_SESSION["error"] = "You can't delete yourself while you're logged, please contact a technician to do so";
-            }
-            elseif ($dbManagerAdmin->deleteUser($email)) {
-                $_SESSION["success"] = "User successfully deleted";
-            } 
+        if (empty($email)) {
+            error_log("Email can't be empty", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+            throw new Exception("Email can't be empty");
         }
-        else {
-            $_SESSION["error"] = "Value in link is not an email";
+
+        if (filter_var($email, FILTER_VALIDATE_EMAIL) === FALSE) {
+            error_log("Value inside link is not an email", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+            throw new Exception("Value inside link isn't an email");
         }
+
+        if ($email == $sessionManager->getEmail()) {
+            error_log("You can't delete yourself while you're logged, please contact a technician to do so", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+            throw new Exception("You can't delete yourself while you're logged, please contact a technician to do so");
+        }
+
+        if ($dbManagerAdmin->deleteUser($email))
+            $_SESSION["success"] = "User successfully deleted";
+        
     }
-    else {
-        $_SESSION["error"] = "Bad method used or email not set";
-    }
+    catch (Exception $e) { $_SESSION["error"] = $e->getMessage(); }
 
     header("Location: ../manageUsers.php");
     exit;
