@@ -104,14 +104,14 @@
 
         // DB Cookie Manipulation //
 
-         // Admin Tools //
+        // Admin Tools //
 
-         function manageUsers() {
+        function manageUsers() {
             
             $result = $this->dbQueryWithoutParams("SELECT * FROM users");
-           
+            
             echo "
-                <table>
+                <table id='table-manageUsers'>
                 <caption> <h2>All Users</h2> </caption>
                 <thead>
                     <tr><th>Firstname</th><th>Lastname</th><th>Email</th><th>Permission</th><th>Delete User</th><th>Edit User</th></tr>
