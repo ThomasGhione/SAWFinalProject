@@ -27,6 +27,18 @@
         <?php $dbManagerAdmin->manageUsers() ?>
     </main>
 
+    <?php
+        
+        if (isset($_SESSION["error"])) {
+            echo "<p class='error'>" . $_SESSION["error"] . "</p>";
+            unset($_SESSION["error"]);
+        }
+        elseif (isset($_SESSION['success'])) {
+            echo "<p class='success'>" . $_SESSION["success"] . "</p>";
+            unset($_SESSION["success"]);
+        }
+
+    ?>
     <?php require_once("../shared/footer.php") ?>
 
     <script>

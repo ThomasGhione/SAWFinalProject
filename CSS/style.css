@@ -54,6 +54,7 @@ body {
     height: auto;
     width: 33.4%;
     padding: 10px;
+    justify-content: center;
 }
 
 .column > * {

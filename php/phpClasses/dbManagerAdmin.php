@@ -81,8 +81,8 @@
                 echo "<td>" . htmlspecialchars($row["lastname"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["permission"]) . "</td>";
-                echo "<td><a href='./adminScripts/deleteUser.php?email='" . urlencode(htmlspecialchars($row["email"])) . "'><i class='fa-solid fa-trash'></i></a></td>";
-                echo "<td><a href='./editUserForm.php?email='" . urlencode(htmlspecialchars($row["email"])) . "'><i class='fa-solid fa-pencil'></i></a></td>";
+                echo "<td><a href='./adminScripts/deleteUser.php?email=" . urlencode(htmlspecialchars($row["email"])) . "'><i class='fa-solid fa-trash'></i></a></td>";
+                echo "<td><a href='./editUserForm.php?email=" . urlencode(htmlspecialchars($row["email"])) . "'><i class='fa-solid fa-pencil'></i></a></td>";
 
                 echo "</tr>";
             }
@@ -170,12 +170,11 @@
             } 
             catch (Exception $e) {
                 $this->conn->rollback();
-                
                 $_SESSION["error"] = $e->getMessage();
-                
                 return false;
             }
             
+            $this->conn->commit();
             return true;
         }
 

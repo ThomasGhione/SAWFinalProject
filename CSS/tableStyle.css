@@ -2,8 +2,14 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
     border-radius: 10px;
-    border: 1px solid lightslategray;
     overflow: hidden;
+}
+
+caption {
+    font-weight: bolder;
+    font-size: large;
+    background-color: lightgray;
+    padding: 10px;
 }
 
 th {

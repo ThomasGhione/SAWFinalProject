@@ -173,6 +173,8 @@
         // Used for logout
         // TODO Must be finished, we need to add error checking and transaction managing
         function deleteRememberMeCookieFromDB($cookie, $email) {    
+            $this->conn->begin_transaction();
+            
             $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && UID = ?)", "ss", [$email, $cookie]);
             
             try {
@@ -182,10 +184,12 @@
                 }
             }
             catch (Exception $e) {
+                $this->conn->rollback();
                 $_SESSION["error"] = $e->getMessage();
                 return false;
             }
 
+            $this->conn->commit();
             return true;
         }
 
@@ -218,7 +222,7 @@
                 echo "<h2>No users were found with these values</h2>";
             else {
                 echo "
-                    <table>
+                    <table id='table-searchUsers'>
                     <caption> Users found </caption>
                     <thead>
                         <tr><th>Email</th><th>Firstname</th><th>Lastname</th></tr>
@@ -226,13 +230,9 @@
                     <tbody>
                 ";
 
-                for ($colorFlag = true; $row = $result->fetch_assoc(); $colorFlag = !$colorFlag) {
-                
-                    if ($colorFlag)
-                        echo "<tr class='oddRow'>";
-                    else
-                        echo "<tr class='evenRow'>";
-                
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>";
+
                     echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
                     echo "<td>" . htmlspecialchars($row["firstname"]) . "</td>";
                     echo "<td>" . htmlspecialchars($row["lastname"]) . "</td>";
@@ -255,7 +255,7 @@
                 echo "<h2>No repos were found with these values</h2>";
             else {
                 echo "
-                    <table>
+                    <table id='table-searchRepos'>
                     <caption> Users found </caption>
                     <thead>
                         <tr><th>Email</th><th>Firstname</th><th>Lastname</th></tr>
@@ -263,24 +263,20 @@
                     <tbody>
                 ";
 
-                for ($colorFlag = true; $row = $result->fetch_assoc(); $colorFlag = !$colorFlag) {
-                
-                    if ($colorFlag)
-                        echo "<tr class='oddRow'>";
-                    else
-                        echo "<tr class='evenRow'>";
-                
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>";
+
                     echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
                     echo "<td>" . htmlspecialchars($row["firstname"]) . "</td>";
                     echo "<td>" . htmlspecialchars($row["lastname"]) . "</td>";
-
+                
                     echo "</tr>";
                 }
 
                 echo "</tbody>
                     </table>
                 ";
-            }        
+            }    
         }
 
         // DB Repos Manipulation //
