@@ -11,7 +11,7 @@
         
         <?php
             if (isset($_SESSION["newsletter"]) && !$_SESSION["newsletter"])
-                echo "<a href='$root/php/scripts/manageUserInNewsletter.php?sub='" . "true" . "'> - Click here to join our newsletter!</a>";
+                echo "<a href='$root/php/scripts/manageUserInNewsletter.php?sub=" . "true" . "'> - Click here to join our newsletter!</a>";
         ?>
     </address>
     

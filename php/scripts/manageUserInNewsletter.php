@@ -24,7 +24,7 @@
         }
     }
     catch (Exception $e) { // If user tries to manipulate the link in a bad way, it triggers this error
-        $_SESSION["error"] = "Soemthing went wrong, try again later";
+        $_SESSION["error"] = "Something went wrong, try again later";
     } 
 
     header("Location: ../show_profile.php");

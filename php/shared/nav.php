@@ -40,7 +40,7 @@
             <div class="searchBox">
                 <div class="inputBox">
                     <label for="searchBar">Search: </label>
-                    <input type="text" class="searchBar" name="searchBar" placeholder="Search repos or users..." name="search_bar" maxlength="128">   
+                    <input type="text" class="searchBar" name="searchBar" placeholder="Search repos or users..." maxlength="128">   
                 </div>
 
                 <input class="formButton" type="submit" value="Search">
@@ -58,7 +58,7 @@
                 else
                     $currentPfp = $sessionManager->getEmail();
 
-                echo "<a href=$root/php/show_profile.php><img class='navImg' src='$root/images/pfps/$currentPfp'></img></a>";
+                echo "<a href=$root/php/show_profile.php><img class='navImg' src='$root/images/pfps/$currentPfp' alt='Your profile picture'></a>";
             }
         ?>
     </div>

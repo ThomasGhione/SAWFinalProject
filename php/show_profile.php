@@ -24,7 +24,7 @@
     <?php include("shared/nav.php") ?>
 
     <div class="main_personalarea">
-        <column id="left_column">
+        <div id="left_column">
 
             <div class="infos">
                 <?php 
@@ -66,13 +66,11 @@
                     echo "<p class='success'>" . $_SESSION["success"] . "</p>";
                     unset($_SESSION["success"]);
                 }
-                else
-                    echo "<p class='error'>&nbsp;</p>"; 
             
             ?>
-        </column>
+        </div>
          
-        <column id="right_column">
+        <div id="right_column">
 
             <section class="first_section">
                 <div class="top_badges">
@@ -107,7 +105,7 @@
                 <p>...</p>
             </div>
 
-        </column>
+            </div>
     </div>
 
 
