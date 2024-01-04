@@ -40,17 +40,17 @@
             <form action="./scripts/login.php" method="post">
                 <div class="inputBox"> 
                     <label for="email">E-Mail:</label>
-                    <input required type="email" name="email" placeholder="E-Mail (required)">
+                    <input required type="email" id="email" name="email" placeholder="E-Mail (required)">
                 </div>
                 
                 <div class="inputBox">
                     <label for="pass">Password:</label>
-                    <input required type="password" name="pass" placeholder="Password (required)">
+                    <input required type="password"  id="pass" name="pass" placeholder="Password (required)">
                 </div>
 
                 <div class="inputBox">
                     <label for="rememberMe">Remember Me:</label>
-                    <input type="checkbox" id="rememberMe" name="rememberMe" placeholder="RememberMe">
+                    <input type="checkbox" id="rememberMe" name="rememberMe">
                 </div>
 
                 <input type="submit" class="formButton" name="submit" value="Login">

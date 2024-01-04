@@ -5,10 +5,8 @@
     ?>
 
     <div class="left_nav">
-        <a href="<?php echo $root; ?>/index.php"><img class="navImg" src="<?php echo $root; ?>/images/bestLogo.png" alt="Website Logo"></a>
-        <a class="navButton">Homepage</a>
-        <a class="blankSpace"></a>
-        <a class="navButton">Dashboard</a>
+        <a href="<?php echo $root; ?>/index.php"><img class="navImg" src="<?php echo $root; ?>/images/bestLogo.png" alt="Website Logo, you can click on it to return to the homepage"></a>
+        <a href="<?php echo $root; ?>/index.php" class="navButton">Homepage</a>
         <a class="blankSpace"></a>
         <a class="navButton">Explore</a>
     </div>
