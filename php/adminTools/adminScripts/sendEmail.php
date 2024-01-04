@@ -9,28 +9,28 @@
     require_once("../../phpClasses/newsletterManager.php");
     $newsletterManager = new newsletterManager();
 
-    if ($_SERVER["REQUEST_METHOD"] != "POST") 
-        $_SESSION["error"] = "Invalid Request";
-    else {
-        try {
-
-            if (!isset($_POST["userCheckbox"]) || empty($_POST["userCheckbox"])) {
-                // TODO Aggiungere caso di errore
-            }
-            
-            if (!isset($_POST["message"]) || empty($_POST["message"])) {
-                // TODO Aggiungere caso di errore
-            }
-
-            $message = $_POST["message"];
-            $usrArr = $_POST["userCheckbox"];
-
-            $newsletterManager->sendNewsletter($usrArr, $message);
+    try {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            error_log("Invalid request", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+            throw new Exception("Invalid request");
         }
-        catch (Exception $e) {
-            $_SESSION["error"] = $e->getMessage();
+
+        if (!isset($_POST["userCheckbox"]) || empty($_POST["userCheckbox"])) {
+            error_log("No user selected", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+            throw new Exception("No user selected");
         }
+
+        if (!isset($_POST["message"]) || empty($_POST["message"])) {
+            error_log("Message can't be empty", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+            throw new Exception("Message can't be empty");
+        }
+
+        $message = $_POST["message"];
+        $usrArr = $_POST["userCheckbox"];
+
+        $newsletterManager->sendNewsletter($usrArr, $message);
     }
+    catch (Exception $e) { $_SESSION["error"] = $e->getMessage(); }
 
     header("Location: ../manageNewsletter.php");
     exit;
@@ -38,8 +38,6 @@
 
 
     /*
-
-    // TODO Questo file verrà probabilmente eliminato
 
     // To create this script we used:
     // - The official documentation on github: 'https://github.com/PHPMailer/PHPMailer'
@@ -55,7 +53,7 @@
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         try {
-            // TODO CONTROLLARE EVENTUALI DATI VUOTI
+            // CONTROLLARE EVENTUALI DATI VUOTI
 
             $selectedUsers = [];
             
@@ -98,14 +96,14 @@
             header("Location: ../adminTools/manageNewsletter.php");
     
         } catch (Exception $e) {
-            // TODO MISSING ERROR CHECKING, COMPLETE IT
+            // MISSING ERROR CHECKING, COMPLETE IT
             $_SESSION["error"] = "";
             echo "Mailer Error: ".$mail->ErrorInfo;
             header("Location: ,,/adminTools/manageNewsletter.php");
         }
     }
     else {
-        // TODO MISSING ERROR CHECKING FOR OTHER REQUESTS
+        // MISSING ERROR CHECKING FOR OTHER REQUESTS
         $_SESSION["error"] = "";
         header("Location: ../adminTools/manageNewsletter.php");
     }

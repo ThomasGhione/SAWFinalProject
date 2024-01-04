@@ -72,7 +72,7 @@
                 }
                 if ($this->isPasswordWeak($password)) {
                     error_log("Password isn't strong enough", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
-                    throw new Exception("Password isn't strong enough, please choose a stronger password"); //TODO this message isn't precise enough
+                    throw new Exception("Password isn't strong enough (it needs to be at least 8 characters long), please choose a stronger password");
                 }
                 if (!$this->isPasswordValid($password, $confirm)) {
                     error_log("Passwords don't match", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");

@@ -6,13 +6,10 @@
 
     class dbManager {  
     
-        // TODO Might be static in the future
         private $dbServer = "localhost";
         private $username = "root";
         private $password = "";
         private $dbName = "DatabaseSAWFinalProject";
-        
-        // TODO correggere regex per email
         private $emailregex = "/^[_a-z0-9.-]+@[a-z0-9-]+(.[a-z]{2,3})$/";
 
 
@@ -222,7 +219,7 @@
             return true;
         }
 
-        function updatePassword ($email) {
+        function updatePassword($email) {
             
             $oldPassword = trim(htmlspecialchars($_POST["oldPassword"]));
             $newPassword = trim(htmlspecialchars($_POST["newPassword"]));
@@ -233,17 +230,20 @@
                 $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$email]);
 
                 if ($result->num_rows != 1) {
-                    // TODO Aggiungere caso di errore
+                    error_log("Something went wrong while updating the pw. (result->num_rows expected to be 1)", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Something went wrong while updating the password, please try again");
                 }
 
                 $row = $result->fetch_assoc();
 
                 if (!password_verify($oldPassword, $row["password"])) {
-                    // TODO Aggiungere caso di errore
+                    error_log("Wrong password", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Wrong password, please try again");
                 }
 
                 if (strlen($newPassword) < 8) {
-                    // TODO Aggiungere caso di errore
+                    error_log("Password must be at least 8 characters long", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Password must be at least 8 characters long, please try again");
                 }
 
                 $newPassword = password_hash($newPassword, PASSWORD_DEFAULT);
@@ -251,7 +251,8 @@
                 $result = $this->dbQueryWithParams("UPDATE users SET password = ? WHERE email = ?", "ss", [$newPassword, $email]);
 
                 if ($result != 1) {
-                    // TODO Aggiungere caso di errore
+                    error_log("Something went wrong while updating the pw. (result expected to be 1)", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Something went wrong while updating the password, please try again");
                 }
             }
             catch (Exception $e) {

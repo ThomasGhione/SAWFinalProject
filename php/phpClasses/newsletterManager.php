@@ -34,7 +34,7 @@
                 $this->mail->SMTPSecure = "ssl";
             }
             catch (Exception $e) {
-                $_SESSION["error"] = "";
+                $_SESSION["error"] = $e->getMessage();
                 echo "newsletterManager error: ".$this->mail->ErrorInfo;
                 header("Location: ,,/adminTools/manageNewsletter.php");
             }
@@ -43,24 +43,28 @@
         function sendNewsletter($usrArr, $message) {
             // TODO Aggiungere Try-Catch al metodo, vedere sendEmail.php in scripts per capire di più
 
-            if (empty($usrArr) || empty($message)) {
-                // TODO Aggiungere caso di errore
-            }
-
-            $selectedUsers = [];
-            $message = htmlspecialchars(trim($message));
-
-            // Following code converts all emails with lower characters
-            foreach ($usrArr as $selectedEmail) {
-                $selectedEmail = strtolower($selectedEmail);
-
-                if (filter_var($selectedEmail, FILTER_VALIDATE_EMAIL) === false) {
-                    // TODO Aggiungere caso di errore
+            try {
+                if (empty($usrArr) || empty($message)) {
+                    error_log("newsletterManager: empty message or user array", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Message can't be empty");
                 }
 
-                array_push($selectedUsers, $selectedEmail);                
-            }
+                $selectedUsers = [];
+                $message = htmlspecialchars(trim($message));
+    
+                // Following code converts all emails with lower characters
+                foreach ($usrArr as $selectedEmail) {
+                    $selectedEmail = strtolower($selectedEmail);
+    
+                    if (filter_var($selectedEmail, FILTER_VALIDATE_EMAIL) === false) {
+                        error_log("newsletterManager: invalid email", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                        throw new Exception("Invalid email");
+                    }
+    
+                    array_push($selectedUsers, $selectedEmail);                
+                }
 
+            } catch (Exception $e) { $_SESSION["error"] = $e->getMessage(); }
 
             foreach($selectedUsers as $email) {
                 $this->mail->clearAddresses();
