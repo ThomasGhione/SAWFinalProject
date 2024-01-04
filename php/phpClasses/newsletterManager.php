@@ -28,15 +28,14 @@
                 // to view proper logging details for success and error messages
                 // $mail->SMTPDebug = 1;
                 $this->mail->Host = "smtp.gmail.com";                                      //gmail SMTP server
-                $this->mail->Username = "Tiananmen2002ChinaIsGoodChinaIsLife@gmail.com";   //email
-                $this->mail->Password = "ynrk wasi eryl yhms" ;                            //16 character obtained from app password created
+                $this->mail->Username = "sawfinalprojecttomasellaghione@gmail.com";   //email
+                $this->mail->Password = "nqwm xclx qstr vssn" ;                            //16 character obtained from app password created
                 $this->mail->Port = 465;                                                   //SMTP port
                 $this->mail->SMTPSecure = "ssl";
             }
             catch (Exception $e) {
                 $_SESSION["error"] = $e->getMessage();
                 echo "newsletterManager error: ".$this->mail->ErrorInfo;
-                header("Location: ,,/adminTools/manageNewsletter.php");
             }
         }
         
