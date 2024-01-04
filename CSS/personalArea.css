@@ -28,6 +28,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     width: 82%;
     height: auto;
 
@@ -49,92 +50,18 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    border: 5px solid black;
-    border-radius: 10px;
 }
 
 .infos > p {
     margin: 3px;
 }
 
-.list_of_badges {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    border: 5px solid black;
-    border-radius: 10px;
-}
-
-.list_of_badges > p {
-    margin: 3px;
-}
-
-
-/* Elements of right column */
-
-.first_section {
-    display: flex;
-    width: 100%;
-    height: auto;
-
-    border: 5px solid black;
-    border-radius: 10px;
-}
-
-.top_badges {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-
-    width: 50%;
-    height: auto;
-    text-align: center;
-
-    border: 5px solid purple;
-    border-radius: 10px;
-}
-
-.top_sponsors {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
-
-    width: 50%;
-    height: auto;
-    text-align: center;
-
-    border: 5px solid purple;
-    border-radius: 10px;
-}
-
-.top_repos {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
-
-    width: 100%;
-    height: auto;
-    text-align: center;
-
-    border: 5px solid black;
-    border-radius: 10px;
-}
-
-.second_section {
+.personalAreaOptions {
     display: flex;
     align-items: center;
     flex-direction: column;
-    width: 100%;
-    height: auto;
-
-    border: 5px solid black;
-    border-radius: 10px;
+    margin-top: 10px;
 }
-
 
 /* General data */
 
@@ -146,6 +73,12 @@
     border: 2px solid black;
     border-radius: 5px;
     cursor: pointer;
+
+    width: 260px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .personalAreaButton:hover {

@@ -1,62 +1,6 @@
 <?php
 
     class dbManagerAdmin extends dbManager {
-    
-        function editProfile($email, $sessionManager) {
-
-            // Sets data names and data 
-            $dataTypeToUpdate = "";
-            $dataToUpdate = array(); 
-            $isEmailModified = !empty($_POST["email"]);
-
-            foreach ($_POST as $dataName => $data) {
-                if (!empty($data)) {
-                    $dataTypeToUpdate .= " " . $dataName . " = ?,";
-                    array_push($dataToUpdate, trim(htmlspecialchars($data)));
-                }
-            }
-
-            if ($isEmailModified) { // Following code checks if email has changed, if so, it checks if email is valid, if so it changes session data and everything related to that email 
-                $newEmail = htmlspecialchars($_POST["email"]);
-                
-                $result = $this->dbQueryWithParams("SELECT email FROM users WHERE email = ?", "s", [$newEmail]);
-                
-                try {
-                    if ($result->num_rows == 1) {
-                        error_log("Email already exists", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
-                        throw new Exception("Email already exists, please try again");
-                    }
-                }
-                catch (Exception $e) {
-                    $_SESSION["error"] = $e->getMessage();
-                    return false;
-                }
-
-                $sessionManager->setEmail($newEmail);
-
-                // Updates all remember me cookies from current email to the new one, 
-                // TODO ask if should delete them instead of updating them
-                $result = $this->dbQueryWithParams("UPDATE remMeCookies SET email = ? WHERE email = ?", "ss", [$newEmail, $email]);
-                $result = $this->dbQueryWithParams("UPDATE repos SET Owner = ? WHERE Owner = ?", "ss", [$newEmail, $email]);
-                rename("../../repos/$email", "../../repos/$newEmail");
-            }
-
-            // cleans data to be used in query function
-            $dataTypeToUpdate = str_replace(", submit = ?,", "", $dataTypeToUpdate);
-            array_pop($dataToUpdate);
-            array_push($dataToUpdate, $email); // Adds last value to be used in query function
-
-            // Sets data types for query function            
-            $dataCount = "";
-            for ($i = count($dataToUpdate); $i > 0; $i--) 
-                $dataCount .= "s";
-
-            // TODO Check result
-            $result = $this->dbQueryWithParams("UPDATE users SET" . $dataTypeToUpdate . " WHERE email = ?", $dataCount, $dataToUpdate);
-
-            return true;
-        }
-
 
         // DB Cookie Manipulation //
 

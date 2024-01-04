@@ -33,7 +33,18 @@
 
     </main>
 
-
     <?php include("./php/shared/footer.php") ?>
+
+    <script>
+        document.querySelector('.fa-cookie').addEventListener('click', function() {
+            var expires = new Date();
+            expires.setMinutes(expires.getMinutes() + 30);
+            var cookieValue = "A fantastic cookie, given by the awesome OpenHub website"
+            var cookieName = "awesomeCookieFromOpenHub";
+            document.cookie = cookieName + "=" + encodeURIComponent(cookieValue) + "; expires" + expires.toUTCString() + "; path=/";
+            alert("You received a cookie! It will expire in half an hour!");
+        });
+    </script>
+
 </body>
 </html>

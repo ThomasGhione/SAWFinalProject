@@ -136,3 +136,7 @@ input {
 .formButton:hover {
     filter: brightness(125%);
 }
+
+.fa-cookie {
+    cursor: pointer;
+}
