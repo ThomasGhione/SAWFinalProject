@@ -26,14 +26,14 @@
         }
         catch (Exception $e) {
             $_SESSION["error"] = $e->getMessage();
-            header("Location: ../update_password_form.php");
+            header("Location: ../update_profile_password_form.php");
             exit;
         }
 
         $_SESSION["success"] = "Your changes were applied successfully!";
     }    
     
-    header("Location: ../update_password_form.php"); // Covers both invalid request and invalid login 
+    header("Location: ../update_profile_password_form.php"); // Covers both invalid request and invalid login 
     exit;
 
 ?>

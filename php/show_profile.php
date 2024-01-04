@@ -41,7 +41,7 @@
             
             <div class="personalAreaOptions">
                 <a class="personalAreaButton" href="./update_profile_form.php">Edit your profile</a>
-                <a class="personalAreaButton" href="./update_profile_password.php">Change your password</a>
+                <a class="personalAreaButton" href="./update_profile_password_form.php">Change your password</a>
                 <a class="personalAreaButton" href="./addNewRepoForm.php">Add a new repo here!</a>
 
                 <?php

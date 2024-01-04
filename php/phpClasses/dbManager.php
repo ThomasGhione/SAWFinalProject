@@ -102,7 +102,7 @@
                 // Creates a new directory for user's repos 
                 $email = $user->getEmail();
                 mkdir("../../repos/$email");
-                chmod("../../repos/$email", 0766);
+                chmod("../../repos/$email", 0666);
             }
             catch (Exception $e) {
                 $_SESSION["error"] = $e->getMessage();
@@ -224,13 +224,13 @@
 
         function updatePassword ($email) {
             
-            $oldPassword = trim($_POST["oldPassword"]);
-            $newPassword = trim($_POST["newPassword"]);
+            $oldPassword = trim(htmlspecialchars($_POST["oldPassword"]));
+            $newPassword = trim(htmlspecialchars($_POST["newPassword"]));
 
             $this->conn->begin_transaction();
 
             try {
-                $result = $this->dbQueryWithParams("SELECT password FROM users WHERE email = ?", "s", [$email]);
+                $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$email]);
 
                 if ($result->num_rows != 1) {
                     // TODO Aggiungere caso di errore
@@ -239,6 +239,10 @@
                 $row = $result->fetch_assoc();
 
                 if (!password_verify($oldPassword, $row["password"])) {
+                    // TODO Aggiungere caso di errore
+                }
+
+                if (strlen($newPassword) < 8) {
                     // TODO Aggiungere caso di errore
                 }
 

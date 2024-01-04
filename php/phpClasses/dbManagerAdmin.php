@@ -109,26 +109,6 @@
                     error_log("Something went wrong when deleting a user, probably user wasn't defined, see final error: " . error_get_last(), 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong when trying to delete user, see log file to know more");
                 }
-                
-                // TODO Aggiungere controllo dell'errore
-
-                $dirPath = $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/repos/$userEmail";
-                $files = glob($dirPath . "/*"); // Obtains all files names
-
-                foreach ($files as $file) {
-                    
-                    $repos = glob($dirPath . "/" . $file);
-
-                    foreach ($repos as $repo) { // Searches for all data in repos's directory and deletes them (deletes .zip)
-                        if(is_file($repo))
-                            unlink($repo);
-                    }
-                    
-                    if(is_file($file))
-                        unlink($file);          // Deletes file
-                }
-
-                rmdir($dirPath);                // Deletes directory
             } 
             catch (Exception $e) {
                 $this->conn->rollback();

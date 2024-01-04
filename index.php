@@ -15,9 +15,9 @@
 
     <main class="mainContainer">
 
-        <section class="column">
+        <div class="column">
             <img src="./images/bestLogo.png" alt="BESTLOGO">
-        </section>
+        </div>
 
         <section class="column">
             <div class="second_column">
