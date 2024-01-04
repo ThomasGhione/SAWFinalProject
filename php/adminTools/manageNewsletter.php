@@ -22,7 +22,7 @@
     <?php require_once("../shared/nav.php") ?> 
     
     <main class="mainContainer">
-        <form action="../scripts/sendEmail.php" method="post">
+        <form action="./adminScripts/sendEmail.php" method="post">
     
         <?php $dbManagerAdmin->manageSubbedToNewsletter() ?>
         <textarea name="message" rows="6" cols="50" style="resize: none;"></textarea>

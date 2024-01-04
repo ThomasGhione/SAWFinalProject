@@ -2,7 +2,7 @@
     require("../shared/initializePage.php");  
     
     if (!$sessionManager->isSessionSet()) {
-        header("Location: ../..index.php");
+        header("Location: ../../index.php");
         exit;
     }
 

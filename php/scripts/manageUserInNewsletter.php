@@ -19,7 +19,7 @@
             
             if ($newsletterManager->setNewsletter($dbManager, $sessionManager, $sessionManager->getEmail(), $sub))
 
-                $_SESSION = "You are now" . ($sub
+                $_SESSION["success"] = "You are now" . ($sub
                     ? "subscribed to"
                     : "unsubscribed from")
                         . " the newsletter";

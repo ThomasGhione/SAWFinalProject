@@ -1,4 +1,43 @@
 <?php
+    require("../../shared/initializePage.php");    
+
+    if (!$sessionManager->isSessionSet() || !$sessionManager->isAdmin()) {
+        header("Location: ../../../index.php");
+        exit;
+    }
+
+    require_once("../../phpClasses/newsletterManager.php");
+    $newsletterManager = new newsletterManager();
+
+    if ($_SERVER["REQUEST_METHOD"] != "POST") 
+        $_SESSION["error"] = "Invalid Request";
+    else {
+        try {
+
+            if (!isset($_POST["userCheckbox"]) || empty($_POST["userCheckbox"])) {
+                // TODO Aggiungere caso di errore
+            }
+            
+            if (!isset($_POST["message"]) || empty($_POST["message"])) {
+                // TODO Aggiungere caso di errore
+            }
+
+            $message = $_POST["message"];
+            $usrArr = $_POST["userCheckbox"];
+
+            $newsletterManager->sendNewsletter($usrArr, $message);
+        }
+        catch (Exception $e) {
+            $_SESSION["error"] = $e->getMessage();
+        }
+    }
+
+    header("Location: ../manageNewsletter.php");
+    exit;
+
+
+
+    /*
 
     // TODO Questo file verrà probabilmente eliminato
 
@@ -20,12 +59,11 @@
 
             $selectedUsers = [];
             
-            /*
+            
             if (!isset($_POST)) {
                 error_log(admin);
                 throw new Exception(utente);
             }
-            */
 
             foreach ($_POST["sendEmail"] as $selectedEmail) 
                 array_push($selectedUsers, $selectedEmail);
@@ -72,6 +110,7 @@
         header("Location: ../adminTools/manageNewsletter.php");
     }
 
+    */
 
 
 ?>

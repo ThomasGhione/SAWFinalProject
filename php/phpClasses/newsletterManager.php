@@ -8,9 +8,11 @@
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
 
-    require "../externalTools/PHPMailer/src/Exception.php";
-    require "../externalTools/PHPMailer/src/PHPMailer.php";
-    require "../externalTools/PHPMailer/src/SMTP.php";
+    $root = $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject";
+    
+    require "$root/php/externalTools/PHPMailer/src/Exception.php";
+    require "$root/php/externalTools/PHPMailer/src/PHPMailer.php";
+    require "$root/php/externalTools/PHPMailer/src/SMTP.php";
 
     class newsletterManager {
 
@@ -19,34 +21,46 @@
         function __construct() {
             // TODO Aggiungere try-catch sul costruttore, guarda al file sendEmail.php per capire di più cosa fare
             try {
-                $mail = new PHPMailer (true);
-                $mail->isSMTP();
-                $mail->Host = "smtp.gmail.com";  //gmail SMTP server
-                $mail->SMTPAuth = true;
+                $this->mail = new PHPMailer (true);
+                $this->mail->isSMTP();
+                $this->mail->Host = "smtp.gmail.com";  //gmail SMTP server
+                $this->mail->SMTPAuth = true;
                 // to view proper logging details for success and error messages
                 // $mail->SMTPDebug = 1;
-                $mail->Host = "smtp.gmail.com";                                      //gmail SMTP server
-                $mail->Username = "Tiananmen2002ChinaIsGoodChinaIsLife@gmail.com";   //email
-                $mail->Password = "ynrk wasi eryl yhms" ;                            //16 character obtained from app password created
-                $mail->Port = 465;                                                   //SMTP port
-                $mail->SMTPSecure = "ssl";
+                $this->mail->Host = "smtp.gmail.com";                                      //gmail SMTP server
+                $this->mail->Username = "Tiananmen2002ChinaIsGoodChinaIsLife@gmail.com";   //email
+                $this->mail->Password = "ynrk wasi eryl yhms" ;                            //16 character obtained from app password created
+                $this->mail->Port = 465;                                                   //SMTP port
+                $this->mail->SMTPSecure = "ssl";
             }
             catch (Exception $e) {
                 $_SESSION["error"] = "";
-                echo "newsletterManager error: ".$mail->ErrorInfo;
+                echo "newsletterManager error: ".$this->mail->ErrorInfo;
                 header("Location: ,,/adminTools/manageNewsletter.php");
             }
         }
         
-        function sendNewsletter() {
+        function sendNewsletter($usrArr, $message) {
             // TODO Aggiungere Try-Catch al metodo, vedere sendEmail.php in scripts per capire di più
-            // TODO CONTROLLARE EVENTUALI DATI VUOTI
+
+            if (empty($usrArr) || empty($message)) {
+                // TODO Aggiungere caso di errore
+            }
 
             $selectedUsers = [];
+            $message = htmlspecialchars(trim($message));
 
-            foreach ($_POST["sendEmail"] as $selectedEmail) 
-                array_push($selectedUsers, $selectedEmail);
-            $message = $_POST["message"];
+            // Following code converts all emails with lower characters
+            foreach ($usrArr as $selectedEmail) {
+                $selectedEmail = strtolower($selectedEmail);
+
+                if (filter_var($selectedEmail, FILTER_VALIDATE_EMAIL) === false) {
+                    // TODO Aggiungere caso di errore
+                }
+
+                array_push($selectedUsers, $selectedEmail);                
+            }
+
 
             foreach($selectedUsers as $email) {
                 $this->mail->clearAddresses();
