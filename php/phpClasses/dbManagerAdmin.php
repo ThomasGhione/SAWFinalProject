@@ -156,8 +156,6 @@
 
         function deleteUser($userEmail) {
             
-            // TODO Controllare funzionamento
-            
             $this->conn->begin_transaction();
 
             try {
@@ -168,14 +166,25 @@
                     throw new Exception("Something went wrong when trying to delete user, see log file to know more");
                 }
                 
+                // TODO Aggiungere controllo dell'errore
+
                 $dirPath = $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/repos/$userEmail";
-                $files = glob($dirPath . "/*"); // Ottiene tutti i file
+                $files = glob($dirPath . "/*"); // Obtains all files names
 
                 foreach ($files as $file) {
-                    unlink();
+                    
+                    $repos = glob($dirPath . "/" . $file);
+
+                    foreach ($repos as $repo) { // Searches for all data in repos's directory and deletes them (deletes .zip)
+                        if(is_file($repo))
+                            unlink($repo);
+                    }
+                    
+                    if(is_file($file))
+                        unlink($file);          // Deletes file
                 }
 
-                rmdir();
+                rmdir($dirPath);                // Deletes directory
             } 
             catch (Exception $e) {
                 $this->conn->rollback();
