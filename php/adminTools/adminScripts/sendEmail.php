@@ -10,12 +10,12 @@
     $newsletterManager = new newsletterManager();
 
     try {
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if ($_SERVER["REQUEST_METHOD"] != "POST") {
             error_log("Invalid request", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
             throw new Exception("Invalid request");
         }
 
-        if (!isset($_POST["userCheckbox"]) || empty($_POST["userCheckbox"])) {
+        if (!isset($_POST["selectedUsers"]) || empty($_POST["selectedUsers"])) {
             error_log("No user selected", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
             throw new Exception("No user selected");
         }
@@ -26,7 +26,7 @@
         }
 
         $message = $_POST["message"];
-        $usrArr = $_POST["userCheckbox"];
+        $usrArr = explode(",", $_POST["selectedUsers"]);
 
         $newsletterManager->sendNewsletter($usrArr, $message);
     }
