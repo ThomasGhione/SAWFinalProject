@@ -22,11 +22,11 @@
 
             try {                
                 if (empty($email) || empty($password)) {
-                    error_log("Empty parameters have been passed to the form", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Empty parameters have been passed to the form", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Empty parameters have been passed to the form. Please try again");
                 }
                 if (!$this->isEmailValid()) {
-                    error_log("Invalid email", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Invalid email", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Invalid email. Please try again");
                 }
             }
@@ -67,15 +67,15 @@
         public function cRegister($firstname, $lastname, $email, $password, $confirm) {
             try {
                 if (empty($firstname) || empty($lastname) || empty($confirm)) {
-                    error_log("Empty parameters have been passed to the form", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Empty parameters have been passed to the form", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Empty parameters have been passed to the form. Please try again later");
                 }
                 if ($this->isPasswordWeak($password)) {
-                    error_log("Password isn't strong enough", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Password isn't strong enough", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Password isn't strong enough (it needs to be at least 8 characters long), please choose a stronger password");
                 }
                 if (!$this->isPasswordValid($password, $confirm)) {
-                    error_log("Passwords don't match", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Passwords don't match", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Passwords don't match");
                 }
             }

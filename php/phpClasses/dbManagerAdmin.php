@@ -11,7 +11,7 @@
             echo "
                 <table id='table-manageUsers'>
                 <thead>
-                    <tr><th>Firstname</th><th>Lastname</th><th>Email</th><th>Permission</th><th>Delete User</th><th>Edit User</th></tr>
+                    <tr><th>Firstname</th><th>Lastname</th><th>Email</th><th>Permission</th><th>Delete</th><th>Edit</th></tr>
                 </thead>
                 <tbody>
             ";
@@ -70,7 +70,7 @@
                 $result = $this->dbQueryWithParams("DELETE FROM users WHERE email=?", "s", [$userEmail]);
 
                 if ($result != 1) {
-                    error_log("Something went wrong when deleting a user, probably user wasn't defined, see final error: " . error_get_last(), 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Something went wrong when deleting a user, probably user wasn't defined, see final error: " . error_get_last(), 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong when trying to delete user, see log file to know more");
                 }
             } 
@@ -89,6 +89,12 @@
             try {
                 $this->conn->begin_transaction();
 
+                $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$userEmail]); 
+                if($result->num_rows != 1) {
+                    error_log("This user does not exist", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Tried to edit a user that does not exist");
+                }
+
                 // Sets data names and data 
                 $dataTypeToUpdate = "";
                 $dataToUpdate = array(); 
@@ -104,10 +110,10 @@
 
 
                 if ($isPasswordModified) {
-                    $pass = $_POST["pass"];
+                    $pass = htmlspecialchars(trim($_POST["pass"]));
 
                     if (strlen($pass) < 8) {
-                        error_log("Choose a password with at least 8 characters", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                        error_log("Choose a password with at least 8 characters", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                         throw new Exception("Choose a password with at least 8 characters");
                     }
 
@@ -118,12 +124,12 @@
 
 
                 if ($isEmailModified) { // Following code checks if email has changed, if so, it checks if email is valid, if so it changes session data and everything related to that email 
-                    $newEmail = htmlspecialchars($_POST["newEmail"]);
+                    $newEmail = htmlspecialchars(trim($_POST["email"]));
                     
                     $result = $this->dbQueryWithParams("SELECT email FROM users WHERE email = ?", "s", [$newEmail]);
                     
                     if ($result->num_rows == 1) {
-                        error_log("Email already exists", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                        error_log("Email already exists", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                         throw new Exception("Email already exists, please try again");
                     }
 
@@ -135,7 +141,7 @@
                 }
 
                 // cleans data to be used in query function
-                $dataTypeToUpdate = str_replace("userEmail = ?, submit = ?,", "", $dataTypeToUpdate);
+                $dataTypeToUpdate = str_replace(", userEmail = ?, submit = ?,", "", $dataTypeToUpdate);
                 array_pop($dataToUpdate);
                 array_pop($dataToUpdate);
                 array_push($dataToUpdate, $userEmail); // Adds last value to be used in query function
@@ -145,8 +151,12 @@
                 for ($i = count($dataToUpdate); $i > 0; $i--) 
                     $dataCount .= "s";
 
-                // TODO Check result
-                $result = $this->dbQueryWithParams("UPDATE users SET" . $dataTypeToUpdate . " WHERE email = ?", $dataCount, $dataToUpdate);
+                $result = $this->dbQueryWithParams("UPDATE users SET " . $dataTypeToUpdate . " WHERE email = ?", $dataCount, $dataToUpdate);
+                if ($result != 1){
+                    error_log("Something went wrong while updating user's data from Manage Users page", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Something went wrong, try again later");
+                }
+            
             }
             catch (Exception $e) {
                 $this->conn->rollback();
@@ -161,15 +171,6 @@
 
 
         // TODO Da sistemare
-        function createUser($data) {
-            $result = $this->dbQueryWithParams("INSERT INTO users (firstname, lastname, email, password, permission) VALUES (?, ?, ?, ?, ?)", "sssss", [$data["firstname"], $data["lastname"], $data["email"], $data["password"], $data["permission"]]);
-            $stmt = $this->conn->prepare($result);
-            $password = password_hash($data["password"], PASSWORD_DEFAULT);
-            $stmt->bind_param("sssss", $data["firstname"], $data["lastname"], $data["email"], $password, $data["permission"]);
-            $stmt->execute();
-        }
-
-
 
         function banUser($userEmail) {
             $result = $this->dbQueryWithParams("UPDATE users SET permission = 'banned' WHERE email = ?", "s", [$userEmail]);

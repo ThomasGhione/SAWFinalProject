@@ -1,4 +1,4 @@
-<?php
+<?php    
     require("../../shared/initializePage.php");    
 
     if (!$sessionManager->isSessionSet() || !$sessionManager->isAdmin()) {
@@ -19,35 +19,31 @@
                 throw new Exception("Invalid request");
             }
 
-            $emptyCount = 0;
+            $count = 0;
             
             foreach ($_POST as $dataName => $data) 
                 if (!empty($_POST[$dataName])) ++$count;
 
             // We used a count because it's much easier to expand the profile editing with more options
             if ($count < 3) {   // At least submit and email should be always set
-                error_log("Admin must choose at least 1 field to edit", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("Admin must choose at least 1 field to edit", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("Please choose at least 1 field to edit, number of empty values = $count");
             }
             if ($count > 7) {   // Max number of editable data is 5, so the system returns error if more data is sent 
-                error_log("Someone tried to edit more data that the system admits", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("Someone tried to edit more data that the system admits", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("Invalid request");
-            }
-            if (!$dbManagerAdmin->editUser($_POST["email"])) {
-                error_log("Something went wrong while editing user", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
-                throw new Exception("Something went wrong while editing user. Please try again later");
             }
         }
         catch (Exception $e) {
             $_SESSION["error"] = $e->getMessage();
-            header("Location: ../editUserForm.php");
+            header("Location: ../manageUsers.php");
             exit;
         }
 
-        $_SESSION["success"] = "Your changes were applied successfully!";
-    }    
+        if ($dbManagerAdmin->editUser($_POST["userEmail"])) 
+            $_SESSION["success"] = "Your changes were applied successfully!";
+    }
     
-    header("Location: ../editUserForm.php"); // Covers both invalid request and invalid login 
+    header("Location: ../manageUsers.php"); // Covers both invalid request and invalid login 
     exit;    
-
 ?>

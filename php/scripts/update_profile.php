@@ -18,15 +18,15 @@
             
             // We used a count because it's much easier to expand the profile editing with more options
             if ($count < 2) {
-                error_log("User must choose at least 1 field to edit", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("User must choose at least 1 field to edit", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("Please choose at least 1 field to edit, number of empty values = $count");
             }
             if ($count > 4) {
-                error_log("Invalid request", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("Invalid request", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("Invalid request");
             }
             if (!$dbManager->editProfile($sessionManager->getEmail(), $sessionManager)) {
-                error_log("Something went wrong while editing user", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("Something went wrong while editing user", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("Something went wrong while editing user. Please try again later");
             }
         }

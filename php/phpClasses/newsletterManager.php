@@ -44,7 +44,7 @@
 
             try {
                 if (empty($usrArr) || empty($message)) {
-                    error_log("newsletterManager: empty message or user array", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("newsletterManager: empty message or user array", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Message can't be empty");
                 }
 
@@ -56,7 +56,7 @@
                     $selectedEmail = strtolower($selectedEmail);
     
                     if (filter_var($selectedEmail, FILTER_VALIDATE_EMAIL) === false) {
-                        error_log("newsletterManager: invalid email", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                        error_log("newsletterManager: invalid email", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                         throw new Exception("Invalid email");
                     }
     

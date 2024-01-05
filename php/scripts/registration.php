@@ -10,7 +10,7 @@
 
     try {
         if ($_SERVER["REQUEST_METHOD"] != "POST") { // invalid request
-            error_log("Invalid request", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+            error_log("Invalid request", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
             throw new Exception("Something went wrong, please try again later");
         }         
         

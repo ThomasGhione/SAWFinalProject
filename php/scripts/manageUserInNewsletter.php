@@ -16,7 +16,7 @@
         // also checks if sub is "true" or "false" treating it as a string.
         
         if (!isset($_GET["sub"]) && ($_GET["sub"] == "true" || $_GET["sub"] == "false")) {
-            error_log("Invalid request", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+            error_log("Invalid request", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
             throw new Exception("Invalid request");
         }
             

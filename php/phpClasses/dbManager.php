@@ -18,7 +18,7 @@
         function __construct() {
             try {
                 if (!($this->conn = new mysqli($this->dbServer, $this->username, $this->password, $this->dbName))) {
-                    error_log("Error: cannot connect to database", 3 , "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Error: cannot connect to database", 3 , $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Error: cannot connect to DB");
                 }  
             }
@@ -35,19 +35,19 @@
         function dbQueryWithParams($stmtString, $paramsTypes, $params) {
             try {
                 if (!($stmt = $this->conn->prepare($stmtString))) {
-                    error_log("Error: cannot prepare the following query -> " . $stmtString, 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Error: cannot prepare the following query -> " . $stmtString, 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("server error");
                 }
                 if (count($params) != strlen($paramsTypes)) {
-                    error_log("Error: number of parameters does not match the number of types", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Error: number of parameters does not match the number of types", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("server error");
                 }
                 if (!($stmt->bind_param($paramsTypes, ...$params))) {
-                    error_log("Error: cannot bind the following parameters -> " . $params, 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Error: cannot bind the following parameters -> " . $params, 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("server error");
                 }
                 if (!($stmt->execute())) {
-                    error_log("Error: cannot execute the following query -> " . $stmtString, 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Error: cannot execute the following query -> " . $stmtString, 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Server error");
                 }
             }
@@ -66,7 +66,7 @@
         function dbQueryWithoutParams($stmtString) {
             try {
                 if (($result = $this->conn->query($stmtString)) == false) {
-                    error_log("Error: cannot execute the following query -> " . $stmtString, 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Error: cannot execute the following query -> " . $stmtString, 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Server error");
                 }
             }
@@ -83,7 +83,7 @@
 
             try {
                 if ($result->num_rows != 0) {
-                    error_log("Email already in use", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Email already in use", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Email already in use");
                 }
     
@@ -91,7 +91,7 @@
                 $result = $this->dbQueryWithParams('INSERT INTO users (email, password, firstname, lastname, username, permission, pfp, gender, birthday, description, newsletter) VALUES (?, ?, ?, ?, null, "user", null, "notSpecified", null, null, false)', 'ssss', $paramArr);
     
                 if ($result != 1) {
-                    error_log("cannot insert user into database (1 expected)", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("cannot insert user into database (1 expected)", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong, please try again later");
                 }
 
@@ -117,14 +117,14 @@
             
             try {
                 if ($result->num_rows != 1) {
-                    error_log("Email not found", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Email not found", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Email not found, please try again");
                 }
     
                 $row = $result->fetch_assoc();
     
                 if (!password_verify($user->getPassword(), $row["password"])) {
-                    error_log("Wrong password", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Wrong password", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Wrong password. please try again");
                 }
     
@@ -141,7 +141,7 @@
                     $result = $this->dbQueryWithParams("INSERT INTO remMeCookies (UID, email, ExpDate) VALUES (?, ?, ?)", "sss", $paramArr);
     
                     if ($result != 1) {
-                        error_log("Something went wrong in INSERT INTO (1 expected), try again later", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                        error_log("Something went wrong in INSERT INTO (1 expected), try again later", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                         throw new Exception("Something went wrong when inserting the new cookie data");
                     }
     
@@ -185,7 +185,7 @@
                 
                 try {
                     if ($result->num_rows == 1) {
-                        error_log("Email already exists", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                        error_log("Email already exists", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                         throw new Exception("Email already exists, please try again");
                     }
                 }
@@ -230,19 +230,19 @@
                 $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$email]);
 
                 if ($result->num_rows != 1) {
-                    error_log("Something went wrong while updating the pw. (result->num_rows expected to be 1)", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Something went wrong while updating the pw. (result->num_rows expected to be 1)", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong while updating the password, please try again");
                 }
 
                 $row = $result->fetch_assoc();
 
                 if (!password_verify($oldPassword, $row["password"])) {
-                    error_log("Wrong password", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Wrong password", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Wrong password, please try again");
                 }
 
                 if (strlen($newPassword) < 8) {
-                    error_log("Password must be at least 8 characters long", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Password must be at least 8 characters long", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Password must be at least 8 characters long, please try again");
                 }
 
@@ -251,7 +251,7 @@
                 $result = $this->dbQueryWithParams("UPDATE users SET password = ? WHERE email = ?", "ss", [$newPassword, $email]);
 
                 if ($result != 1) {
-                    error_log("Something went wrong while updating the pw. (result expected to be 1)", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Something went wrong while updating the pw. (result expected to be 1)", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong while updating the password, please try again");
                 }
             }
@@ -275,7 +275,7 @@
             
             try {
                 if ($result != 1) {
-                    error_log("Couldn't delete the cookie from the database (0 found)", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Couldn't delete the cookie from the database (0 found)", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
             }
@@ -399,7 +399,7 @@
         
         
                 if (!move_uploaded_file($tempPath, "../../repos/$email/$reposName/ . $fileName")) {
-                    error_log("Something went wrong while transferring the file into its new location", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Something went wrong while transferring the file into its new location", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
             }
@@ -425,7 +425,7 @@
         function manageFatalError() {
             $lastError = error_get_last();
             if ($lastError["type"] === E_ERROR) { 
-                error_log("Fatal error: " . $lastError["message"], 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("Fatal error: " . $lastError["message"], 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 $_SESSION["error"] = "Unexpected error occured, try again later";
                 return false; // fre non so perché tu l'abbia aggiunta in manageError ma nel dubbio la aggiungo anche io qui
             }
