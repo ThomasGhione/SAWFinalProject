@@ -102,7 +102,7 @@
                 // Creates a new directory for user's repos 
                 $email = $user->getEmail();
                 mkdir("../../repos/$email");
-                chmod("../../repos/$email", 0666);
+                chmod("../../repos/$email", 0777);
             }
             catch (Exception $e) {
                 $this->conn->rollback();
@@ -415,7 +415,7 @@
 
                 if (!mkdir("../../repos/$email/$reposName")) {
                     $error = error_get_last();
-                    error_log($error["message"] . " Current value in pathLocation is: " . $pathLocation);
+                    error_log($error["message"] . " Current value in pathLocation is: " . $pathLocation, 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
         

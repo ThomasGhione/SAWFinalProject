@@ -1,1 +1,0 @@
-Password isn't strong enoughPasswords don't matchEmpty parameters have been passed to the formWrong password
