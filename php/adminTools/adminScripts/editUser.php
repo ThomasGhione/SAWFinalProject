@@ -1,38 +1,46 @@
-<?php 
+<?php
     require("../../shared/initializePage.php");    
 
-    if (!$sessionManager->isSessionSet()) {
-        header("Location: ../../loginForm.php");
+    if (!$sessionManager->isSessionSet() || !$sessionManager->isAdmin()) {
+        header("Location: ../../../index.php");
         exit;
     }
+
+    $dbManagerAdmin = new dbManagerAdmin();
+
 
     if ($_SERVER["REQUEST_METHOD"] != "POST") 
         $_SESSION["error"] = "Invalid request";
     else { // Following code checks the number of arguments used in POST, it can be improved... probably :3
-        $emptyCount = 0;
-            
-        foreach ($_POST as $dataName => $data) 
-            if (!empty($_POST[$dataName])) ++$count;
-
         try {
-            
-            // We used a count because it's much easier to expand the profile editing with more options
-            if ($count < 2) {
-                error_log("User must choose at least 1 field to edit", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
-                throw new Exception("Please choose at least 1 field to edit, number of empty values = $count");
-            }
-            if ($count > 4) {
-                error_log("Invalid request", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+        
+            if (!isset($_POST["submit"]) || !isset($_POST["userEmail"]) || empty($_POST["userEmail"])) {
+                error_log("Someone tried to send a form without submitting it first or didn't set the email of the user to be edited");
                 throw new Exception("Invalid request");
             }
-            if (!$dbManager->editProfile($sessionManager->getEmail(), $sessionManager)) {
+
+            $emptyCount = 0;
+            
+            foreach ($_POST as $dataName => $data) 
+                if (!empty($_POST[$dataName])) ++$count;
+
+            // We used a count because it's much easier to expand the profile editing with more options
+            if ($count < 3) {   // At least submit and email should be always set
+                error_log("Admin must choose at least 1 field to edit", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                throw new Exception("Please choose at least 1 field to edit, number of empty values = $count");
+            }
+            if ($count > 7) {   // Max number of editable data is 5, so the system returns error if more data is sent 
+                error_log("Someone tried to edit more data that the system admits", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
+                throw new Exception("Invalid request");
+            }
+            if (!$dbManagerAdmin->editUser($_POST["email"])) {
                 error_log("Something went wrong while editing user", 3, "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("Something went wrong while editing user. Please try again later");
             }
         }
         catch (Exception $e) {
             $_SESSION["error"] = $e->getMessage();
-            header("Location: ../update_profile_form.php");
+            header("Location: ../editUserForm.php");
             exit;
         }
 

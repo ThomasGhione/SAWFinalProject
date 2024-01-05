@@ -221,8 +221,8 @@
 
         function updatePassword($email) {
             
-            $oldPassword = trim(htmlspecialchars($_POST["oldPassword"]));
-            $newPassword = trim(htmlspecialchars($_POST["newPassword"]));
+            $oldPassword = htmlspecialchars(trim($_POST["oldPassword"]));
+            $newPassword = htmlspecialchars(trim($_POST["newPassword"]));
 
             $this->conn->begin_transaction();
 

@@ -55,7 +55,7 @@
 
                 <div class="inputBox">
                     <label for="newEmail">Email: </label>
-                    <input type="email" id="newEmail" name="newEmail" placeholder="Email">
+                    <input type="email" id="newEmail" name="email" placeholder="Email">
                 </div>
 
                 <div class="inputBox">
@@ -71,7 +71,7 @@
                     </select>
                 </div>
 
-                <input type="hidden" name="email" value="<?php echo htmlspecialchars($_GET["email"])?>">
+                <input type="hidden" name="userEmail" value="<?php echo htmlspecialchars($_GET["email"])?>">
 
                 <input type="submit" class="formButton" name="submit" value="Edit">
             </form>

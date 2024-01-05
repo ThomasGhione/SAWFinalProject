@@ -5,7 +5,7 @@
     ?>
 
     <address>
-        <p>&copy; 2023 - All rights reserved - <a href="../termsAndConditions.php">See our terms and conditions</a></p>
+        <p>&copy; 2023 - All rights reserved - <a href="<?php echo $root?>/php/termsAndConditions.php">See our terms and conditions</a></p>
         <a>This site is a great replacement for an ancient way to manage repositories.</a>
         <a href="<?php echo $root?>/php/shared/listOfReasons.php">Click here to see why</a>
         
