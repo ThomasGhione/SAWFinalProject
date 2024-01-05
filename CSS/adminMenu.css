@@ -1,0 +1,14 @@
+.admin-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.navButton {
+    max-width: 300px;
+    margin: 10px auto;
+}
+
+#text {
+    text-align: center;
+    margin: 10px;
+}

@@ -39,7 +39,7 @@
         $_SESSION["success"] = "Your changes were applied successfully!";
     }    
     
-    header("Location: editUserForm.php"); // Covers both invalid request and invalid login 
+    header("Location: ../editUserForm.php"); // Covers both invalid request and invalid login 
     exit;    
 
 ?>
