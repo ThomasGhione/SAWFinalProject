@@ -79,9 +79,12 @@
         // User functions //
 
         function registerUser($user) {
-            $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$user->getEmail()]);
 
             try {
+                $this->conn->begin_transaction();
+
+                $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$user->getEmail()]);
+
                 if ($result->num_rows != 0) {
                     error_log("Email already in use", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Email already in use");
@@ -102,20 +105,25 @@
                 chmod("../../repos/$email", 0666);
             }
             catch (Exception $e) {
+                $this->conn->rollback();
                 $_SESSION["error"] = $e->getMessage();
                 header("Location: ../loginForm.php");
                 exit;
             }
 
             $_SESSION["success"] = "Registration Completed, please login to access the website";
+            
+            $this->conn->commit();
             return true;
         }
 
         function loginUser($user) {
 
-            $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$user->getEmail()]);
-            
             try {
+                $this->conn->begin_transaction();
+
+                $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$user->getEmail()]);
+
                 if ($result->num_rows != 1) {
                     error_log("Email not found", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Email not found, please try again");
@@ -142,7 +150,7 @@
     
                     if ($result != 1) {
                         error_log("Something went wrong in INSERT INTO (1 expected), try again later", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                        throw new Exception("Something went wrong when inserting the new cookie data");
+                        throw new Exception("Something went wrong, try again later");
                     }
     
                     $cookieManager = new cookieManager();
@@ -150,13 +158,16 @@
                 }
             }
             catch (Exception $e) {
+                $this->conn->rollback();
                 $_SESSION["error"] = $e->getMessage();
                 header("Location: ../loginForm.php");
                 exit;
             }
 
-            $user->setPermission($row["permission"]);
-            $user->setNewsletter($row["newsletter"]);
+            $this->conn->commit();
+            $user->setPermission(htmlspecialchars($row["permission"]));
+            $user->setNewsletter(htmlspecialchars($row["newsletter"]));
+            
             $_SESSION["success"] = "Login successful";
             return true;
         }
@@ -166,65 +177,72 @@
 
         function editProfile($email, $sessionManager) {
 
-            // Sets data names and data 
-            $dataTypeToUpdate = "";
-            $dataToUpdate = array(); 
-            $isEmailModified = !empty($_POST["email"]);
+            try {
+                $this->conn->begin_transaction();
 
-            foreach ($_POST as $dataName => $data) {
-                if (!empty($data)) {
-                    $dataTypeToUpdate .= " " . $dataName . " = ?,";
-                    array_push($dataToUpdate, trim(htmlspecialchars($data)));
+                // Sets data names and data 
+                $dataTypeToUpdate = "";
+                $dataToUpdate = array(); 
+                $isEmailModified = !empty($_POST["email"]);
+
+                foreach ($_POST as $dataName => $data) {
+                    if (!empty($data)) {
+                        $dataTypeToUpdate .= " " . $dataName . " = ?,";
+                        array_push($dataToUpdate, htmlspecialchars(trim($data)));
+                    }
                 }
-            }
 
-            if ($isEmailModified) { // Following code checks if email has changed, if so, it checks if email is valid, if so it changes session data and everything related to that email 
-                $newEmail = htmlspecialchars($_POST["email"]);
-                
-                $result = $this->dbQueryWithParams("SELECT email FROM users WHERE email = ?", "s", [$newEmail]);
-                
-                try {
+                if ($isEmailModified) { // Following code checks if email has changed, if so, it checks if email is valid, if so it changes session data and everything related to that email 
+                    $newEmail = htmlspecialchars(trim($_POST["email"]));
+                    
+                    $result = $this->dbQueryWithParams("SELECT email FROM users WHERE email = ?", "s", [$newEmail]);
+                    
                     if ($result->num_rows == 1) {
                         error_log("Email already exists", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                         throw new Exception("Email already exists, please try again");
                     }
-                }
-                catch (Exception $e) {
-                    $_SESSION["error"] = $e->getMessage();
-                    return false;
+
+                    $sessionManager->setEmail($newEmail);
+
+                    // Updates all remember me cookies from current email to the new one, 
+                    // TODO ask if should delete them instead of updating them
+                    $result = $this->dbQueryWithParams("UPDATE remMeCookies SET email = ? WHERE email = ?", "ss", [$newEmail, $email]);
+                    $result = $this->dbQueryWithParams("UPDATE repos SET Owner = ? WHERE Owner = ?", "ss", [$newEmail, $email]);
+                    rename("../../repos/$email", "../../repos/$newEmail");
                 }
 
-                $sessionManager->setEmail($newEmail);
+                // cleans data to be used in query function
+                $dataTypeToUpdate = str_replace(", submit = ?,", "", $dataTypeToUpdate);
+                array_pop($dataToUpdate);
+                array_push($dataToUpdate, $email); // Adds last value to be used in query function
 
-                // Updates all remember me cookies from current email to the new one, 
-                // TODO ask if should delete them instead of updating them
-                $result = $this->dbQueryWithParams("UPDATE remMeCookies SET email = ? WHERE email = ?", "ss", [$newEmail, $email]);
-                $result = $this->dbQueryWithParams("UPDATE repos SET Owner = ? WHERE Owner = ?", "ss", [$newEmail, $email]);
-                rename("../../repos/$email", "../../repos/$newEmail");
+                // Sets data types for query function            
+                $dataCount = "";
+                for ($i = count($dataToUpdate); $i > 0; $i--) 
+                    $dataCount .= "s";
+
+                $result = $this->dbQueryWithParams("UPDATE users SET" . $dataTypeToUpdate . " WHERE email = ?", $dataCount, $dataToUpdate);
+                if ($result != 1){
+                    error_log("Something went wrong while updating user's data from Manage Users page", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Something went wrong, try again later");
+                }
             }
+            catch (Exception $e) {
+                $this->conn->rollback();
+                $_SESSION["error"] = $e->getMessage();
+                return false;  
+            } 
 
-            // cleans data to be used in query function
-            $dataTypeToUpdate = str_replace(", submit = ?,", "", $dataTypeToUpdate);
-            array_pop($dataToUpdate);
-            array_push($dataToUpdate, $email); // Adds last value to be used in query function
-
-            // Sets data types for query function            
-            $dataCount = "";
-            for ($i = count($dataToUpdate); $i > 0; $i--) 
-                $dataCount .= "s";
-
-            // TODO Check result
-            $result = $this->dbQueryWithParams("UPDATE users SET" . $dataTypeToUpdate . " WHERE email = ?", $dataCount, $dataToUpdate);
-
+            $this->conn->commit();
             return true;
         }
 
         function updatePassword($email) {
-            
-            $oldPassword = htmlspecialchars(trim($_POST["oldPassword"]));
-            $newPassword = htmlspecialchars(trim($_POST["newPassword"]));
 
             $this->conn->begin_transaction();
+
+            $oldPassword = htmlspecialchars(trim($_POST["oldPassword"]));
+            $newPassword = htmlspecialchars(trim($_POST["newPassword"]));
 
             try {
                 $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$email]);
@@ -267,13 +285,15 @@
         
 
         // Session managing methods
-        // Used for logout
-        function deleteRememberMeCookieFromDB($cookie, $email) {    
-            $this->conn->begin_transaction();
-            
-            $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && UID = ?)", "ss", [$email, $cookie]);
-            
+        
+        function deleteRememberMeCookieFromDB($cookie, $email) {    // Used for logout
+           
             try {
+
+                $this->conn->begin_transaction();
+
+                $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && UID = ?)", "ss", [$email, $cookie]);
+
                 if ($result != 1) {
                     error_log("Couldn't delete the cookie from the database (0 found)", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
@@ -378,15 +398,21 @@
         // DB Repos Manipulation //
 
         function addNewRepo ($email) {
-            $reposName = htmlspecialchars($_POST["reposName"]);
-            $fileName = htmlspecialchars($_FILES["fileUpload"]["name"]);
+            $reposName = htmlspecialchars(trim($_POST["reposName"]));
+            $fileName = htmlspecialchars(trim($_FILES["fileUpload"]["name"]));
             $pathLocation = "/SAW/SAWFinalProject/repos/$email/$reposName";
             $currentDate = date("Y-m-d", time());
         
-            // TODO Check results
-            $result = $this->dbQueryWithParams("INSERT INTO repos (Name, Owner, CreationDate, LastModified, RepoLocation) VALUES (?, ?, ?, ?, ?)", "sssss", [$reposName, $email, $currentDate, $currentDate, $pathLocation]);
-        
             try {
+                $this->conn->begin_transaction();
+
+                $result = $this->dbQueryWithParams("INSERT INTO repos (Name, Owner, CreationDate, LastModified, RepoLocation) VALUES (?, ?, ?, ?, ?)", "sssss", [$reposName, $email, $currentDate, $currentDate, $pathLocation]);
+
+                if ($result != 1) {
+                    error_log("Repos could not be created in database", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Something went wrong, try again later");
+                }
+
                 if (!mkdir("../../repos/$email/$reposName")) {
                     $error = error_get_last();
                     error_log($error["message"] . " Current value in pathLocation is: " . $pathLocation);
@@ -397,26 +423,19 @@
             
                 $tempPath = $_FILES["fileUpload"]["tmp_name"];
         
-        
                 if (!move_uploaded_file($tempPath, "../../repos/$email/$reposName/ . $fileName")) {
                     error_log("Something went wrong while transferring the file into its new location", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
             }
             catch (Exception $e) {
-                        $_SESSION["error"] = $e->getMessage();
-                        return false;
+                $this->conn->rollback();
+                $_SESSION["error"] = $e->getMessage();
+                return false;
             }
-        
+            
+            $this->conn->commit();
             return true;
-        }
-        
-        function editRepo ($email) {
-        
-        }
-        
-        function deleteRepo ($email) {
-        
         }
 
 

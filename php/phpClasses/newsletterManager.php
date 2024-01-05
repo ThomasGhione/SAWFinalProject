@@ -78,7 +78,6 @@
         }
 
         function setNewsletter($dbManager, $sessionManager, $email, $set) {
-            // TODO Check errors on both $result and add Try-Catch
             
             $result = $dbManager->dbQueryWithParams("SELECT newsletter FROM users WHERE email = ?", "s", [$email]); 
             $row = $result->fetch_assoc();

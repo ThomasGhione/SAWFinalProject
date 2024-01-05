@@ -21,22 +21,20 @@
                 error_log("User must choose at least 1 field to edit", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("Please choose at least 1 field to edit, number of empty values = $count");
             }
+
             if ($count > 4) {
                 error_log("Invalid request", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("Invalid request");
             }
-            if (!$dbManager->editProfile($sessionManager->getEmail(), $sessionManager)) {
-                error_log("Something went wrong while editing user", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                throw new Exception("Something went wrong while editing user. Please try again later");
-            }
+
+            if ($dbManager->editProfile($sessionManager->getEmail(), $sessionManager)) 
+                $_SESSION["success"] = "Your changes were applied successfully!";
         }
         catch (Exception $e) {
             $_SESSION["error"] = $e->getMessage();
             header("Location: ../update_profile_form.php");
             exit;
         }
-
-        $_SESSION["success"] = "Your changes were applied successfully!";
     }    
     
     header("Location: ../update_profile_form.php"); // Covers both invalid request and invalid login 

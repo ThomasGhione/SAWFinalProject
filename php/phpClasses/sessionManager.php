@@ -23,15 +23,15 @@
         /* Setter methods */
 
         function setEmail($email) {
-            $_SESSION["email"] = $email;
+            $_SESSION["email"] = htmlspecialchars($email);
         }
 
         function setPermission($permission) {
-            $_SESSION["permission"] = $permission;
+            $_SESSION["permission"] = htmlspecialchars($permission);
         }
 
         function setNewsletter($newsletter) {
-            $_SESSION["newsletter"] = $newsletter;
+            $_SESSION["newsletter"] = htmlspecialchars($newsletter);
         }
 
 
@@ -57,27 +57,6 @@
         function isAdmin() {
             return isset($_SESSION["permission"]) && ($_SESSION["permission"] == "admin");
         }
-
-
-
-
-        // Methods not yet used
-        function sessionStatus() {
-            return session_status();
-        }
-
-        function isSessionStarted() {
-            return session_status() == PHP_SESSION_ACTIVE;
-        }
-
-        function isSessionExpired() { // TODO check if this works
-            return isset($_SESSION["LAST_ACTIVITY"]) && (time() - $_SESSION["LAST_ACTIVITY"] > 1800);
-        }
-
-        function updateSession() { // TODO check if this works 
-            $_SESSION["LAST_ACTIVITY"] = time();
-        }
-
     }
 
 

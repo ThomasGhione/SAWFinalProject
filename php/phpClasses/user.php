@@ -17,8 +17,8 @@
                              $confirmPwd = null, $gender = null, $birthday = null) {*/
 
         function __construct ($login) {            
-            $email = htmlspecialchars($_POST["email"]);
-            $password = htmlspecialchars($_POST["pass"]);
+            $email = htmlspecialchars(trim($_POST["email"]));
+            $password = htmlspecialchars(trim($_POST["pass"]));
 
             try {                
                 if (empty($email) || empty($password)) {
@@ -81,7 +81,7 @@
             }
             catch (Exception $e) {
                 $_SESSION["error"] = $e->getMessage();
-                header("Location: ../loginForm.php");
+                header("Location: ../registrationForm.php");
                 exit;
             }
 

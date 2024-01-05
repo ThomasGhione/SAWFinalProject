@@ -9,8 +9,6 @@
     require_once("../phpClasses/newsletterManager.php");
     $newsletterManager = new newsletterManager();
 
-
-
     try {
         // Following code checks if there's a sub value within a link
         // also checks if sub is "true" or "false" treating it as a string.

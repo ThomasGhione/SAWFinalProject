@@ -8,24 +8,13 @@
         exit;
     }
 
-    try {
-        if ($_SERVER["REQUEST_METHOD"] != "POST") { // invalid request
-            error_log("Invalid request", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-            throw new Exception("Something went wrong, please try again later");
-        }         
-        
-        $user = new User(false);        
+    if($_SERVER["REQUEST_METHOD"] != "POST")
+        $_SESSION["error"] = "Invalid request";
+            
+    $user = new User(false);        
+    
+    $dbManager->registerUser($user); // If it has problems, it returns from registerUser method
 
-        header("Location: " .($dbManager->registerUser($user)
-            ? "../loginForm.php"         // valid registration
-            : "../registrationForm.php") // invalid registration
-        );
-        exit;
-    }
-    catch (Exception $e) { // invalid request
-        $_SESSION["error"] = $e->getMessage();
-        header("Location: ../registrationForm.php");
-        exit;
-    }
-
+    header("Location: ../loginForm.php");   // Valid registration
+    exit;
 ?>
