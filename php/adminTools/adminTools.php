@@ -23,11 +23,6 @@
 
         <a class="navButton" href="/SAW/SAWFinalProject/php/adminTools/manageUsers.php">Manage Users</a>
         <a class="navButton" href="/SAW/SAWFinalProject/php/adminTools/manageNewsletter.php">Manage Newsletter</a>
-
-        <a class="navButton" href="/SAW/SAWFinalProject/php/adminTools/manageRepos.php">Manage Repos</a>
-        <a class="navButton" href="/SAW/SAWFinalProject/php/adminTools/manageSponsors.php">Manage Sponsors</a>
-        <a class="navButton" href="/SAW/SAWFinalProject/php/adminTools/manageBadges.php">Manage Badges</a>
-
     </div>
     
     <?php require_once("../shared/footer.php")?>
