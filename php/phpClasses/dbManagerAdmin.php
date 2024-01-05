@@ -129,8 +129,8 @@
 
                     // Updates all remember me cookies from current email to the new one, 
                     // TODO ask if should delete them instead of updating them
-                    $result = $this->dbQueryWithParams("UPDATE remMeCookies SET email = ? WHERE email = ?", "ss", [$newEmail, $email]);
-                    $result = $this->dbQueryWithParams("UPDATE repos SET Owner = ? WHERE Owner = ?", "ss", [$newEmail, $email]);
+                    $result = $this->dbQueryWithParams("UPDATE remMeCookies SET email = ? WHERE email = ?", "ss", [$newEmail, $userEmail]);
+                    $result = $this->dbQueryWithParams("UPDATE repos SET Owner = ? WHERE Owner = ?", "ss", [$newEmail, $userEmail]);
                     rename("../../repos/$userEmail", "../../repos/$newEmail");
                 }
 
