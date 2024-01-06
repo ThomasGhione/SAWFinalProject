@@ -17,7 +17,7 @@ h1 {
     margin-bottom: 20px;
 }
 
-.firstMessage, li {
+.message, li {
     color: #666;
     max-width: 1000px;
 }

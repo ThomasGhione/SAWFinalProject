@@ -16,14 +16,12 @@
         <div class="termsAndConditions">
             <h1>Terms and Conditions</h1>
 
-            <p class="firstMessage">
+            <p class="message">
                 Welcome to our website. If you continue to browse and use this website, you are agreeing to comply with and be bound by the following terms and conditions of use, 
                 which together with our privacy policy govern OpenHub's relationship with you in relation to this website.
+                <br>
+                The use of this website is subject to the following terms of use:
             </p>
-
-            <br>
-
-            <p class="firstMessage">The use of this website is subject to the following terms of use:</p>
 
             <ol>
                 <li>
