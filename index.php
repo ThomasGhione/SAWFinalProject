@@ -15,7 +15,7 @@
 
     <main class="mainContainer">
 
-        <div class="column">
+        <div class="homepage-img-container">
             <img src="./images/bestLogo.png" alt="BESTLOGO">
         </div>
 

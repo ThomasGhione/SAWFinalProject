@@ -20,7 +20,7 @@ body {
 }
 
 
-/* general */
+/* General */
 
 .mainContainer {
     position: relative;
@@ -51,11 +51,49 @@ body {
 }
 
 
+/* Homepage style */
+
+.homepage-img-container {
+    display: flex;
+    align-items: center;
+    height: auto;
+    width: 30%;
+    padding: 10px;
+    justify-content: center;
+}
+
+.homepage-img-container > img {
+    width: 100%;
+    height: 100%;
+}
+
+
+@media screen and (max-width: 1000px) {
+    .homepage-img-container {
+        width: 35%;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .homepage-img-container {
+        width: 45%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .homepage-img-container {
+        width: 60%;
+    }
+}
+
+/* Other data */
+
+
 .column {
     display: flex;
     align-items: center;
     height: auto;
-    width: 25%;
+    width: 80%;
     padding: 10px;
     justify-content: center;
 }

@@ -6,20 +6,16 @@
 
     <div class="left_nav">
         <a href="<?php echo $root; ?>/index.php"><img class="navLogoImg" src="<?php echo $root; ?>/images/bestLogo.png" alt="Website Logo, you can click on it to return to the homepage"></a>
-        <div class="big-right-nav">
-            <a href="<?php echo $root; ?>/index.php" class="navButton">Homepage</a>
-            <a class="blankSpace"></a>
-        </div>
 
-        <?php
-            if ($sessionManager->isSessionSet())
-                if ($sessionManager->isAdmin()) {
-                    echo "<div class='admin-small-right-nav'>";
-                        echo "<a class='navButton' href='$root/index.php'>Homepage</a>";
-                        echo "<a class='navButton' href='$root/php/adminTools/adminTools.php'>Admin Tools</a>";
-                    echo "</div>";
+        <div class="left-nav-buttons">
+            <a href="<?php echo $root; ?>/index.php" class="navButton">Homepage</a>
+            <?php
+                if ($sessionManager->isSessionSet() && $sessionManager->isAdmin()) {
+                    echo "<a class='blankSpace'></a>";
+                    echo "<a class='navButton' href='$root/php/adminTools/adminTools.php'>Admin Tools</a>";
                 }
-        ?>
+            ?>
+        </div>
     
     </div>
 
@@ -28,13 +24,6 @@
         <?php
             
             if ($sessionManager->isSessionSet()) {
-                if ($sessionManager->isAdmin()) {
-                    echo "<div class='admin-button'>";    
-                        echo "<a class='navButton' href='" . $root . "/php/adminTools/adminTools.php'>Admin Tools</a>";
-                        echo "<a class='blankSpace'></a>";
-                    echo "</div>";
-                }
-                
                 echo "<div class='visit-options'>";
                     echo "<a class='navButton' href='" . $root . "/php/show_profile.php'>Personal Area</a>";
                     echo "<a class='blankSpace'></a>";

@@ -31,9 +31,9 @@ nav > div {
     margin: 0px 3px;
 }
 
-.admin-small-right-nav {
-    display: none;
-    flex-direction: column;
+.left-nav-buttons {
+    display: flex;
+    flex-direction: row;
     padding-right: 5px;
 }
 
@@ -98,12 +98,12 @@ a:link, a:visited {
         display: none;
     }
 
-    .big-right-nav {
-        display: none;
+    .left-nav-buttons {
+        flex-direction: column;
     }
 
-    .admin-small-right-nav {
-        display: flex;
+    .left-nav-buttons > .blankSpace {
+        display: none;
     }
 
     .visit-options {
