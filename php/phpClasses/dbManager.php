@@ -374,7 +374,7 @@
                     <table id='table-searchRepos'>
                     <caption> Users found </caption>
                     <thead>
-                        <tr><th>Email</th><th>Firstname</th><th>Lastname</th></tr>
+                        <tr><th>Owner</th><th>Name</th><th>CreationDate</th><th>LastModified</th></tr>
                     </thead>
                     <tbody>
                 ";
@@ -382,9 +382,10 @@
                 while ($row = $result->fetch_assoc()) {
                     echo "<tr>";
 
-                    echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
-                    echo "<td>" . htmlspecialchars($row["firstname"]) . "</td>";
-                    echo "<td>" . htmlspecialchars($row["lastname"]) . "</td>";
+                    echo "<td>" . htmlspecialchars($row["Owner"]) . "</td>";
+                    echo "<td>" . htmlspecialchars($row["Name"]) . "</td>";
+                    echo "<td>" . htmlspecialchars($row["CreationDate"]) . "</td>";
+                    echo "<td>" . htmlspecialchars($row["LastModified"]) . "</td>";
                 
                     echo "</tr>";
                 }

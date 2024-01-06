@@ -23,13 +23,13 @@
 
     <main class="mainContainer">
 
-        <section class="column">
+        <div class="column">
             <?php if ($doSearch) $dbManager->searchUsers($_POST["searchBar"]); ?>
-        </section>
+        </div>
 
-        <section class="column">
+        <div class="column">
             <?php if ($doSearch) $dbManager->searchRepos($_POST["searchBar"]); ?>
-        </section>
+        </div>
 
     </main>
 

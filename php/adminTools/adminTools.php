@@ -12,18 +12,19 @@
 <head>
     <?php require_once("../shared/commonHead.php"); ?>
     <title>OpenHub - Admin Tools Page</title>
-    <link rel="stylesheet" href="../../css/adminMenu.css">
+    <link rel="stylesheet" type="text/css" href="../../CSS/adminMenu.css">
 </head>
 <body>
     <?php require_once("../shared/nav.php"); ?>
-
-    <div class="admin-menu">
+    <main class="mainContainer">
         
-        <h2 id="text">Admin Menu</h2>
+        <div class="admin-menu">
+            <h2>Admin Menu</h2>
 
-        <a class="navButton" href="/SAW/SAWFinalProject/php/adminTools/manageUsers.php">Manage Users</a>
-        <a class="navButton" href="/SAW/SAWFinalProject/php/adminTools/manageNewsletter.php">Manage Newsletter</a>
-    </div>
+            <a class="navButton" href="/SAW/SAWFinalProject/php/adminTools/manageUsers.php">Manage Users</a>
+            <a class="navButton" href="/SAW/SAWFinalProject/php/adminTools/manageNewsletter.php">Manage Newsletter</a>
+        </div>
+    </main>
     
     <?php require_once("../shared/footer.php")?>
 </body>

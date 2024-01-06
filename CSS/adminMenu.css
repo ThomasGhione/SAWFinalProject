@@ -1,14 +1,21 @@
 .admin-menu {
     display: flex;
     flex-direction: column;
+    background-color: #FCFAFA;
+    padding: 10px;
+    border-radius: 5%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border: 2px solid black;
+}
+
+.admin-menu > h2 {
+    background-image: linear-gradient(180deg, #C8D3D5, #6E8387);
+    border-radius: 5%;
+    text-align: center;
+    padding: 10px;
 }
 
 .navButton {
     max-width: 300px;
     margin: 10px auto;
-}
-
-#text {
-    text-align: center;
-    margin: 10px;
 }
