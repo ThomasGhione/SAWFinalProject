@@ -3,10 +3,9 @@ nav {
     align-items: center;
     justify-content: space-between;
     position: sticky;
-    
-    /* Dovrà essere cambiato */
     background-image: linear-gradient(180deg, #C8D3D5, #6E8387);
 }
+
 
 nav > div {
     display: flex;
@@ -14,19 +13,36 @@ nav > div {
     justify-content: space-between; 
 }
 
-.navImg {
+.navLogoImg, .navUsrImg {
     width: 50px;
     height: 50px;
     margin: 10px;
     border-radius: 100%;
 }
 
-.navImg:hover {
+.navLogoImg:hover, .navUsrImg:hover {
     filter: brightness(125%);
 }
 
+
+/* Left side of the nav */
+
 .left_nav > button {
     margin: 0px 3px;
+}
+
+.admin-small-right-nav {
+    display: none;
+    flex-direction: column;
+    padding-right: 5px;
+}
+
+
+/* Right side of the nav */
+
+.visit-options {
+    display: flex;
+    flex-direction: row;
 }
 
 .right_nav > button {
@@ -48,6 +64,8 @@ nav > div {
     border: 2px solid black;
     border-radius: 5px;
     cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .navButton:hover {
@@ -71,3 +89,45 @@ a:link, a:visited {
     border-left: 3px solid black;
     border-right: 3px solid black;
 }
+
+
+/* Style for small screens */
+
+@media screen and (max-width: 800px) {
+    .admin-button {
+        display: none;
+    }
+
+    .big-right-nav {
+        display: none;
+    }
+
+    .admin-small-right-nav {
+        display: flex;
+    }
+
+    .visit-options {
+        flex-direction: column;
+    }
+
+    .visit-options > .blankSpace {
+        display: none;
+    }
+    
+    .searchBar {
+        width: 100%; /* Fai sì che la searchBar occupi tutta la larghezza disponibile */
+        margin-bottom: 5px; /* Aggiungi uno spazio tra la searchBar e il pulsante di ricerca */
+    }
+
+    .formButton {
+        width: 100%; /* Fai sì che il pulsante di ricerca occupi tutta la larghezza disponibile */
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .navUsrImg {
+        display: none;
+    }
+}
+
+

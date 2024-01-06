@@ -36,6 +36,7 @@
     <?php include("./php/shared/footer.php") ?>
 
     <script>
+        // JS Logic for cookie data
         document.querySelector('.fa-cookie').addEventListener('click', function() {
             var expires = new Date();
             expires.setMinutes(expires.getMinutes() + 30);

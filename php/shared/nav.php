@@ -5,29 +5,48 @@
     ?>
 
     <div class="left_nav">
-        <a href="<?php echo $root; ?>/index.php"><img class="navImg" src="<?php echo $root; ?>/images/bestLogo.png" alt="Website Logo, you can click on it to return to the homepage"></a>
-        <a href="<?php echo $root; ?>/index.php" class="navButton">Homepage</a>
-        <a class="blankSpace"></a>
+        <a href="<?php echo $root; ?>/index.php"><img class="navLogoImg" src="<?php echo $root; ?>/images/bestLogo.png" alt="Website Logo, you can click on it to return to the homepage"></a>
+        <div class="big-right-nav">
+            <a href="<?php echo $root; ?>/index.php" class="navButton">Homepage</a>
+            <a class="blankSpace"></a>
+        </div>
+
+        <?php
+            if ($sessionManager->isSessionSet())
+                if ($sessionManager->isAdmin()) {
+                    echo "<div class='admin-small-right-nav'>";
+                        echo "<a class='navButton' href='$root/index.php'>Homepage</a>";
+                        echo "<a class='navButton' href='$root/php/adminTools/adminTools.php'>Admin Tools</a>";
+                    echo "</div>";
+                }
+        ?>
+    
     </div>
 
     <div class="right_nav">
 
         <?php
-            // TODO Creare una funzione di check che controlli se l'oggetto sessionManager esiste effettivamente
             
             if ($sessionManager->isSessionSet()) {
-                echo "<a class='navButton' href='" . $root . "/php/show_profile.php'>Personal Area</a>";
-                echo "<a class='blankSpace'></a>";
-                echo "<a class='navButton' href='" . $root . "/php/scripts/logout.php'>Logout</a>";
                 if ($sessionManager->isAdmin()) {
-                    echo "<a class='blankSpace'></a>";
-                    echo "<a class='navButton' href='" . $root . "/php/adminTools/adminTools.php'>Admin Tools</a>";
+                    echo "<div class='admin-button'>";    
+                        echo "<a class='navButton' href='" . $root . "/php/adminTools/adminTools.php'>Admin Tools</a>";
+                        echo "<a class='blankSpace'></a>";
+                    echo "</div>";
                 }
+                
+                echo "<div class='visit-options'>";
+                    echo "<a class='navButton' href='" . $root . "/php/show_profile.php'>Personal Area</a>";
+                    echo "<a class='blankSpace'></a>";
+                    echo "<a class='navButton' href='" . $root . "/php/scripts/logout.php'>Logout</a>";
+                echo "</div>";
             }
             else {
-                echo "<a class='navButton' href='" . $root . "/php/registrationForm.php'>Register here!</a>";
-                echo "<a class='blankSpace'></a>";
-                echo "<a class='navButton' href='" . $root . "/php/loginForm.php'>Login</a>";
+                echo "<div class='visit-options'>";
+                    echo "<a class='navButton' href='" . $root . "/php/registrationForm.php'>Register</a>";
+                    echo "<a class='blankSpace'></a>";
+                    echo "<a class='navButton' href='" . $root . "/php/loginForm.php'>Login</a>";
+                echo "</div>";
             }
         ?>
 
@@ -55,9 +74,10 @@
                 else
                     $currentPfp = $sessionManager->getEmail();
 
-                echo "<a href=$root/php/show_profile.php><img class='navImg' src='$root/images/pfps/$currentPfp' alt='Your profile picture'></a>";
+                echo "<a href=$root/php/show_profile.php><img class='navUsrImg' src='$root/images/pfps/$currentPfp' alt='Your profile picture'></a>";
             }
         ?>
+        
     </div>
 
 </nav> 
