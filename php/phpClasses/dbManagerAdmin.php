@@ -24,7 +24,7 @@
                 echo "<td>" . htmlspecialchars($row["permission"]) . "</td>";
                 echo "<td><a href='./adminScripts/deleteUser.php?email=" . urlencode(htmlspecialchars($row["email"])) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'></i></a></td>";
                 echo "<td><a href='./editUserForm.php?email=" . urlencode(htmlspecialchars($row["email"])) . "'><i class='fa-solid fa-pencil'></i></a></td>";
-                echo "<td><a href='./adminScripts/adminScripts/banUser.php.php?email=" . urlencode(htmlspecialchars($row["email"])) .  "' onclick='return confirmBan();'><i class='fa-solid fa-ban'></i></a></td>";
+                echo "<td><a href='./adminScripts/banUser.php?email=" . urlencode(htmlspecialchars($row["email"])) .  "' onclick='return confirmBan();'><i class='fa-solid fa-ban'></i></a></td>";
 
                 echo "</tr>";
             }
@@ -76,6 +76,9 @@
                 $_SESSION["error"] = $e->getMessage();
                 return false;
             }
+
+            $this->conn->commit();
+            return true;
         }
 
         function deleteUser($userEmail) {

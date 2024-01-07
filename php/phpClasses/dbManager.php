@@ -182,7 +182,10 @@
 
         function isBanned($email) {
             $result = $this->dbQueryWithParams("SELECT permission FROM users WHERE email = ?", "s", [$email]);
-            return ($result == "banned");
+            
+            $row = $result->fetch_assoc();
+            
+            return ($row["permission"] == "banned");
         }
 
         // Editing profile functions (only for users)
