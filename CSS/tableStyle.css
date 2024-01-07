@@ -4,8 +4,14 @@
     padding: 10px;
     text-align: center;
 
+    margin-left: 3%;
+    margin-right: 3%;
+
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border: 2px solid black;
+
+    overflow-x: auto;
+    max-width: 100%;
 }   
 
 table.dataTable {
