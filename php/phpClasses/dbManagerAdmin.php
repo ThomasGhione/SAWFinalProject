@@ -25,6 +25,8 @@
                 echo "<td>" . htmlspecialchars($row["permission"]) . "</td>";
                 echo "<td><a href='./adminScripts/deleteUser.php?email=" . urlencode(htmlspecialchars($row["email"])) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'></i></a></td>";
                 echo "<td><a href='./editUserForm.php?email=" . urlencode(htmlspecialchars($row["email"])) . "'><i class='fa-solid fa-pencil'></i></a></td>";
+                echo "<td>" . htmlspecialchars($row["permission"]) . "</td>";
+
 
                 echo "</tr>";
             }
@@ -100,6 +102,7 @@
                 $dataToUpdate = array(); 
                 $isEmailModified = !empty($_POST["email"]);
                 $isPasswordModified = !empty($_POST["pass"]);
+                $isPermissionModified = !empty($_POST["permission"]);
 
                 foreach ($_POST as $dataName => $data) {
                     if (!empty($data)) {
@@ -138,6 +141,19 @@
                     $result = $this->dbQueryWithParams("UPDATE remMeCookies SET email = ? WHERE email = ?", "ss", [$newEmail, $userEmail]);
                     $result = $this->dbQueryWithParams("UPDATE repos SET Owner = ? WHERE Owner = ?", "ss", [$newEmail, $userEmail]);
                     rename("../../repos/$userEmail", "../../repos/$newEmail");
+                }
+
+
+                if ($isPermissionModified) {
+                    $newPermission = htmlspecialchars(trim($_POST["permission"]));
+
+                    
+                    if ($newPermission != "user" && $newPermission != "mod" && $newPermission != "admin" && $newPermission != "banned") {
+                        error_log("Invalid permission", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                        throw new Exception("Invalid permission");
+                    }
+
+                    $result = $this->dbQueryWithParams("UPDATE users SET permission = ? WHERE email = ?", "ss", [$newPermission, $userEmail]);
                 }
 
                 // cleans data to be used in query function

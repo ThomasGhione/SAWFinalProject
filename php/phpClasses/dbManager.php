@@ -135,6 +135,12 @@
                     error_log("Wrong password", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Wrong password. please try again");
                 }
+
+                $isBanned = $this->dbQueryWithParams("SELECT permission FROM users WHERE email = ?", "s", [$user->getEmail()]);
+                if ($isBanned == "banned") {
+                    error_log("User is banned", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("You are banned. Please contact an admin if you think you didn't violate our terms and conditions");
+                }
     
                 if ($user->getRemMeFlag()) { 
                     $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && (STR_TO_DATE(ExpDate, '%Y-%m-%d') < CURDATE()))", "s", [$user->getEmail()]);
