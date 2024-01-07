@@ -6,14 +6,30 @@
 
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border: 2px solid black;
+}   
+
+table.dataTable {
+    border-radius: 10px;
+    border-spacing: 0;
+    border: 2px solid black;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+table.dataTable td, table.dataTable th {
+    border: 1px solid black;
+    border-top: none;
+    border-left: none;
+}
 
-table {
-    border-collapse: collapse;
-    border-spacing: 0;
-    border-radius: 10px;
-    overflow: hidden;
+table.dataTable tr:first-child th {
+    border-top: 1px solid black;
+}
+
+table.dataTable td:first-child, table.dataTable th:first-child {
+    border-left: 1px solid black;
 }
 
 caption {
@@ -42,30 +58,22 @@ tr:nth-child(odd) {
 
 td, th {
     border-right: 1px solid gray;
+    text-align: center;
+    padding: 5px;
 }
 
 td:last-child, th:last-child {
     border-right: none;
 }
 
-table, td, th {
-    padding: 5px;
-    text-align: center;
-}
-
 
 /* JQuery Datatables style */
 
-.dataTables_filter input {
+.dataTables_filter input, .dataTables_length select {
     border: 1px solid #ccc;
     padding: 5px;
     margin: 5px 0;
-}
-
-.dataTables_length select {
-    border: 1px solid #ccc;
-    padding: 5px;
-    margin: 5px 0;
+    cursor: pointer;
 }
 
 .dataTables_wrapper .dataTables_scroll .dataTables_scrollHeadInner table {
@@ -92,9 +100,35 @@ table, td, th {
     color: #fff;
     border: 1px solid #ccc;
     background-color: #333;
+    cursor: pointer;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.previous,
 .dataTables_wrapper .dataTables_paginate .paginate_button.next {
     background-image: linear-gradient(180deg, #C8D3D5, #6E8387);
+    cursor: pointer;
+}
+
+
+
+/* Data for smaller screens */
+
+@media screen and (max-width: 800px){
+    td {
+        font-size: 14px;
+    }
+
+    th {
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .responsive-hide {
+        display: none;
+    }
+
+    .responsive-show {
+        display: table-cell;
+    }
 }
