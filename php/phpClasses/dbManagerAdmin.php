@@ -5,7 +5,6 @@
         // Admin Tools //
 
         function manageUsers() {
-            
             $result = $this->dbQueryWithoutParams("SELECT * FROM users");
 
             echo "
@@ -25,7 +24,7 @@
                 echo "<td>" . htmlspecialchars($row["permission"]) . "</td>";
                 echo "<td><a href='./adminScripts/deleteUser.php?email=" . urlencode(htmlspecialchars($row["email"])) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'></i></a></td>";
                 echo "<td><a href='./editUserForm.php?email=" . urlencode(htmlspecialchars($row["email"])) . "'><i class='fa-solid fa-pencil'></i></a></td>";
-                echo "<td><a href='./adminScripts/banUser.php?email=" . urlencode(htmlspecialchars($row["email"])) .  "' onclick='return confirmBan();'><i class='fa-solid fa-ban'></i></a></td>";
+                echo "<td><a href='./adminScripts/adminScripts/banUser.php.php?email=" . urlencode(htmlspecialchars($row["email"])) .  "' onclick='return confirmBan();'><i class='fa-solid fa-ban'></i></a></td>";
 
                 echo "</tr>";
             }
@@ -63,20 +62,33 @@
             ";
         }
 
+        function banUser($userEmail) {
+            $this->conn->begin_transaction();
+
+            try {
+                $result = $this->dbQueryWithParams("UPDATE users SET permission = 'banned' WHERE email = ?", "s", [$userEmail]);
+                if ($result != 1)
+                    throw new Exception("Something went wrong when banning a user, probably user wasn't defined, see final error: " . error_get_last());
+            }
+            catch (Exception $e) {
+                $this->conn->rollback();
+                error_log($e->getMessage(), 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                $_SESSION["error"] = $e->getMessage();
+                return false;
+            }
+        }
+
         function deleteUser($userEmail) {
-            
             $this->conn->begin_transaction();
 
             try {
                 $result = $this->dbQueryWithParams("DELETE FROM users WHERE email=?", "s", [$userEmail]);
-
-                if ($result != 1) {
-                    error_log("Something went wrong when deleting a user, probably user wasn't defined, see final error: " . error_get_last(), 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                    throw new Exception("Something went wrong when trying to delete user, see log file to know more");
-                }
+                if ($result != 1)
+                    throw new Exception("Something went wrong when deleting a user, probably user wasn't defined, see final error: " . error_get_last());
             } 
             catch (Exception $e) {
                 $this->conn->rollback();
+                error_log($e->getMessage(), 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 $_SESSION["error"] = $e->getMessage();
                 return false;
             }
@@ -181,17 +193,6 @@
 
             $this->conn->commit();
             return true;
-        }
-
-
-
-        // TODO Da sistemare
-
-        function banUser($userEmail) {
-            $result = $this->dbQueryWithParams("UPDATE users SET permission = 'banned' WHERE email = ?", "s", [$userEmail]);
-            $stmt = $this->conn->prepare($result);
-            $stmt->bind_param("s", $userEmail);
-            $stmt->execute();   
         }
 
     }

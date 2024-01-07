@@ -33,8 +33,8 @@
             throw new Exception("You can't delete yourself while you're logged, please contact a technician to do so");
         }
 
-        if ($dbManagerAdmin->deleteUser($email))
-            $_SESSION["success"] = "User deleted successfully";
+        if ($dbManagerAdmin->banUser($email))
+            $_SESSION["success"] = "User banned successfully";
         
     }
     catch (Exception $e) { $_SESSION["error"] = $e->getMessage(); }

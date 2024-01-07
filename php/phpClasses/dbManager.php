@@ -136,8 +136,7 @@
                     throw new Exception("Wrong password. please try again");
                 }
 
-                $isBanned = $this->dbQueryWithParams("SELECT permission FROM users WHERE email = ?", "s", [$user->getEmail()]);
-                if ($isBanned == "banned") {
+                if ($this->isBanned($user->getEmail())) {
                     error_log("User is banned", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("You are banned. Please contact an admin if you think you didn't violate our terms and conditions");
                 }
@@ -178,6 +177,13 @@
             return true;
         }
 
+
+        // Checks whether the user is banned or not
+
+        function isBanned($email) {
+            $result = $this->dbQueryWithParams("SELECT permission FROM users WHERE email = ?", "s", [$email]);
+            return ($result == "banned");
+        }
 
         // Editing profile functions (only for users)
 
