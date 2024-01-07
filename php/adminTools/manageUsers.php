@@ -33,7 +33,7 @@
             echo "<p class='error'>" . $_SESSION["error"] . "</p>";
             unset($_SESSION["error"]);
         }
-        elseif (isset($_SESSION['success'])) {
+        elseif (isset($_SESSION["success"])) {
             echo "<p class='success'>" . $_SESSION["success"] . "</p>";
             unset($_SESSION["success"]);
         }
@@ -44,15 +44,15 @@
     <script>
 
         function confirmDelete() {
-            return confirm("Are you sure to delete this user?");
+            return confirm("Are you sure you want to delete this user?");
         }
 
         function confirmBan() {
-            return confirm("Are you sure to ban this user?");
+            return confirm("Are you sure you want to ban this user?");
         }
 
         $(document).ready( function () {
-            $('#table-manageUsers').DataTable();
+            $("#table-manageUsers").DataTable();
         } );
 
     </script>

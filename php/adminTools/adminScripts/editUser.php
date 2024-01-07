@@ -29,7 +29,7 @@
                 error_log("Admin must choose at least 1 field to edit", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("Please choose at least 1 field to edit, number of empty values = $count");
             }
-            if ($count > 7) {   // Max number of editable data is 5, so the system returns error if more data is sent 
+            if ($count > 7) {   // Max number of editable data is 7, so the system returns error if more data is sent 
                 error_log("Someone tried to edit more data that the system admits", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("Invalid request");
             }
