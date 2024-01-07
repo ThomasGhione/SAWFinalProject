@@ -124,11 +124,7 @@ td:last-child, th:last-child {
 }
 
 @media screen and (max-width: 600px) {
-    .responsive-hide {
-        display: none;
-    }
-
-    .responsive-show {
-        display: table-cell;
+    th {
+        font-size: 14px;
     }
 }
