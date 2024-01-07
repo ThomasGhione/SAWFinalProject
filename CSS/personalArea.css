@@ -10,6 +10,21 @@
     flex-grow: 1;
 }
 
+.main_personalarea::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-image: url("/SAW/SAWFinalProject/images/homeBackGround.jpg");
+    filter: blur(16px);
+    z-index: -1;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 
 /* Containers for columns */
 
@@ -17,11 +32,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 18%;
+    width: 350px;
     height: auto;
 
     border: 5px solid purple;
     border-radius: 10px;
+    background-color: white;
 }
 
 .right_column {
@@ -29,11 +45,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 82%;
+    width: 100%;
     height: auto;
 
     border: 5px solid purple;
     border-radius: 10px;
+    background-color: white;
 }
 
 
@@ -50,6 +67,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    white-space: nowrap;
 }
 
 .infos > p {
@@ -103,14 +121,24 @@
     }
 
     .left_column {
-        width: auto;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         border: 2px solid black;
         border-radius: 10px;
+        width: 65%;
     }
 
     .right_column {
         width: 50%;
         white-space: nowrap;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .fa-square-envelope {
+        font-size: 15px;
+    }
+
+    .personalAreaButton {
+        font-size: 14px;
     }
 }

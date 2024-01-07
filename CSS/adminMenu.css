@@ -13,9 +13,17 @@
     border-radius: 5%;
     text-align: center;
     padding: 10px;
+    margin-bottom: 5px;
 }
 
-.navButton {
-    max-width: 300px;
-    margin: 10px auto;
+.admin-menu-button {
+    background-color: #A4B8C4;
+    padding: 6px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    border: 2px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
 }

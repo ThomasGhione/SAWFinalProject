@@ -24,7 +24,9 @@
     <?php require_once("../shared/nav.php") ?>
     
     <main class="mainContainer">
-        <?php $dbManagerAdmin->manageUsers() ?>
+        <div class="tableContainer">
+            <?php $dbManagerAdmin->manageUsers() ?>
+        </div>
     </main>
 
     <?php

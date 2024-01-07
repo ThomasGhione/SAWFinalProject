@@ -90,6 +90,10 @@ a:link, a:visited {
     border-right: 3px solid black;
 }
 
+.searchBox > .formButton {
+    width: auto;
+}
+
 
 /* Style for small screens */
 
@@ -125,9 +129,17 @@ a:link, a:visited {
 }
 
 @media screen and (max-width: 550px) {
+    .navLogoImg, .navUsrImg {
+        margin: 10px 5px;
+    }
+    
+    .navButton, .formButton {
+        font-size: 13px;
+    }
+}
+
+@media screen and (max-width: 475px) {
     .navUsrImg {
         display: none;
     }
 }
-
-
