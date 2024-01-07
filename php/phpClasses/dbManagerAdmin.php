@@ -11,7 +11,7 @@
             echo "
                 <table id='table-manageUsers'>
                 <thead>
-                    <tr><th>Firstname</th><th>Lastname</th><th>Email</th><th>Permission</th><th>Delete</th><th>Edit</th></tr>
+                    <tr><th>Firstname</th><th>Lastname</th><th>Email</th><th>Permission</th><th>Delete</th><th>Edit</th><th>Ban</th></tr>
                 </thead>
                 <tbody>
             ";
@@ -25,7 +25,7 @@
                 echo "<td>" . htmlspecialchars($row["permission"]) . "</td>";
                 echo "<td><a href='./adminScripts/deleteUser.php?email=" . urlencode(htmlspecialchars($row["email"])) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'></i></a></td>";
                 echo "<td><a href='./editUserForm.php?email=" . urlencode(htmlspecialchars($row["email"])) . "'><i class='fa-solid fa-pencil'></i></a></td>";
-                echo "<td>" . htmlspecialchars($row["permission"]) . "</td>";
+                echo "<td><a href='./banUser?email=" . urlencode(htmlspecialchars($row["email"])) .  "' onclick='return confirmBan();'><i class='fa-solid fa-ban'></i></a></td>";
 
 
                 echo "</tr>";

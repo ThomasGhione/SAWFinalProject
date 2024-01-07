@@ -24,9 +24,7 @@
     <?php require_once("../shared/nav.php") ?>
     
     <main class="mainContainer">
-        <div class="tableContainer">
-            <?php $dbManagerAdmin->manageUsers() ?>
-        </div>
+        <?php $dbManagerAdmin->manageUsers() ?>
     </main>
 
     <?php
@@ -47,6 +45,10 @@
 
         function confirmDelete() {
             return confirm("Are you sure to delete this user?");
+        }
+
+        function confirmBan() {
+            return confirm("Are you sure to ban this user?");
         }
 
         $(document).ready( function () {
