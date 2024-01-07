@@ -24,7 +24,7 @@
     <?php include("shared/nav.php") ?>
 
     <div class="main_personalarea">
-        <div id="left_column">
+        <div class="left_column">
 
             <div class="infos">
                 <?php 
@@ -64,7 +64,7 @@
             </div>
         </div>
          
-        <div id="right_column">
+        <div class="right_column">
 
             <p>This part of the website is under construction</p>
 
