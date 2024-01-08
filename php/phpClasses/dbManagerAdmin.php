@@ -16,6 +16,9 @@
             ";
 
             while ($row = $result->fetch_assoc()) {
+                
+                $isBanned = ($row["permission"] === "banned");
+                
                 echo "<tr>";
                 
                 echo "<td>" . htmlspecialchars($row["firstname"]) . "</td>";
@@ -24,8 +27,20 @@
                 echo "<td>" . htmlspecialchars($row["permission"]) . "</td>";
                 echo "<td><a href='./adminScripts/deleteUser.php?email=" . urlencode(htmlspecialchars($row["email"])) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'></i></a></td>";
                 echo "<td><a href='./editUserForm.php?email=" . urlencode(htmlspecialchars($row["email"])) . "'><i class='fa-solid fa-pencil'></i></a></td>";
-                echo "<td><a href='./adminScripts/banUser.php?email=" . urlencode(htmlspecialchars($row["email"])) .  "' onclick='return confirmBan();'><i class='fa-solid fa-ban'></i></a></td>";
-                echo "<td><a href='./adminScripts/unbanUser.php?email=" . urlencode(htmlspecialchars($row["email"])) .  "' onclick='return confirmBan();'><i class='fa-solid fa-ban'></i></a></td>";
+                
+                echo "<td>";
+                if(!$isBanned)
+                    echo "<a href='./adminScripts/banUser.php?email=" . urlencode(htmlspecialchars($row["email"])) .  "' onclick='return confirmBan();'><i class='fa-solid fa-ban'></i></a>";
+                else   
+                    echo "<a class='emptyButton'><i class='fa-solid fa-ban'></i></a>";
+                echo "</td>";
+                
+                echo "<td>";
+                if($isBanned)
+                    echo "<a href='./adminScripts/unbanUser.php?email=" . urlencode(htmlspecialchars($row["email"])) .  "' onclick='return confirmUnBan();'><i class='fa-solid fa-confirm'></i></a>";
+                else
+                    echo "<a class='emptyButton'><i class='fa-solid fa-confirm'></i></a>";
+                echo "</td>";
 
                 echo "</tr>";
             }
