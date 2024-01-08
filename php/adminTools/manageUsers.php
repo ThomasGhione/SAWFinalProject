@@ -51,6 +51,10 @@
             return confirm("Are you sure you want to ban this user?");
         }
 
+        function confirmUnban() {
+            return confirm("Are you sure you want to unban this user?");
+        }
+
         $(document).ready( function () {
             $('#table-manageUsers').DataTable();
         } );
