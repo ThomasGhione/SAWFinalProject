@@ -10,7 +10,7 @@
             echo "
                 <table id='table-manageUsers'>
                 <thead>
-                    <tr><th>Firstname</th><th>Lastname</th><th>Email</th><th>Role</th><th>Delete</th><th>Edit</th><th>Ban</th></tr>
+                    <tr><th>Firstname</th><th>Lastname</th><th>Email</th><th>Role</th><th>Delete</th><th>Edit</th><th>Ban</th><th>Unban</th></tr>
                 </thead>
                 <tbody>
             ";
@@ -25,6 +25,7 @@
                 echo "<td><a href='./adminScripts/deleteUser.php?email=" . urlencode(htmlspecialchars($row["email"])) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'></i></a></td>";
                 echo "<td><a href='./editUserForm.php?email=" . urlencode(htmlspecialchars($row["email"])) . "'><i class='fa-solid fa-pencil'></i></a></td>";
                 echo "<td><a href='./adminScripts/banUser.php?email=" . urlencode(htmlspecialchars($row["email"])) .  "' onclick='return confirmBan();'><i class='fa-solid fa-ban'></i></a></td>";
+                echo "<td><a href='./adminScripts/unbanUser.php?email=" . urlencode(htmlspecialchars($row["email"])) .  "' onclick='return confirmBan();'><i class='fa-solid fa-ban'></i></a></td>";
 
                 echo "</tr>";
             }
@@ -60,6 +61,25 @@
                 </tbody>
                 </table>
             ";
+        }
+
+        function unbanUser($userEmail) {
+            $this->conn->begin_transaction();
+
+            try {
+                $result = $this->dbQueryWithParams("UPDATE users SET permission = 'user' WHERE email = ?", "s", [$userEmail]);
+                if ($result != 1)
+                    throw new Exception("Something went wrong when unbanning a user, probably user wasn't defined, see final error: " . error_get_last());
+            }
+            catch (Exception $e) {
+                $this->conn->rollback();
+                error_log($e->getMessage(), 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                $_SESSION["error"] = $e->getMessage();
+                return false;
+            }
+
+            $this->conn->commit();
+            return true;
         }
 
         function banUser($userEmail) {
