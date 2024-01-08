@@ -1,12 +1,14 @@
 <?php
     require("./shared/initializePage.php");
 
-    require_once("./phpClasses/loggedUser.php");
-
     if (!$sessionManager->isSessionSet()) {
         header("Location: ./loginForm.php");
         exit;
     }
+
+    require("./shared/banCheck.php");
+
+    require_once("./phpClasses/loggedUser.php");
 
     $currentUser = new loggedUser($sessionManager->getEmail()); // sets user data obtained from database
 ?>

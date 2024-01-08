@@ -12,7 +12,7 @@
         }
         catch (Exception $e) {
             $_SESSION["error"] = $e->getMessage();
-            header("Location: $root/SAW/SAWFinalProject/php/scripts/logout.php");
+            header("Location: /SAW/SAWFinalProject/php/scripts/logout.php");
             exit;
         }
     }

@@ -1,5 +1,7 @@
 <?php 
     require("./shared/initializePage.php");
+
+    require("./shared/banCheck.php");
 ?>
 
 <!DOCTYPE html>

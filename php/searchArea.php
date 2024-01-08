@@ -2,6 +2,8 @@
     require("./shared/initializePage.php");
 
     $doSearch = !empty($_POST["searchBar"]);
+
+    require("./shared/banCheck.php");
 ?>
 
 <!DOCTYPE html>

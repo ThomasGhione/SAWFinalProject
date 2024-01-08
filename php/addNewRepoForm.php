@@ -6,6 +6,7 @@
         exit;
     }
 
+    require("./shared/banCheck.php");
 ?>
 
 <!DOCTYPE html>

@@ -5,6 +5,8 @@
         header("Location: ./loginForm.php");
         exit;
     }
+
+    require("./shared/banCheck.php");
 ?>
 
 

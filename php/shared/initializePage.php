@@ -11,7 +11,6 @@
     $cookieManager = new cookieManager();
     $dbManager = new dbManager();
     $dbManagerAdmin = new dbManagerAdmin();
-
     
     if (!$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
         $dbManager->recoverSession($cookieManager->getCookie("remMeCookie"), $sessionManager);

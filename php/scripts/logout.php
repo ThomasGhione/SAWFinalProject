@@ -7,7 +7,6 @@
     }
 
     if ($cookieManager->isCookieSet("remMeCookie")) {    
-        $dbManager = new dbManager();
         $dbManager->deleteRememberMeCookieFromDB($cookieManager->getCookie("remMeCookie"), $sessionManager->getEmail());
         $cookieManager->deleteCookie("remMeCookie");
     }
