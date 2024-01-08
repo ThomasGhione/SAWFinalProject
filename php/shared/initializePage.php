@@ -14,6 +14,4 @@
     
     if (!$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
         $dbManager->recoverSession($cookieManager->getCookie("remMeCookie"), $sessionManager);
-
-    header("Location: ./banCheck.php");
 ?>
