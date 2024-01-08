@@ -32,14 +32,14 @@
                 if(!$isBanned)
                     echo "<a href='./adminScripts/banUser.php?email=" . urlencode(htmlspecialchars($row["email"])) .  "' onclick='return confirmBan();'><i class='fa-solid fa-ban'></i></a>";
                 else   
-                    echo "<a class='emptyButton'><i class='fa-solid fa-ban'></i></a>";
+                    echo "<span class='emptyButton'><i class='fa-solid fa-ban'></i></span>";
                 echo "</td>";
                 
                 echo "<td>";
                 if($isBanned)
-                    echo "<a href='./adminScripts/unbanUser.php?email=" . urlencode(htmlspecialchars($row["email"])) .  "' onclick='return confirmUnBan();'><i class='fa-solid fa-confirm'></i></a>";
+                    echo "<a href='./adminScripts/unbanUser.php?email=" . urlencode(htmlspecialchars($row["email"])) .  "' onclick='return confirmUnBan();'><i class='fa-solid fa-check'></i></a>";
                 else
-                    echo "<a class='emptyButton'><i class='fa-solid fa-confirm'></i></a>";
+                    echo "<span class='emptyButton'><i class='fa-solid fa-check'></i></span>";
                 echo "</td>";
 
                 echo "</tr>";

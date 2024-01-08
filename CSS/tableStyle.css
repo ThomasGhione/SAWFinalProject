@@ -73,7 +73,7 @@ td:last-child, th:last-child {
 }
 
 .emptyButton {
-    color: lightgray;
+    color: rgb(112, 112, 112);
 }
 
 /* JQuery Datatables style */
