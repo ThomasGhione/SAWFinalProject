@@ -32,10 +32,10 @@
 
         // Query functions //
 
-        function dbQueryWithParams($stmtString, $paramsTypes, $params) {
+        function dbQueryWithParams(string $query, string $paramsTypes, array $params) {
             try {
-                if (!($stmt = $this->conn->prepare($stmtString))) {
-                    error_log("Error: cannot prepare the following query -> " . $stmtString, 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                if (!($stmt = $this->conn->prepare($query))) {
+                    error_log("Error: cannot prepare the following query -> " . $query, 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("server error");
                 }
                 if (count($params) != strlen($paramsTypes)) {
@@ -47,14 +47,14 @@
                     throw new Exception("server error");
                 }
                 if (!($stmt->execute())) {
-                    error_log("Error: cannot execute the following query -> " . $stmtString, 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("Error: cannot execute the following query -> " . $query, 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Server error");
                 }
             }
             catch (Exception $e) { die($e->getMessage() . $this->conn->error); }
 
 
-            $result = (str_contains($stmtString, "SELECT"))
+            $result = (str_contains($query, "SELECT"))
                 ? $stmt->get_result()
                 : $stmt->affected_rows;
 
@@ -63,10 +63,10 @@
         }
 
         // To be used ONLY for queries without params (lighter on resources because statements are not necessary)
-        function dbQueryWithoutParams($stmtString) {
+        function dbQueryWithoutParams(string $query) {
             try {
-                if (($result = $this->conn->query($stmtString)) == false) {
-                    error_log("Error: cannot execute the following query -> " . $stmtString, 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                if (($result = $this->conn->query($query)) == false) {
+                    error_log("Error: cannot execute the following query -> " . $query, 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Server error");
                 }
             }
@@ -298,7 +298,7 @@
 
         // Session managing methods
         
-        function deleteRememberMeCookieFromDB($cookie, string $email): bool {    // Used for logout
+        function deleteRememberMeCookieFromDB(string &$cookie, string $email): bool {    // Used for logout
             try {
                 $this->conn->begin_transaction();
 
@@ -319,7 +319,7 @@
             return true;
         }
 
-        function recoverSession(&$cookie, &$session): void {
+        function recoverSession(string &$cookie, &$session): void {
             $cookieArr = explode(" ", $cookie); // boom!
 
             $result = $this->dbQueryWithParams("SELECT * FROM remMeCookies WHERE (UID = ? && (STR_TO_DATE(ExpDate, '%Y-%m-%d') > CURDATE()))", "s", [$cookieArr[0]]);
@@ -339,7 +339,7 @@
 
         // Search Area tools //
 
-        function searchUsers(&$userQuery): void {
+        function searchUsers(string &$userQuery): void {
             
             $userQuery = "%" . $userQuery . "%";
             $result = $this->dbQueryWithParams("SELECT email, firstname, lastname FROM users WHERE (email LIKE ? OR firstname LIKE ? OR lastname LIKE ?)", "sss", [$userQuery, $userQuery, $userQuery]);
@@ -372,7 +372,7 @@
             }       
         }
 
-        function searchRepos(&$repoQuery): void {
+        function searchRepos(string &$repoQuery): void {
                         
             $repoQuery = "%" . $repoQuery . "%";
             $result = $this->dbQueryWithParams("SELECT Name, Owner, CreationDate, LastModified FROM repos WHERE (Owner LIKE ? OR Name LIKE ?)", "ss", [$repoQuery, $repoQuery]);

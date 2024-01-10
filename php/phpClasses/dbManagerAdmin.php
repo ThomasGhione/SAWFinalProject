@@ -29,14 +29,14 @@
                 echo "<td><a href='./editUserForm.php?email=" . urlencode(htmlspecialchars($row["email"])) . "'><i class='fa-solid fa-pencil'></i></a></td>";
                 
                 echo "<td>";
-                if(!$isBanned)
-                    echo "<a href='./adminScripts/banUser.php?email=" . urlencode(htmlspecialchars($row["email"])) .  "' onclick='return confirmBan();'><i class='fa-solid fa-ban'></i></a>";
-                else   
+                if ($isBanned)
                     echo "<span class='emptyButton'><i class='fa-solid fa-ban'></i></span>";
+                else   
+                    echo "<a href='./adminScripts/banUser.php?email=" . urlencode(htmlspecialchars($row["email"])) .  "' onclick='return confirmBan();'><i class='fa-solid fa-ban'></i></a>";
                 echo "</td>";
                 
                 echo "<td>";
-                if($isBanned)
+                if ($isBanned)
                     echo "<a href='./adminScripts/unbanUser.php?email=" . urlencode(htmlspecialchars($row["email"])) .  "' onclick='return confirmUnBan();'><i class='fa-solid fa-check'></i></a>";
                 else
                     echo "<span class='emptyButton'><i class='fa-solid fa-check'></i></span>";
@@ -140,7 +140,7 @@
                 $this->conn->begin_transaction();
 
                 $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$userEmail]); 
-                if($result->num_rows != 1) {
+                if ($result->num_rows != 1) {
                     error_log("This user does not exist", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Tried to edit a user that does not exist");
                 }

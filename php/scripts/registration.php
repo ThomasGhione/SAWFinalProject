@@ -8,7 +8,7 @@
         exit;
     }
 
-    if($_SERVER["REQUEST_METHOD"] != "POST")
+    if ($_SERVER["REQUEST_METHOD"] != "POST")
         $_SESSION["error"] = "Invalid request";
             
     $user = new User(false);        

@@ -39,11 +39,11 @@
             }
         }
         
-        function sendNewsletter(&$usrArr, &$message): bool {
+        function sendNewsletter(array &$userArr, string &$message): bool {
             // TODO Aggiungere Try-Catch al metodo, vedere sendEmail.php in scripts per capire di più
 
             try {
-                if (empty($usrArr) || empty($message)) {
+                if (empty($userArr) || empty($message)) {
                     error_log("newsletterManager: empty message or user array", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Message can't be empty");
                 }
@@ -52,7 +52,7 @@
                 $message = htmlspecialchars(trim($message));
     
                 // Following code converts all emails with lower characters
-                foreach ($usrArr as $selectedEmail) {
+                foreach ($userArr as $selectedEmail) {
                     $selectedEmail = strtolower($selectedEmail);
     
                     if (filter_var($selectedEmail, FILTER_VALIDATE_EMAIL) === false) {
@@ -77,7 +77,7 @@
             return true;
         }
 
-        function setNewsletter(&$dbManager, &$sessionManager, string $email, &$set): void {
+        function setNewsletter(&$dbManager, &$sessionManager, string $email, bool &$set): void {
             
             $result = $dbManager->dbQueryWithParams("SELECT newsletter FROM users WHERE email = ?", "s", [$email]); 
             $row = $result->fetch_assoc();
