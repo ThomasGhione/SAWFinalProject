@@ -118,6 +118,11 @@ td:last-child, th:last-child {
     cursor: pointer;
 }
 
+.dataTables_wrapper .dataTables_paginate .paginate_button.previous:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.next:hover {
+    filter: brightness(125%);
+}
+
 
 
 /* Data for smaller screens */

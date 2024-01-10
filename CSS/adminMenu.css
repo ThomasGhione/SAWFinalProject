@@ -27,3 +27,7 @@
     text-align: center;
     white-space: nowrap;
 }
+
+.admin-menu-button:hover {
+    filter: brightness(125%);
+}
