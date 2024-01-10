@@ -54,8 +54,6 @@
                     <input type="email" id="email" name="email" placeholder="Email">
                 </div>
 
-                <!-- TODO we should be able to edit all user's data -->
-
                 <input type="submit" class="formButton" name="submit" value="Edit">
             </form>
         </fieldset>

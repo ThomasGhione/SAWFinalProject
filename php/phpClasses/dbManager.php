@@ -494,8 +494,6 @@
                     throw new Exception("Something went wrong, try again later");
                 }
 
-                $row = $result->fetch_assoc();
-
                 $result = $this->dbQueryWithParams("DELETE FROM repos WHERE (Owner = ? && Name = ?)", "ss", [$email, $repoName]);
 
                 if ($result != 1) {
@@ -518,9 +516,58 @@
             return true;
         }
 
-        function updateRepo (string $email):bool {
+        function updateRepo (string $email, string $repoToEdit):bool {
             
+            $currentDate = date("Y-m-d", time());
             
+            try {
+                $this->conn->begin_transaction();
+
+                $result = $this->dbQueryWithParams("SELECT * FROM repos WHERE (Owner = ? && Name = ?)", "ss", [$email, $repoToEdit]);
+
+                if ($result->num_rows != 1) {
+                    error_log("User $email tried to update a repo not of his own, or chosen user does not exist", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Something went wrong, try again later");
+                }
+
+                $row = $result->fetch_assoc();
+
+                $result = $this->dbQueryWithParams("UPDATE repos SET LastModified = ? WHERE (Owner = ? && Name = ?)", "sss", [$currentDate, $email, $repoToEdit]);
+
+                if ($result != 1) {
+                    error_log("Something went wrong while updating the repo in the database", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Something went wrong, try again later");
+                }
+
+                // Following code deletes the old file and replaces it with the new one
+                $repoPath = "../../repos/$email/$repoToEdit";
+
+                $files = glob($repoPath . '/*'); // Gets all files and directories inside $repoPath and puts them in an array called $files
+
+                if (count($files) > 0) {
+                    $file = $files[0];
+                    if (is_file($file) && is_writable($file)) 
+                        unlink($file);
+                    else {
+                        error_log("Something went wrong while deleting the old file", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                        throw new Exception("Something went wrong, try again later");
+                    }
+                }
+
+                $fileName = htmlspecialchars(trim($_FILES["fileUpload"]["name"]));
+                $tempPath = $_FILES["fileUpload"]["tmp_name"]; // The server saves the file in a temporary location, so we need to move it to its final location
+
+                if (!move_uploaded_file($tempPath, "../../repos/$email/$repoToEdit/ . $fileName")) {
+                    error_log("Something went wrong while transferring the file into its new location", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Something went wrong, try again later");
+                }
+            }
+            catch (Exception $e) {
+                $this->conn->rollback();
+                $_SESSION["error"] = $e->getMessage();
+                return false;
+            }
+
             $this->conn->commit();
             return true;
         }

@@ -10,7 +10,7 @@
         $_SESSION["error"] = "Invalid request";
     else {
         try {
-            if (!isset($_POST["oldPassword"]) || !isset($_POST["newPassword"])){
+            if (!isset($_POST["submit"]) || !isset($_POST["oldPassword"]) || !isset($_POST["newPassword"])){
                 error_log("Invalid request", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("Invalid request");
             }
