@@ -11,7 +11,8 @@
 <html lang="en">
 <head>
     <?php require_once("../shared/commonHead.php"); ?>
-    
+    <link rel="stylesheet" type="text/css" href="../../CSS/newsletterPage.css">
+
     <link rel="stylesheet" type="text/css" href="../../CSS/tableStyle.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"> </script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"> </script>
@@ -23,12 +24,12 @@
     
     <main class="mainContainer">
         <form action="./adminScripts/sendEmail.php" method="post">
-    
-        <?php $dbManagerAdmin->manageSubbedToNewsletter() ?>
-        <textarea name="message" id="textArea" rows="6" cols="50" style="resize: none;"></textarea>
-        <input type="hidden" name="selectedUsers" id="selectedUsersInput">
-        <input type="submit" value="Submit">
-
+            <div class="newsletter-container">
+                <?php $dbManagerAdmin->manageSubbedToNewsletter() ?>
+                <textarea name="message" id="textArea" rows="6" cols="50" style="resize: none;"></textarea>
+                <input type="hidden" name="selectedUsers" id="selectedUsersInput">
+                <input type="submit" class="newsletter-form-button" value="Submit">
+            </div>
         </form>
     </main>
 

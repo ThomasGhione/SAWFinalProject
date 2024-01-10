@@ -1,0 +1,45 @@
+.newsletter-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    background-color: whitesmoke;
+    box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+    border: 2px solid black;
+    border-radius: 10px;
+
+    width: 100%;
+    overflow-x: auto;
+}
+
+textarea[name="message"] {
+    width: 100%;
+    padding: 10px; 
+    
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    box-sizing: border-box; 
+    resize: none; 
+    
+    font-size: 16px; 
+    font-family: Arial, sans-serif; 
+}
+
+.newsletter-form-button {
+    background-color: #A4B8C4;
+    padding: 6px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    border: 2px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.newsletter-form-button:hover {
+    filter: brightness(125%);
+}
