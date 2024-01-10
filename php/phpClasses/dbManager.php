@@ -487,7 +487,7 @@
             try{
                 $this->conn->begin_transaction();
 
-                $result = $this->dbQueryWithParams("SELECT * FROM repos WHERE (Owner = ? && Name = ?)", "ss", [$email, $repoName, $email]);
+                $result = $this->dbQueryWithParams("SELECT * FROM repos WHERE (Owner = ? && Name = ?)", "ss", [$email, $repoName]);
                 
                 if ($result->num_rows != 1) {
                     error_log("User $email tried to delete a repo not of his own, or chosen user does not exist", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
