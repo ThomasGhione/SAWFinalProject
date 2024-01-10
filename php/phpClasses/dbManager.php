@@ -411,6 +411,38 @@
             }    
         }
 
+        function showRepos ($email) {
+            $result = $this->dbQueryWithParams("SELECT Name, CreationDate, LastModified FROM repos WHERE Owner = ?", "s", [$email]);
+        
+            if ($result->num_rows == 0) {
+                echo "<p>You haven't uploaded any repo yet</p>";
+            } 
+            else {
+                echo "<table id='table-userRepos'>
+                    <thead>
+                        <tr><th>Name</th><th>Date of Creation</th><th>Last Modification<th>Update</th><th>Delete</th></tr>
+                    </thead>
+                    <tbody>
+                ";
+
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>";
+                    
+                    echo "<td>" . htmlspecialchars($row["Name"]) . "</td>";
+                    echo "<td>" . htmlspecialchars($row["CreationDate"]) . "</td>";
+                    echo "<td>" . htmlspecialchars($row["LastModified"]) . "</td>";
+                    echo "<td><a href='./update_repo_form.php?name=" . urlencode(htmlspecialchars($row["Name"])) . "'><i class='fa-solid fa-pen'></i></a></td>";
+                    echo "<td><a href='./deleteRepo.php?name=" . urlencode(htmlspecialchars($row["Name"])) . "'><i class='fa-solid fa-trash'</td>";
+
+                    echo "</tr>";
+                }
+                
+                echo "</tbody>
+                    </table>
+                ";
+            }
+        }
+
         // DB Repos Manipulation //
 
         function addNewRepo ($email) {
