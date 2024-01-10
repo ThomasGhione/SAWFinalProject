@@ -1,1 +1,1 @@
-Email not foundEmail already existsWrong passwordWrong password
+Email not foundEmail already existsWrong passwordWrong passwordBad method used or repo name not setRepo name can't be emptyError: number of parameters does not match the number of types

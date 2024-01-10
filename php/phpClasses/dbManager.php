@@ -427,7 +427,7 @@
                     echo "<td>" . htmlspecialchars($row["CreationDate"]) . "</td>";
                     echo "<td>" . htmlspecialchars($row["LastModified"]) . "</td>";
                     echo "<td><a href='./update_repo_form.php?name=" . urlencode(htmlspecialchars($row["Name"])) . "'><i class='fa-solid fa-pen'></i></a></td>";
-                    echo "<td><a href='./deleteRepo.php?name=" . urlencode(htmlspecialchars($row["Name"])) . "'><i class='fa-solid fa-trash'</td>";
+                    echo "<td><a href='./scripts/deleteRepo.php?name=" . urlencode(htmlspecialchars($row["Name"])) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'</td>";
 
                     echo "</tr>";
                 }
@@ -437,6 +437,7 @@
                 ";
             }
         }
+
 
         // DB Repos Manipulation //
 
@@ -478,6 +479,89 @@
             }
             
             $this->conn->commit();
+            return true;
+        }
+
+        function deleteRepo (string $email, string $repoName):bool {
+            
+            try{
+                $this->conn->begin_transaction();
+
+                $result = $this->dbQueryWithParams("SELECT * FROM repos WHERE (Owner = ? && Name = ?)", "ss", [$email, $repoName, $email]);
+                
+                if ($result->num_rows != 1) {
+                    error_log("User $email tried to delete a repo not of his own, or chosen user does not exist", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Something went wrong, try again later");
+                }
+
+                $row = $result->fetch_assoc();
+
+                $result = $this->dbQueryWithParams("DELETE FROM repos WHERE (Owner = ? && Name = ?)", "ss", [$email, $repoName]);
+
+                if ($result != 1) {
+                    error_log("Something went wrong while deleting the repo from the database", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Something went wrong, try again later");
+                }
+
+                if (!$this->deleteDirectory("../../repos/$email/$repoName")) {
+                    error_log("Something went wrong when trying to delete the repo from the file system, specific error is: " . $_SESSION["error"], 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Something went wrong, contact admin if you can't see your repo anymore");
+                }
+            }
+            catch (Exception $e) {
+                $this->conn->rollback();
+                $_SESSION["error"] = $e->getMessage();
+                return false;
+            }
+
+            $this->conn->commit();
+            return true;
+        }
+
+        function updateRepo (string $email):bool {
+            
+            
+            $this->conn->commit();
+            return true;
+        }
+
+
+        // Aux Methods //
+        function deleteDirectory($dirPath):bool {
+            try {
+                if (!is_dir($dirPath)) 
+                    throw new Exception("$dirPath must be a directory");
+
+                // Following code checks if $dirPath ends with a /, if not it adds it (done to avoid errors)
+                if (substr($dirPath, strlen($dirPath) - 1, 1) != '/')
+                    $dirPath .= '/';
+
+                // Following code gets all files and directories inside $dirPath and puts them in an array called $files
+                $files = glob($dirPath . '*', GLOB_MARK);
+
+                foreach ($files as $file) {
+                    if (is_dir($file)) 
+                        if (is_writable($file))
+                            $this->deleteDirectory($file);
+                        else
+                            throw new Exception("Directory $file is not writable");
+                    else 
+                        if (is_writable($file))
+                            unlink($file);
+                        else
+                            throw new Exception("File $file is not writable");
+                    }
+
+                if (is_writable($dirPath))
+                    rmdir($dirPath);
+                else 
+                    throw new Exception("Directory $dirPath is not writable");
+            }
+            catch (Exception $e) {
+                $_SESSION["error"] = $e->getMessage();
+                return false;
+            }
+
             return true;
         }
 
