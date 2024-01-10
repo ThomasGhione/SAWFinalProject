@@ -12,7 +12,7 @@
         private $description;
         private $newsletter;
 
-        function __construct ($email) {
+        function __construct(string $email) {
             $dbManager = new dbManager();
             $result = $dbManager->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$email]);
             try {
@@ -52,25 +52,25 @@
 
 
         // Setter methods
-        function setFirstname($firstname) { $this->firstname = $firstname; }
-        function setLastname($lastname) { $this->lastname = $lastname; }
-        function setEmail($email) { $this->email = $email; }
-        function setUsername($username) { $this->username = $username; }
-        function setPfp($pfp) { $this->pfp = $pfp; }
-        function setGender($gender) { $this->gender = $gender; }
-        function setBirthday($birthday) { $this->birthday = $birthday; }
-        function setDescription($description) { $this->description = $description; }
-        function setNewsletter($newsletter) { $this->newsletter = $newsletter; }
+        function setFirstname(string $firstname): void { $this->firstname = $firstname; }
+        function setLastname(string $lastname): void { $this->lastname = $lastname; }
+        function setEmail(string $email): void { $this->email = $email; }
+        function setUsername(string $username): void { $this->username = $username; }
+        function setPfp($pfp): void { $this->pfp = $pfp; }
+        function setGender($gender): void { $this->gender = $gender; }
+        function setBirthday($birthday): void { $this->birthday = $birthday; }
+        function setDescription(string $description): void { $this->description = $description; }
+        function setNewsletter($newsletter): void { $this->newsletter = $newsletter; }
     
         // Getter methods
-        function getFirstname() { return $this->firstname; }
-        function getLastname() { return $this->lastname; }
-        function getEmail() { return $this->email; }
-        function getUsername() { return $this->username; }
+        function getFirstname(): string { return $this->firstname; }
+        function getLastname(): string { return $this->lastname; }
+        function getEmail(): string { return $this->email; }
+        function getUsername(): string { return $this->username; }
         function getPfp() { return $this->pfp; }
         function getGender() { return $this->gender; }
         function getBirthday() { return $this->birthday; }
-        function getDescription() { return $this->description; }
+        function getDescription(): string { return $this->description; }
         function getNewsletter() { return $this->newsletter; }
 
     }
