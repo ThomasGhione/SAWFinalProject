@@ -58,13 +58,13 @@
 
         // Constructor extensions
 
-        public function cLogin($email, $password, $remMeFlag) {
+        private function cLogin(string $email, string &$password, &$remMeFlag): void {
             $this->remMeFlag = $remMeFlag;
             $this->email = trim($email);
             $this->password = trim($password);
         }
 
-        public function cRegister($firstname, $lastname, $email, $password, $confirm) {
+        private function cRegister(string &$firstname, string &$lastname, string $email, string &$password, string &$confirm): void {
             try {
                 if (empty($firstname) || empty($lastname) || empty($confirm)) {
                     error_log("Empty parameters have been passed to the form", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
@@ -92,15 +92,15 @@
         }
 
         // Getters
-        function getFirstName() { return $this->firstname; }
-        function getLastName() { return $this->lastname; }
-        function getEmail() { return $this->email; }
-        function getPassword() { return $this->password; }
+        function getFirstName(): string { return $this->firstname; }
+        function getLastName(): string { return $this->lastname; }
+        function getEmail(): string { return $this->email; }
+        function getPassword(): string { return $this->password; }
         function getPermission() { return $this->permission; }
         function getRemMeFlag() { return $this->remMeFlag; }
         function getNewsletter() { return $this->newsletter; }
 
-        function getUser() {
+        function getUser(): array {
             return array(
                 "firstName" => $this->getFirstName(),
                 "lastName" => $this->getLastName(),
@@ -113,28 +113,28 @@
         }
 
         // Setters
-        function setFirstName($firstname) { $this->firstname = $firstname; }
-        function setLastName($lastname) { $this->lastname = $lastname; }
-        function setEmail($email) { $this->email = $email; }
-        function setPassword($password) { $this->password = $password; }
-        function setConfirmPwd($confirm) { $this->password = $confirm; }
-        function setPermission($permission) { $this->permission = $permission; }
-        function setRemMeFlag($remMeFlag) { $this->remMeFlag = $remMeFlag; }
-        function setNewsletter($newsletter) {$this->newsletter = $newsletter; }
+        function setFirstName(string &$firstname): void { $this->firstname = $firstname; }
+        function setLastName(string &$lastname): void { $this->lastname = $lastname; }
+        function setEmail(string $email): void { $this->email = $email; }
+        function setPassword(string &$password): void { $this->password = $password; }
+        function setConfirmPwd(string &$confirm): void { $this->password = $confirm; }
+        function setPermission(&$permission): void { $this->permission = $permission; }
+        function setRemMeFlag(&$remMeFlag): void { $this->remMeFlag = $remMeFlag; }
+        function setNewsletter(&$newsletter): void {$this->newsletter = $newsletter; }
         
         
         
         // Aux methods
     
-        function getFullName($user) {
+        function getFullName(&$user): string {
             return $user->getFirstName() . " " . $user->getLastName();
         }
     
-        function isPasswordWeak($password) {
+        function isPasswordWeak(string &$password): bool {
             return strlen($password) < 8;
         }
     
-        function isPasswordValid($password, $confirmPwd) {
+        function isPasswordValid(string &$password, string &$confirmPwd): bool {
             return $password == $confirmPwd;
         }
         

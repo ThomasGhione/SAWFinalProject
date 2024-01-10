@@ -78,8 +78,7 @@
 
         // User functions //
 
-        function registerUser($user) {
-
+        function registerUser($user): bool {
             try {
                 $this->conn->begin_transaction();
 
@@ -117,8 +116,7 @@
             return true;
         }
 
-        function loginUser($user) {
-
+        function loginUser($user): bool {
             try {
                 $this->conn->begin_transaction();
 
@@ -180,7 +178,7 @@
 
         // Checks whether the user is banned or not
 
-        function isBanned($email) {
+        function isBanned(string $email): bool {
             $result = $this->dbQueryWithParams("SELECT permission FROM users WHERE email = ?", "s", [$email]);
             
             $row = $result->fetch_assoc();
@@ -190,8 +188,7 @@
 
         // Editing profile functions (only for users)
 
-        function editProfile($email, $sessionManager) {
-
+        function editProfile(string $email, &$sessionManager): bool {
             try {
                 $this->conn->begin_transaction();
 
@@ -252,7 +249,7 @@
             return true;
         }
 
-        function updatePassword($email) {
+        function updatePassword(string $email): bool {
 
             $this->conn->begin_transaction();
 
@@ -301,10 +298,8 @@
 
         // Session managing methods
         
-        function deleteRememberMeCookieFromDB($cookie, $email) {    // Used for logout
-           
+        function deleteRememberMeCookieFromDB($cookie, string $email): bool {    // Used for logout
             try {
-
                 $this->conn->begin_transaction();
 
                 $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && UID = ?)", "ss", [$email, $cookie]);
@@ -324,7 +319,7 @@
             return true;
         }
 
-        function recoverSession($cookie, $session) {
+        function recoverSession(&$cookie, &$session): void {
             $cookieArr = explode(" ", $cookie); // boom!
 
             $result = $this->dbQueryWithParams("SELECT * FROM remMeCookies WHERE (UID = ? && (STR_TO_DATE(ExpDate, '%Y-%m-%d') > CURDATE()))", "s", [$cookieArr[0]]);
@@ -344,7 +339,7 @@
 
         // Search Area tools //
 
-        function searchUsers($userQuery) {
+        function searchUsers(&$userQuery): void {
             
             $userQuery = "%" . $userQuery . "%";
             $result = $this->dbQueryWithParams("SELECT email, firstname, lastname FROM users WHERE (email LIKE ? OR firstname LIKE ? OR lastname LIKE ?)", "sss", [$userQuery, $userQuery, $userQuery]);
@@ -377,7 +372,7 @@
             }       
         }
 
-        function searchRepos($repoQuery) {
+        function searchRepos(&$repoQuery): void {
                         
             $repoQuery = "%" . $repoQuery . "%";
             $result = $this->dbQueryWithParams("SELECT Name, Owner, CreationDate, LastModified FROM repos WHERE (Owner LIKE ? OR Name LIKE ?)", "ss", [$repoQuery, $repoQuery]);
@@ -411,7 +406,7 @@
             }    
         }
 
-        function showRepos ($email) {
+        function showRepos(string $email): void {
             $result = $this->dbQueryWithParams("SELECT Name, CreationDate, LastModified FROM repos WHERE Owner = ?", "s", [$email]);
         
             if ($result->num_rows == 0) {
@@ -445,7 +440,7 @@
 
         // DB Repos Manipulation //
 
-        function addNewRepo ($email) {
+        function addNewRepo(string $email): bool {
             $reposName = htmlspecialchars(trim($_POST["reposName"]));
             $fileName = htmlspecialchars(trim($_FILES["fileUpload"]["name"]));
             $pathLocation = "/SAW/SAWFinalProject/repos/$email/$reposName";

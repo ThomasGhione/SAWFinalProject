@@ -4,7 +4,7 @@
 
         // Admin Tools //
 
-        function manageUsers() {
+        function manageUsers(): void {
             $result = $this->dbQueryWithoutParams("SELECT * FROM users");
 
             echo "
@@ -50,7 +50,7 @@
             ";
         }
 
-        function manageSubbedToNewsletter() {
+        function manageSubbedToNewsletter(): void {
             $result = $this->dbQueryWithoutParams("SELECT * FROM users WHERE newsletter = 1");
            
             echo "
@@ -78,7 +78,7 @@
             ";
         }
 
-        function unbanUser($userEmail) {
+        function unbanUser(string $userEmail): bool {
             $this->conn->begin_transaction();
 
             try {
@@ -97,7 +97,7 @@
             return true;
         }
 
-        function banUser($userEmail) {
+        function banUser(string $userEmail): bool {
             $this->conn->begin_transaction();
 
             try {
@@ -116,7 +116,7 @@
             return true;
         }
 
-        function deleteUser($userEmail) {
+        function deleteUser(string $userEmail): bool {
             $this->conn->begin_transaction();
 
             try {
@@ -135,8 +135,7 @@
             return true;
         }
 
-        function editUser($userEmail) {
-
+        function editUser(string $userEmail): bool {
             try {
                 $this->conn->begin_transaction();
 

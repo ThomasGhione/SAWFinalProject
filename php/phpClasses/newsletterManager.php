@@ -39,7 +39,7 @@
             }
         }
         
-        function sendNewsletter($usrArr, $message) {
+        function sendNewsletter(&$usrArr, &$message): bool {
             // TODO Aggiungere Try-Catch al metodo, vedere sendEmail.php in scripts per capire di più
 
             try {
@@ -77,7 +77,7 @@
             return true;
         }
 
-        function setNewsletter($dbManager, $sessionManager, $email, $set) {
+        function setNewsletter(&$dbManager, &$sessionManager, string $email, &$set): void {
             
             $result = $dbManager->dbQueryWithParams("SELECT newsletter FROM users WHERE email = ?", "s", [$email]); 
             $row = $result->fetch_assoc();
