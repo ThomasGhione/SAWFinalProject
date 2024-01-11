@@ -6,18 +6,18 @@
 
     class dbManager {  
     
-        private $dbServer = "localhost";
-        private $username = "root";
-        private $password = "";
-        private $dbName = "DatabaseSAWFinalProject";
-        private $emailregex = "/^[_a-z0-9.-]+@[a-z0-9-]+(.[a-z]{2,3})$/";
+        private const DB_SERVER = "localhost";
+        private const USERNAME = "root";
+        private const PASSWORD = "";
+        private const DB_NAME = "DatabaseSAWFinalProject";
+        private const EMAIL_REGEX = "/^[_a-z0-9.-]+@[a-z0-9-]+(.[a-z]{2,3})$/";
 
 
         protected $conn;
         
         function __construct() {
             try {
-                if (!($this->conn = new mysqli($this->dbServer, $this->username, $this->password, $this->dbName))) {
+                if (!($this->conn = new mysqli(dbManager::DB_SERVER, dbManager::USERNAME, dbManager::PASSWORD, dbManager::DB_NAME))) {
                     error_log("Error: cannot connect to database", 3 , $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Error: cannot connect to DB");
                 }  
@@ -482,7 +482,7 @@
             return true;
         }
 
-        function deleteRepo (string $email, string $repoName):bool {
+        function deleteRepo(string $email, string $repoName): bool {
             
             try{
                 $this->conn->begin_transaction();
@@ -516,7 +516,7 @@
             return true;
         }
 
-        function updateRepo (string $email, string $repoToEdit):bool {
+        function updateRepo(string $email, string $repoToEdit): bool {
             
             $currentDate = date("Y-m-d", time());
             
@@ -574,7 +574,7 @@
 
 
         // Aux Methods //
-        function deleteDirectory($dirPath):bool {
+        function deleteDirectory($dirPath): bool {
             try {
                 if (!is_dir($dirPath)) 
                     throw new Exception("$dirPath must be a directory");

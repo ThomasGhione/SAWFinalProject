@@ -10,7 +10,7 @@
         private $remMeFlag;
         private $newsletter;
         
-        private $emailregex = "/\S+@\S+\.\S+/";  // TODO correggere regex per email
+        private const EMAIL_REGEX = "/\S+@\S+\.\S+/";  // TODO correggere regex per email
 
         /*function __construct ($login, $email, $password,
                              $firstName = null, $lastName = null, $userName = null,
@@ -70,10 +70,14 @@
                     error_log("Empty parameters have been passed to the form", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Empty parameters have been passed to the form. Please try again later");
                 }
-                if ($this->isPasswordWeak($password)) {
+                
+                if ($this->isPasswordWeakDEBUG($password)) {
                     error_log("Password isn't strong enough", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                    throw new Exception("Password isn't strong enough (it needs to be at least 8 characters long), please choose a stronger password");
+                    throw new Exception("Password isn't strong enough. Please choose a stronger password");
                 }
+                
+                $this->isPasswordWeak($password);
+
                 if (!$this->isPasswordValid($password, $confirm)) {
                     error_log("Passwords don't match", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Passwords don't match");
@@ -130,16 +134,45 @@
             return $user->getFirstName() . " " . $user->getLastName();
         }
     
-        function isPasswordWeak(string &$password): bool {
+        private function isPasswordWeakDEBUG(string &$password): bool { //! USE THIS ONLY FOR DEBBUGING PURPOSES
             return strlen($password) < 8;
         }
     
-        function isPasswordValid(string &$password, string &$confirmPwd): bool {
+        private function isPasswordWeak(string &$password): bool {
+            if (strlen($password) < 8) {
+                error_log("Pw is too short", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                throw new Exception("Password is too short, please choose a longer password");
+            }
+            if (strlen($password) > 24) {
+                error_log("Pw is too long", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                throw new Exception("Password is too long, please choose a shorter password");
+            }
+            if (!preg_match('@[A-Z]@', $password)) {
+                error_log("Pw doesn't contain uppercase letters", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                throw new Exception("Password doesn't contain uppercase letters, please try again");
+            }
+            if (!preg_match('@[a-z]@', $password)) {
+                error_log("Pw doesn't contain lowercase letters", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                throw new Exception("Password doesn't contain lowercase letters, please try again");
+            }
+            if (!preg_match('@[0-9]@', $password)) {
+                error_log("Pw doesn't contain numbers", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                throw new Exception("Password doesn't contain numbers, please try again");
+            }
+            if (!preg_match('@[^\w]@', $password)) {
+                error_log("Pw doesn't contain special characters", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                throw new Exception("Password doesn't contain special characters, please try again");
+            }
+
+            return true;
+        }
+
+        private function isPasswordValid(string &$password, string &$confirmPwd): bool {
             return $password == $confirmPwd;
         }
         
-        function isEmailValid() {
-            return !preg_match($this->emailregex, $this->email);
+        private function isEmailValid(): bool {
+            return !preg_match($this::EMAIL_REGEX, $this->email);
         }
     }
 
