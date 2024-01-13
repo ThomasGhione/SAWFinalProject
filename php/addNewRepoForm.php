@@ -41,7 +41,7 @@
                 
                 <div class="inputBox">
                     <label for="reposName">Repository name: </label>
-                    <input required type="text" id="reposName" name="reposName" placeholder="Name of the new repository" title="Repository name should not contain ., /, or ,">
+                    <input required type="text" id="reposName" name="reposName" placeholder="Name of the new repository">
                 </div> 
 
                 <div class="inputBox">
