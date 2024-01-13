@@ -21,7 +21,7 @@
 <html lang="en">
 <head>
     <?php require_once("./shared/commonHead.php") ?>
-    <title>OpenHub - Update user page</title>
+    <title>OpenHub - Update repo page</title>
 </head>
 <body>
     <?php include("./shared/nav.php"); ?>

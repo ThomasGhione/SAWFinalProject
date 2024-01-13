@@ -37,11 +37,11 @@
                     echo "<p class='error'>&nbsp;</p>"; 
             ?>
 
-            <form action="./scripts/addNewRepo.php" method="post" enctype="multipart/form-data"> 
+            <form id="repoForm" action="./scripts/addNewRepo.php" method="post" enctype="multipart/form-data"> 
                 
                 <div class="inputBox">
-                    <label for="reposName">Repos name: </label>
-                    <input required type="text" id="reposName" name="reposName" placeholder="Name of the new repository">
+                    <label for="reposName">Repository name: </label>
+                    <input required type="text" id="reposName" name="reposName" placeholder="Name of the new repository" title="Repository name should not contain ., /, or ,">
                 </div> 
 
                 <div class="inputBox">
@@ -59,5 +59,20 @@
     </main>
 
     <?php include("./shared/footer.php") ?>
+
+    <script>
+        
+        document.getElementById("repoForm").addEventListener("submit", function(event) {
+            var reposName = document.getElementById("reposName").value;
+
+            if (/[.,\/?]/.test(reposName)) {
+                event.preventDefault();
+                alert("Repository name should not contain . / or ,")
+            }
+
+        })
+
+    </script>
+
 </body>
 </html>
