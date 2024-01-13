@@ -64,8 +64,9 @@
         
         document.getElementById("repoForm").addEventListener("submit", function(event) {
             var reposName = document.getElementById("reposName").value;
+            var fileName = document.getElementById("fileUpload").files[0].name;
 
-            if (/[.,\/?]/.test(reposName)) {
+            if (/[.,\/?]/.test(reposName) || /[.,\/?]/.test(fileName)) {
                 event.preventDefault();
                 alert("Repository name should not contain . / or ,")
             }
