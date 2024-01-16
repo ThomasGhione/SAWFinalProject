@@ -67,7 +67,7 @@
             
             <div class="endFormButtons">
                 <button id="resetData" class="formButton">Reset data</button>
-                <button class="formButton"><a href="./show_profile.php">Return to the homepage</a></button>
+                <button class="formButton"><a href="./show_profile.php">Return to the personal area</a></button>
             </div>
         </fieldset>
 
