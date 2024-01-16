@@ -192,21 +192,15 @@
             try {
                 $this->conn->begin_transaction();
 
-                // Sets data names and data 
-                $dataTypeToUpdate = "";
-                $dataToUpdate = array(); 
-                $isEmailModified = !empty($_POST["email"]);
+                $newEmail = htmlspecialchars(trim($_POST["email"]));
+                $firstname = htmlspecialchars(trim($_POST["firstname"]));
+                $lastname = htmlspecialchars(trim($_POST["lastname"]));
 
-                foreach ($_POST as $dataName => $data) {
-                    if (!empty($data)) {
-                        $dataTypeToUpdate .= " " . $dataName . " = ?,";
-                        array_push($dataToUpdate, htmlspecialchars(trim($data)));
-                    }
-                }
+                $hasEmailChanged = ($email != $newEmail);
 
-                if ($isEmailModified) { // Following code checks if email has changed, if so, it checks if email is valid, if so it changes session data and everything related to that email 
-                    $newEmail = htmlspecialchars(trim($_POST["email"]));
-                    
+                $this->dbQueryWithParams("UPDATE users SET email = ?, firstname = ?, lastname = ? WHERE email = ?", "ssss", [$newEmail, $firstname, $lastname, $email]);
+
+                if ($hasEmailChanged) {
                     $result = $this->dbQueryWithParams("SELECT email FROM users WHERE email = ?", "s", [$newEmail]);
                     
                     if ($result->num_rows == 1) {
@@ -222,28 +216,12 @@
                     $result = $this->dbQueryWithParams("UPDATE repos SET Owner = ? WHERE Owner = ?", "ss", [$newEmail, $email]);
                     rename("../../repos/$email", "../../repos/$newEmail");
                 }
-
-                // cleans data to be used in query function
-                $dataTypeToUpdate = str_replace(", submit = ?,", "", $dataTypeToUpdate);
-                array_pop($dataToUpdate);
-                array_push($dataToUpdate, $email); // Adds last value to be used in query function
-
-                // Sets data types for query function            
-                $dataCount = "";
-                for ($i = count($dataToUpdate); $i > 0; $i--) 
-                    $dataCount .= "s";
-
-                $result = $this->dbQueryWithParams("UPDATE users SET" . $dataTypeToUpdate . " WHERE email = ?", $dataCount, $dataToUpdate);
-                if ($result != 1){
-                    error_log("Something went wrong while updating user's data from Manage Users page", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                    throw new Exception("Something went wrong, try again later");
-                }
             }
             catch (Exception $e) {
                 $this->conn->rollback();
                 $_SESSION["error"] = $e->getMessage();
-                return false;  
-            } 
+                return false;
+            }
 
             $this->conn->commit();
             return true;
@@ -440,7 +418,6 @@
 
 
         // DB Repos Manipulation //
-
         function addNewRepo(string $email): bool {
             $reposName = htmlspecialchars(trim($_POST["reposName"]));
             $fileName = htmlspecialchars(trim($_FILES["fileUpload"]["name"]));

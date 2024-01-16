@@ -9,35 +9,26 @@
     if ($_SERVER["REQUEST_METHOD"] != "POST") 
         $_SESSION["error"] = "Invalid request";
     else { // Following code checks the number of arguments used in POST, it can be improved... probably :3
-        $emptyCount = 0;
-            
-        foreach ($_POST as $dataName => $data) 
-            if (!empty($_POST[$dataName])) ++$count;
-
         try {
-            
-            // We used a count because it's much easier to expand the profile editing with more options
-            if ($count < 2) {
-                error_log("User must choose at least 1 field to edit", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                throw new Exception("Please choose at least 1 field to edit, number of empty values = $count");
+            if (!isset($_POST["submit"]) || !isset($_POST["firstname"]) || !isset($_POST["lastname"]) || !isset($_POST["email"])) {
+                error_log("Not all fields were set, invalid form", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                throw new Exception("Something went wrong when trying to update your data, try again later");
             }
 
-            if ($count > 4) {
-                error_log("Invalid request", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                throw new Exception("Invalid request");
+            if (empty($_POST["firstname"]) || empty($_POST["lastname"]) || empty($_POST["email"])) {
+                error_log("User " . $sessionManager->getEmail() . " tried to update his data with empty fields", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                throw new Exception("One or more required fields were empty");
             }
 
-            if ($dbManager->editProfile($sessionManager->getEmail(), $sessionManager)) 
-                $_SESSION["success"] = "Your changes were applied successfully!";
+            if ($dbManager->editProfile($sessionManager->getEmail(), $sessionManager)) {
+                $_SESSION["success"] = "Data updated successfully";
+            }
         }
         catch (Exception $e) {
             $_SESSION["error"] = $e->getMessage();
-            header("Location: ../update_profile_form.php");
-            exit;
         }
-    }    
-    
-    header("Location: ../update_profile_form.php"); // Covers both invalid request and invalid login 
-    exit;
+    }
 
+    header("Location: ../update_profile_form.php");
+    exit;
 ?>
