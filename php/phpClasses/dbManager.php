@@ -198,8 +198,6 @@
 
                 $hasEmailChanged = ($email != $newEmail);
 
-                $this->dbQueryWithParams("UPDATE users SET email = ?, firstname = ?, lastname = ? WHERE email = ?", "ssss", [$newEmail, $firstname, $lastname, $email]);
-
                 if ($hasEmailChanged) {
                     $result = $this->dbQueryWithParams("SELECT email FROM users WHERE email = ?", "s", [$newEmail]);
                     
@@ -207,11 +205,16 @@
                         error_log("Email already exists", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                         throw new Exception("Email already exists, please try again");
                     }
+                }
+
+                $this->dbQueryWithParams("UPDATE users SET email = ?, firstname = ?, lastname = ? WHERE email = ?", "ssss", [$newEmail, $firstname, $lastname, $email]);
+
+                // If email has changed, we need to update some data related to repos and cookies
+                if ($hasEmailChanged) {
 
                     $sessionManager->setEmail($newEmail);
 
                     // Updates all remember me cookies from current email to the new one, 
-                    // TODO ask if should delete them instead of updating them
                     $result = $this->dbQueryWithParams("UPDATE remMeCookies SET email = ? WHERE email = ?", "ss", [$newEmail, $email]);
                     $result = $this->dbQueryWithParams("UPDATE repos SET Owner = ? WHERE Owner = ?", "ss", [$newEmail, $email]);
                     rename("../../repos/$email", "../../repos/$newEmail");
