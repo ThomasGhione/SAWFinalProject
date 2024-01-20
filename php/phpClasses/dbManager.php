@@ -7,8 +7,8 @@
     class dbManager {  
     
         private const DB_SERVER = "localhost";
-        private const USERNAME = "root";
-        private const PASSWORD = "";
+        private const USERNAME = "S5311626";
+        private const PASSWORD = "NothingHappenedInTiananmenSquareIn1989";
         private const DB_NAME = "DatabaseSAWFinalProject";
         private const EMAIL_REGEX = "/^[_a-z0-9.-]+@[a-z0-9-]+(.[a-z]{2,3})$/";
 
