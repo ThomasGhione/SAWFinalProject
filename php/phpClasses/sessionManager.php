@@ -26,7 +26,7 @@
         }
 
         function endSession(): void {
-            session_unset();
+            $_SESSION = array();
             session_destroy();
         }
 

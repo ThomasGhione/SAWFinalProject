@@ -41,9 +41,7 @@
                 elseif (isset($_SESSION["success"])) {
                     echo "<p class='success'>" . $_SESSION["success"] . "</p>";
                     unset($_SESSION["success"]);
-                }
-                else
-                    echo "<p class='error'>&nbsp;</p>"; 
+                } 
             ?>
 
             <form id="form" action="./scripts/update_profile.php" method="post">
@@ -62,7 +60,7 @@
                     <input type="email" id="email" name="email" value="<?php echo "$email"?>" placeholder="Email">
                 </div>
 
-                <input type="submit" class="formButton" name="submit" value="Edit">
+                <input type="submit" id="submitButton" class="formButton" name="submit" value="Edit">
             </form>
             
             <div class="endFormButtons">
@@ -91,19 +89,61 @@
             el3.value = currentEmail;
         });
         
+        document.getElementById("form").addEventListener("submit", formButton);
         
+        async function formButton (event) {
+            event.preventDefault();
+            
+            let firstname = document.getElementById("firstname").value.trim();
+            let lastname = document.getElementById("lastname").value.trim();
+            let email = document.getElementById("email").value.trim();
 
-        document.getElementById("form").addEventListener("submit", function (event) {
-            let firstname = document.getElementById("firstname").value;
-            let lastname = document.getElementById("lastname").value;
-            let email = document.getElementById("email").value;
-
-            if ((firstname.trim() === "") || lastname.trim() === "" || email.trim() === "") {
-                event.preventDefault();
+            if ((firstname === "") || lastname === "" || email === "") {
                 alert("You can't set an empty field");
+                return;
             }
 
-        });
+            let res = await checkEmail(email);
+            if (res === "exists") {
+                alert("This email is already in use");
+                return;
+            } 
+            else if (res === "error") {
+                alert("Something went wrong, try again later");
+                return;
+            }
+
+            event.target.submit();
+        };
+
+        async function checkEmail (email) {
+            try {
+                const response = await fetch("./scripts/ajaxScripts/check_email.php", {
+                    method: "POST",
+                    headers: { 
+                        "Content-Type": "application/x-www-form-urlencoded", 
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
+                    body: "email=" + encodeURIComponent(email),
+                });
+
+                if (!response.ok) 
+                    throw new Error("Something went wrong, try again later");
+
+                const data = await response.text();
+
+                console.log(data);
+
+                if (data === "exists") {
+                    console.log("This email is already in use");
+                    return data;
+                }
+            } catch (error) {
+                console.error(error);
+                return "error";
+            }
+        };
+
     </script>
 
 </body>

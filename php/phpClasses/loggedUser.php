@@ -11,6 +11,7 @@
         private $birthday;
         private $description;
         private $newsletter;
+private $permission;
 
         function __construct(string $email) {
             $dbManager = new dbManager();
@@ -48,6 +49,8 @@
                 $this->setDescription(htmlspecialchars($row["description"]));
 
             $this->setNewsletter(htmlspecialchars($row["newsletter"]));
+
+            $this->setPermission(htmlspecialchars($row["permission"]));
         }
 
 
@@ -61,6 +64,7 @@
         function setBirthday($birthday): void { $this->birthday = $birthday; }
         function setDescription(string $description): void { $this->description = $description; }
         function setNewsletter($newsletter): void { $this->newsletter = $newsletter; }
+        function setPermission($permission): void { $this->permission = $permission; }
     
         // Getter methods
         function getFirstname(): string { return $this->firstname; }
@@ -72,6 +76,7 @@
         function getBirthday() { return $this->birthday; }
         function getDescription(): string { return $this->description; }
         function getNewsletter() { return $this->newsletter; }
+        function getPermission(): string { return $this->permission; }
 
     }
 ?>

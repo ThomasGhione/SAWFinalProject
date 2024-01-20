@@ -26,8 +26,7 @@
         }
 
         function __destruct() {
-            if ($this->conn) 
-                $this->conn->close();
+            if ($this->conn) $this->conn->close();
         }
 
         // Query functions //
@@ -198,10 +197,9 @@
 
                 $hasEmailChanged = ($email != $newEmail);
 
+                // TODO test
                 if ($hasEmailChanged) {
-                    $result = $this->dbQueryWithParams("SELECT email FROM users WHERE email = ?", "s", [$newEmail]);
-                    
-                    if ($result->num_rows == 1) {
+                    if ($this->emailExists($newEmail)) {
                         error_log("Email already exists", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                         throw new Exception("Email already exists, please try again");
                     }
@@ -590,6 +588,14 @@
             }
 
             return true;
+        }
+
+
+        // Aux Methods //
+
+        function emailExists($email): bool {
+            $result = $this->dbQueryWithParams("SELECT email FROM users WHERE email = ?", "s", [$email]);
+            return ($result->num_rows == 0) ? false : true;
         }
 
 
