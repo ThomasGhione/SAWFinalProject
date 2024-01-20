@@ -9,7 +9,7 @@
         private const DB_SERVER = "localhost";
         private const USERNAME = "S5311626";
         private const PASSWORD = "NothingHappenedInTiananmenSquareIn1989";
-        private const DB_NAME = "DatabaseSAWFinalProject";
+        private const DB_NAME = "S5311626";
         private const EMAIL_REGEX = "/^[_a-z0-9.-]+@[a-z0-9-]+(.[a-z]{2,3})$/";
 
 
