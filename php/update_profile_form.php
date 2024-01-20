@@ -75,9 +75,12 @@
     <?php include("./shared/footer.php"); ?>
 
     <script>
-        const currentFirstname = document.getElementById("firstname").value;
-        const currentLastname = document.getElementById("lastname").value;
-        const currentEmail = document.getElementById("email").value;
+        const currentFirstname = document.getElementById("firstname").value.trim();
+        const currentLastname = document.getElementById("lastname").value.trim();
+        const currentEmail = document.getElementById("email").value.trim();
+
+        emailFlag = false;
+        emailMessage = "";
 
         document.getElementById("resetData").addEventListener("click", function (event) {
             let el1 = document.getElementById("firstname");
@@ -89,32 +92,47 @@
             el3.value = currentEmail;
         });
         
-        document.getElementById("form").addEventListener("submit", formButton);
+        document.getElementById("email").addEventListener("change", async function (event) {
+            let email = document.getElementById("email").value.trim();
+
+            let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+            if (!emailRegex.test(email)) {
+                emailFlag = false;
+                emailMessage = "Invalid email";
+            }
+
+            let res = await checkEmail(email);            
         
-        async function formButton (event) {
-            event.preventDefault();
-            
+            if (res === "exists") {
+                emailFlag = false;
+                emailMessage = "This email is already in use";
+            }
+            else if (res === "error") {
+                emailFlag = false;
+                emailMessage = "Something went wrong, try again later";
+            }
+            else {
+                emailFlag = true;
+                emailMessage = "";
+            }
+        });
+
+        document.getElementById("form").addEventListener("submit", function (event) {
             let firstname = document.getElementById("firstname").value.trim();
             let lastname = document.getElementById("lastname").value.trim();
             let email = document.getElementById("email").value.trim();
 
             if ((firstname === "") || lastname === "" || email === "") {
+                event.preventDefault();
                 alert("You can't set an empty field");
-                return;
             }
 
-            let res = await checkEmail(email);
-            if (res === "exists") {
-                alert("This email is already in use");
-                return;
-            } 
-            else if (res === "error") {
-                alert("Something went wrong, try again later");
-                return;
+            if (!emailFlag) {
+                event.preventDefault();
+                alert(emailMessage);
             }
-
-            event.target.submit();
-        };
+        });    
 
         async function checkEmail (email) {
             try {
