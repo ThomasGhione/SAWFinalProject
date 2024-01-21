@@ -23,23 +23,23 @@
                 
                 echo "<tr>";
                 
-                echo "<td>" . htmlspecialchars($row["firstname"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["lastname"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["permission"]) . "</td>";
-                echo "<td><a href='./adminScripts/deleteUser.php?email=" . urlencode(htmlspecialchars($row["email"])) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'></i></a></td>";
-                echo "<td><a href='./editUserForm.php?email=" . urlencode(htmlspecialchars($row["email"])) . "'><i class='fa-solid fa-pencil'></i></a></td>";
+                echo "<td>" . $row["firstname"] . "</td>";
+                echo "<td>" . $row["lastname"] . "</td>";
+                echo "<td>" . $row["email"] . "</td>";
+                echo "<td>" . $row["permission"] . "</td>";
+                echo "<td><a href='./adminScripts/deleteUser.php?email=" . urlencode($row["email"]) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'></i></a></td>";
+                echo "<td><a href='./editUserForm.php?email=" . urlencode($row["email"]) . "'><i class='fa-solid fa-pencil'></i></a></td>";
                 
                 echo "<td>";
                 if ($isBanned)
                     echo "<span class='emptyButton'><i class='fa-solid fa-ban'></i></span>";
                 else   
-                    echo "<a href='./adminScripts/banUser.php?email=" . urlencode(htmlspecialchars($row["email"])) .  "' onclick='return confirmBan();'><i class='fa-solid fa-ban'></i></a>";
+                    echo "<a href='./adminScripts/banUser.php?email=" . urlencode($row["email"]) .  "' onclick='return confirmBan();'><i class='fa-solid fa-ban'></i></a>";
                 echo "</td>";
                 
                 echo "<td>";
                 if ($isBanned)
-                    echo "<a href='./adminScripts/unbanUser.php?email=" . urlencode(htmlspecialchars($row["email"])) .  "' onclick='return confirmUnBan();'><i class='fa-solid fa-check'></i></a>";
+                    echo "<a href='./adminScripts/unbanUser.php?email=" . urlencode($row["email"]) .  "' onclick='return confirmUnBan();'><i class='fa-solid fa-check'></i></a>";
                 else
                     echo "<span class='emptyButton'><i class='fa-solid fa-check'></i></span>";
                 echo "</td>";
@@ -66,10 +66,10 @@
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
 
-                echo "<td>" . htmlspecialchars($row["firstname"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["lastname"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
-                echo "<td><input type='checkbox' name='userCheckbox[]' value='" . htmlspecialchars($row["email"]) . "'></td>";
+                echo "<td>" . $row["firstname"] . "</td>";
+                echo "<td>" . $row["lastname"] . "</td>";
+                echo "<td>" . $row["email"] . "</td>";
+                echo "<td><input type='checkbox' name='userCheckbox[]' value='" . $row["email"] . "'></td>";
 
                 echo "</tr>";
             }
@@ -137,6 +137,7 @@
             return true;
         }
 
+        // TODO Change this function to use updated way to update users
         function editUser(string $userEmail): bool {
             try {
                 $this->conn->begin_transaction();
@@ -187,7 +188,6 @@
                     }
 
                     // Updates all remember me cookies from current email to the new one, 
-                    // TODO ask if should delete them instead of updating them
                     $result = $this->dbQueryWithParams("UPDATE remMeCookies SET email = ? WHERE email = ?", "ss", [$newEmail, $userEmail]);
                     $result = $this->dbQueryWithParams("UPDATE repos SET Owner = ? WHERE Owner = ?", "ss", [$newEmail, $userEmail]);
                     rename("../../repos/$userEmail", "../../repos/$newEmail");

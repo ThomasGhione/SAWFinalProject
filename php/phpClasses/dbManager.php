@@ -96,7 +96,6 @@
                     throw new Exception("Something went wrong, please try again later");
                 }
 
-                // TODO Add exceptions for mkdir and chmod
                 // Creates a new directory for user's repos 
                 $email = $user->getEmail();
                 mkdir("../../repos/$email");
@@ -105,7 +104,7 @@
             catch (Exception $e) {
                 $this->conn->rollback();
                 $_SESSION["error"] = $e->getMessage();
-                header("Location: ../loginForm.php");
+                header("Location: ../registrationForm.php");
                 exit;
             }
 
@@ -144,8 +143,7 @@
                     $actTime = time();
                     $oneWeek = 604800; // 60 * 60 * 24 * 7 = 604800 seconds = 1 week
                     $expDate = date("Y-m-d", $actTime + $oneWeek);
-                    $salt = "WeLoveRibaudo";
-                    $UID = hash("sha512", (bin2hex(random_bytes(32)) . $actTime . $salt));
+                    $UID = hash("sha512", (bin2hex(random_bytes(32)) . $actTime));
                     
                     $paramArr = [$UID, $user->getEmail(), $expDate];
                     $result = $this->dbQueryWithParams("INSERT INTO remMeCookies (UID, email, ExpDate) VALUES (?, ?, ?)", "sss", $paramArr);
@@ -167,8 +165,8 @@
             }
 
             $this->conn->commit();
-            $user->setPermission(htmlspecialchars($row["permission"]));
-            $user->setNewsletter(htmlspecialchars($row["newsletter"]));
+            $user->setPermission($row["permission"]);
+            $user->setNewsletter($row["newsletter"]);
             
             $_SESSION["success"] = "Login successful";
             return true;
@@ -192,17 +190,37 @@
                 $this->conn->begin_transaction();
 
                 $newEmail = htmlspecialchars(trim($_POST["email"]));
-                $firstname = htmlspecialchars(trim($_POST["firstname"]));
-                $lastname = htmlspecialchars(trim($_POST["lastname"]));
+
+                if (filter_var($newEmail, FILTER_VALIDATE_EMAIL) === false) {
+                    error_log("Email is not valid", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Email is not valid, please try again");
+                }
 
                 $hasEmailChanged = ($email != $newEmail);
 
-                // TODO test
                 if ($hasEmailChanged) {
                     if ($this->emailExists($newEmail)) {
                         error_log("Email already exists", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                         throw new Exception("Email already exists, please try again");
                     }
+
+                    if (strlen($newEmail) > 64) {
+                        error_log("Email is too long", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                        throw new Exception("Email is too long, maximum 64 characters");
+                    }
+                }
+
+                $firstname = htmlspecialchars(trim($_POST["firstname"]));
+                $lastname = htmlspecialchars(trim($_POST["lastname"]));
+
+                if (strlen($firstname) > 64) {
+                    error_log("Firstname is too long", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Firstname is too long, maximum 64 characters");
+                }
+
+                if (strlen($lastname) > 64) {
+                    error_log("Lastname is too long", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Lastname is too long, maximum 64 characters");
                 }
 
                 $this->dbQueryWithParams("UPDATE users SET email = ?, firstname = ?, lastname = ? WHERE email = ?", "ssss", [$newEmail, $firstname, $lastname, $email]);
@@ -299,7 +317,7 @@
         }
 
         function recoverSession(string &$cookie, &$session): void {
-            $cookieArr = explode(" ", $cookie); // boom!
+            $cookieArr = explode(" ", $cookie);
 
             $result = $this->dbQueryWithParams("SELECT * FROM remMeCookies WHERE (UID = ? && (STR_TO_DATE(ExpDate, '%Y-%m-%d') > CURDATE()))", "s", [$cookieArr[0]]);
             
@@ -338,9 +356,9 @@
                 while ($row = $result->fetch_assoc()) {
                     echo "<tr>";
 
-                    echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
-                    echo "<td>" . htmlspecialchars($row["firstname"]) . "</td>";
-                    echo "<td>" . htmlspecialchars($row["lastname"]) . "</td>";
+                    echo "<td>" . $row["email"] . "</td>";
+                    echo "<td>" . $row["firstname"] . "</td>";
+                    echo "<td>" . $row["lastname"] . "</td>";
 
                     echo "</tr>";
                 }
@@ -371,10 +389,10 @@
                 while ($row = $result->fetch_assoc()) {
                     echo "<tr>";
 
-                    echo "<td>" . htmlspecialchars($row["Owner"]) . "</td>";
-                    echo "<td>" . htmlspecialchars($row["Name"]) . "</td>";
-                    echo "<td>" . htmlspecialchars($row["CreationDate"]) . "</td>";
-                    echo "<td>" . htmlspecialchars($row["LastModified"]) . "</td>";
+                    echo "<td>" . $row["Owner"] . "</td>";
+                    echo "<td>" . $row["Name"] . "</td>";
+                    echo "<td>" . $row["CreationDate"] . "</td>";
+                    echo "<td>" . $row["LastModified"] . "</td>";
                 
                     echo "</tr>";
                 }
@@ -402,11 +420,11 @@
                 while ($row = $result->fetch_assoc()) {
                     echo "<tr>";
                     
-                    echo "<td>" . htmlspecialchars($row["Name"]) . "</td>";
-                    echo "<td>" . htmlspecialchars($row["CreationDate"]) . "</td>";
-                    echo "<td>" . htmlspecialchars($row["LastModified"]) . "</td>";
-                    echo "<td><a href='./update_repo_form.php?name=" . urlencode(htmlspecialchars($row["Name"])) . "'><i class='fa-solid fa-pen'></i></a></td>";
-                    echo "<td><a href='./scripts/deleteRepo.php?name=" . urlencode(htmlspecialchars($row["Name"])) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'</td>";
+                    echo "<td>" . $row["Name"] . "</td>";
+                    echo "<td>" . $row["CreationDate"] . "</td>";
+                    echo "<td>" . $row["LastModified"] . "</td>";
+                    echo "<td><a href='./update_repo_form.php?name=" . urlencode($row["Name"]) . "'><i class='fa-solid fa-pen'></i></a></td>";
+                    echo "<td><a href='./scripts/deleteRepo.php?name=" . urlencode($row["Name"]) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'</td>";
 
                     echo "</tr>";
                 }

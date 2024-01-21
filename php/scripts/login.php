@@ -12,7 +12,7 @@
     if ($_SERVER["REQUEST_METHOD"] != "POST")  
         $_SESSION["error"] = "Invalid request";
     else {
-
+        
         $user = new User(true);
 
         if ($dbManager->loginUser($user)) { // if remember me is set, then following code sets session and cookie

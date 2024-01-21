@@ -17,8 +17,9 @@
             }
             
             $fileType = $_FILES["fileUpload"]["type"];
+            // Check if file is a .zip file, "application/zip" is the MIME type for .zip files in linux, "application/x-zip-compressed" is the MIME type for .zip files in windows
             if (($fileType != "application/zip") && ($fileType != "application/x-zip-compressed")) {
-                error_log("Uploaded file is not a .zip file, contenuto di filetype: $fileType, contennuto di FILES: " . $_FILES["fileUpload"]["type"], 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("Uploaded file is not a .zip file, contenuto di filetype: $fileType, contenuto di FILES: " . $_FILES["fileUpload"]["type"], 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("Uploaded file is not a .zip file");
             }
     

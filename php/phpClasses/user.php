@@ -11,20 +11,24 @@
         private $newsletter;
         
         function __construct ($login) {            
-            
-            // TODO Lavorare sul codice di controllo degli input su $_POST tra login.php e user.php
-            $email = (trim($_POST["email"]));
-            $password = htmlspecialchars(trim($_POST["pass"]));
+            try{
+                if (!isset($_POST["submit"]) || !isset($_POST["email"]) || !isset($_POST["pass"])) {
+                    error_log("Invalid request", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Invalid request");
+                }
 
-            try {                
-                if (empty($email) || empty($password)) {
+                if (empty($_POST["email"]) || empty($_POST["pass"])) {
                     error_log("Empty parameters have been passed to the form", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Empty parameters have been passed to the form. Please try again");
                 }
-                if ($this->isEmailValid() === false) {
+                
+                $email = filter_var(trim($_POST["email"]), FILTER_VALIDATE_EMAIL);
+                if ($email === false || strlen($email) > 64) {
                     error_log("Invalid email", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Invalid email. Please try again");
                 }
+
+                $password = htmlspecialchars(trim($_POST["pass"]));
             }
             catch (Exception $e) {
                 $_SESSION["error"] = $e->getMessage();
@@ -37,10 +41,7 @@
                 $this->cLogin($email, $password, $remMeFlag);
             }
             else {
-                $firstname = htmlspecialchars($_POST["firstname"]);
-                $lastname = htmlspecialchars($_POST["lastname"]);
-                $confirm = htmlspecialchars($_POST["confirm"]);
-                $this->cRegister($firstname, $lastname, $email, $password, $confirm);
+                $this->cRegister($email, $password);
             }
         }
 
@@ -56,23 +57,43 @@
 
         private function cLogin(string $email, string &$password, &$remMeFlag): void {
             $this->remMeFlag = $remMeFlag;
-            $this->email = trim($email);
-            $this->password = trim($password);
+            $this->email = $email;
+            $this->password = $password;
         }
 
-        private function cRegister(string &$firstname, string &$lastname, string $email, string &$password, string &$confirm): void {
+        private function cRegister(string $email, string &$password): void {
             try {
-                if (empty($firstname) || empty($lastname) || empty($confirm)) {
+                if (!isset($_POST["firstname"]) || !isset($_POST["lastname"]) || !isset($_POST["confirm"])) {
+                    error_log("Invalid request", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Invalid request");
+                }
+
+                if (empty($_POST["firstname"]) || empty($_POST["lastname"]) || empty($_POST["confirm"])) {
                     error_log("Empty parameters have been passed to the form", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Empty parameters have been passed to the form. Please try again later");
                 }
+
+                $firstname = htmlspecialchars(trim($_POST["firstname"]));
+                $lastname = htmlspecialchars(trim($_POST["lastname"]));
+                
+                if (strlen($firstname) > 64) {
+                    error_log("First name or last name are too long", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("First name or last name are too long. Please try again");
+                }
+                
+                if (strlen($lastname) > 64) {
+                    error_log("First name or last name are too long", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("First name or last name are too long. Please try again");
+                }
+                
+                $confirm = htmlspecialchars(trim($_POST["confirm"]));
                 
                 if ($this->isPasswordWeak($password)) {
                     error_log("Password isn't strong enough", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Password isn't strong enough. Please choose a stronger password");
                 }
                 
-                if (!$this->isPasswordValid($password, $confirm)) {
+                if (!$this->passwordMatches($password, $confirm)) {
                     error_log("Passwords don't match", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Passwords don't match");
                 }
@@ -83,10 +104,10 @@
                 exit;
             }
 
-            $this->firstname = trim($firstname);
-            $this->lastname = trim($lastname);
-            $this->email = trim($email);
-            $this->password = password_hash(trim($password), PASSWORD_DEFAULT);
+            $this->firstname = $firstname;
+            $this->lastname = $lastname;
+            $this->email = $email;
+            $this->password = password_hash($password, PASSWORD_DEFAULT);
         }
 
         // Getters
@@ -121,13 +142,15 @@
         function setNewsletter(&$newsletter): void {$this->newsletter = htmlspecialchars($newsletter); }
         
         
-        
         // Aux methods
     
         private function isPasswordWeak(string &$password): bool {
             return strlen($password) < 8;
         }
     
+        private function passwordMatches(string &$password, string &$confirmPwd): bool {
+            return $password == $confirmPwd;
+        }
         /*
         private function isPasswordWeak(string &$password): bool {
             if (strlen($password) < 8) {
@@ -158,14 +181,6 @@
             return true;
         }
         */
-
-        private function isPasswordValid(string &$password, string &$confirmPwd): bool {
-            return $password == $confirmPwd;
-        }
-        
-        private function isEmailValid(): bool {
-            return filter_var($this->email, FILTER_VALIDATE_EMAIL);
-        }
     }
 
 ?>
