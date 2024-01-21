@@ -69,4 +69,18 @@
         
     </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("searchAreaForm").addEventListener("submit", function (event) {
+                let searchBar = document.getElementById("searchBar").value.trim();
+
+                if (searchBar == "") {
+                    event.preventDefault();
+                    alert("You must enter something to search!");
+                }
+            })
+        })
+    </script>
+
+
 </nav> 

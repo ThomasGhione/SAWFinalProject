@@ -10,8 +10,12 @@
     $sessionManager = new sessionManager();
     $cookieManager = new cookieManager();
     $dbManager = new dbManager();
+    
+    // TODO Remove this line 
     $dbManagerAdmin = new dbManagerAdmin();
     
-    if (!$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) 
-        $dbManager->recoverSession($cookieManager->getCookie("remMeCookie"), $sessionManager);
+    if (!$sessionManager->isSessionSet() && $cookieManager->isCookieSet("remMeCookie")) {
+        $cookieData = $cookieManager->getCookie("remMeCookie");
+        $dbManager->recoverSession($cookieData, $sessionManager);
+    }
 ?>
