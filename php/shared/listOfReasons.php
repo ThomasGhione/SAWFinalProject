@@ -1,5 +1,7 @@
 <?php 
     require("./initializePage.php");
+
+    unset($dbManager);
 ?>
 
 <!DOCTYPE html>

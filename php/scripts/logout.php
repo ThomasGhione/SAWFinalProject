@@ -6,11 +6,13 @@
         exit;
     }
 
-    if ($cookieManager->isCookieSet("remMeCookie")) {    
-        $dbManager->deleteRememberMeCookieFromDB($cookieManager->getCookie("remMeCookie"), $sessionManager->getEmail());
+    if ($cookieManager->isCookieSet("remMeCookie")) {  
+        $cookieData = $cookieManager->getCookie("remMeCookie");  
+        $dbManager->deleteRememberMeCookieFromDB($cookieData, $sessionManager->getEmail());
         $cookieManager->deleteCookie("remMeCookie");
     }
     
+    unset($dbManager);
     $sessionManager->endSession();
     
     header("Location: /SAW/SAWFinalProject/index.php");

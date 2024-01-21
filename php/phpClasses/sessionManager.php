@@ -14,12 +14,12 @@
         /* Setter methods */
         function setEmail(string $email): void { $_SESSION["email"] = htmlspecialchars($email); }
         function setPermission(&$permission): void { $_SESSION["permission"] = htmlspecialchars($permission); }
-        function setNewsletter(&$newsletter): void { $_SESSION["newsletter"] = htmlspecialchars($newsletter); }
+        function setNewsletter($newsletter): void { $_SESSION["newsletter"] = htmlspecialchars($newsletter); }
 
 
         /* Methods */
 
-        function setSessionVariables(string $email, &$permission, &$newsletter): void {
+        function setSessionVariables(string $email, string $permission, $newsletter): void {
             $this->setEmail($email);
             $this->setPermission($permission);
             $this->setNewsletter($newsletter);

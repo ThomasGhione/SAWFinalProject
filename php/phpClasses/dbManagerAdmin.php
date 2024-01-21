@@ -1,5 +1,7 @@
 <?php
 
+    require_once("dbManager.php");
+
     class dbManagerAdmin extends dbManager {
 
         // Admin Tools //

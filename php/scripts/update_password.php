@@ -26,6 +26,7 @@
         catch (Exception $e) { $_SESSION["error"] = $e->getMessage(); }
     }
 
+    unset($dbManager);
     header("Location: ../update_profile_password_form.php"); // Covers both invalid request and invalid login 
     exit;
 

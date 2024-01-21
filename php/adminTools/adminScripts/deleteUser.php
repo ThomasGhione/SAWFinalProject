@@ -1,13 +1,10 @@
 <?php
-    require("../../shared/initializePage.php");
+    require("../../shared/initializePageAdmin.php");
     
     if (!$sessionManager->isSessionSet() || !$sessionManager->isAdmin()) {
         header("Location: ../../../index.php");
         exit;
     }
-
-    require_once("../../phpClasses/dbManagerAdmin.php");
-    $dbManagerAdmin = new dbManagerAdmin();
 
     
     try {
@@ -33,12 +30,13 @@
             throw new Exception("You can't delete yourself while you're logged, please contact a technician to do so");
         }
 
-        if ($dbManagerAdmin->deleteUser($email))
+        if ($dbManager->deleteUser($email))
             $_SESSION["success"] = "User deleted successfully";
         
     }
     catch (Exception $e) { $_SESSION["error"] = $e->getMessage(); }
 
+    unset($dbManager);
     header("Location: ../manageUsers.php");
     exit;
 

@@ -10,14 +10,10 @@
         private $remMeFlag;
         private $newsletter;
         
-        private const EMAIL_REGEX = "/\S+@\S+\.\S+/";  // TODO correggere regex per email
-
-        /*function __construct ($login, $email, $password,
-                             $firstName = null, $lastName = null, $userName = null,
-                             $confirmPwd = null, $gender = null, $birthday = null) {*/
-
         function __construct ($login) {            
-            $email = htmlspecialchars(trim($_POST["email"]));
+            
+            // TODO Lavorare sul codice di controllo degli input su $_POST tra login.php e user.php
+            $email = (trim($_POST["email"]));
             $password = htmlspecialchars(trim($_POST["pass"]));
 
             try {                
@@ -25,7 +21,7 @@
                     error_log("Empty parameters have been passed to the form", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Empty parameters have been passed to the form. Please try again");
                 }
-                if (!$this->isEmailValid()) {
+                if ($this->isEmailValid() === false) {
                     error_log("Invalid email", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Invalid email. Please try again");
                 }
@@ -71,13 +67,11 @@
                     throw new Exception("Empty parameters have been passed to the form. Please try again later");
                 }
                 
-                if ($this->isPasswordWeakDEBUG($password)) {
+                if ($this->isPasswordWeak($password)) {
                     error_log("Password isn't strong enough", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Password isn't strong enough. Please choose a stronger password");
                 }
                 
-                $this->isPasswordWeak($password);
-
                 if (!$this->isPasswordValid($password, $confirm)) {
                     error_log("Passwords don't match", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Passwords don't match");
@@ -117,27 +111,24 @@
         }
 
         // Setters
-        function setFirstName(string &$firstname): void { $this->firstname = $firstname; }
-        function setLastName(string &$lastname): void { $this->lastname = $lastname; }
-        function setEmail(string $email): void { $this->email = $email; }
-        function setPassword(string &$password): void { $this->password = $password; }
-        function setConfirmPwd(string &$confirm): void { $this->password = $confirm; }
-        function setPermission(&$permission): void { $this->permission = $permission; }
-        function setRemMeFlag(&$remMeFlag): void { $this->remMeFlag = $remMeFlag; }
-        function setNewsletter(&$newsletter): void {$this->newsletter = $newsletter; }
+        function setFirstName(string &$firstname): void { $this->firstname = htmlspecialchars($firstname); }
+        function setLastName(string &$lastname): void { $this->lastname = htmlspecialchars($lastname); }
+        function setEmail(string $email): void { $this->email = filter_var($email, FILTER_VALIDATE_EMAIL); }
+        function setPassword(string &$password): void { $this->password = htmlspecialchars($password); }
+        function setConfirmPwd(string &$confirm): void { $this->password = htmlspecialchars($confirm); }
+        function setPermission(&$permission): void { $this->permission = htmlspecialchars($permission); }
+        function setRemMeFlag(&$remMeFlag): void { $this->remMeFlag = htmlspecialchars($remMeFlag); }
+        function setNewsletter(&$newsletter): void {$this->newsletter = htmlspecialchars($newsletter); }
         
         
         
         // Aux methods
     
-        function getFullName(&$user): string {
-            return $user->getFirstName() . " " . $user->getLastName();
-        }
-    
-        private function isPasswordWeakDEBUG(string &$password): bool { //! USE THIS ONLY FOR DEBBUGING PURPOSES
+        private function isPasswordWeak(string &$password): bool {
             return strlen($password) < 8;
         }
     
+        /*
         private function isPasswordWeak(string &$password): bool {
             if (strlen($password) < 8) {
                 error_log("Pw is too short", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
@@ -166,13 +157,14 @@
 
             return true;
         }
+        */
 
         private function isPasswordValid(string &$password, string &$confirmPwd): bool {
             return $password == $confirmPwd;
         }
         
         private function isEmailValid(): bool {
-            return !preg_match($this::EMAIL_REGEX, $this->email);
+            return filter_var($this->email, FILTER_VALIDATE_EMAIL);
         }
     }
 

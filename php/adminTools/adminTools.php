@@ -1,5 +1,5 @@
 <?php
-    require("../shared/initializePage.php");
+    require("../shared/initializePageAdmin.php");
     
     if (!$sessionManager->isSessionSet() || !$sessionManager->isAdmin()) {
         header("Location: ../../index.php");
@@ -15,7 +15,10 @@
     <link rel="stylesheet" type="text/css" href="../../CSS/adminMenu.css">
 </head>
 <body>
-    <?php require_once("../shared/nav.php"); ?>
+    <?php 
+        require_once("../shared/nav.php"); 
+        unset($dbManager);
+    ?>
     <main class="mainContainer">
         
         <div class="admin-menu">

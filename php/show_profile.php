@@ -73,7 +73,10 @@
          
         <div class="right_column">
 
-            <?php $dbManager->showRepos($currentUser->getEmail()) ?>
+            <?php 
+                $dbManager->showRepos($currentUser->getEmail());
+                unset($dbManager);
+            ?>
 
         </div>
     </div>

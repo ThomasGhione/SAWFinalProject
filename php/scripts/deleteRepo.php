@@ -27,6 +27,7 @@
     }
     catch (Exception $e) { $_SESSION["error"] = $e->getMessage();}
 
+    unset($dbManager);
     header("Location: ../show_profile.php");
     exit;
 ?>

@@ -19,7 +19,6 @@
         private $mail;
 
         function __construct() {
-            // TODO Aggiungere try-catch sul costruttore, guarda al file sendEmail.php per capire di più cosa fare
             try {
                 $this->mail = new PHPMailer (true);
                 $this->mail->isSMTP();
@@ -28,7 +27,7 @@
                 // to view proper logging details for success and error messages
                 // $mail->SMTPDebug = 1;
                 $this->mail->Host = "smtp.gmail.com";                                      //gmail SMTP server
-                $this->mail->Username = "sawfinalprojecttomasellaghione@gmail.com";   //email
+                $this->mail->Username = "sawfinalprojecttomasellaghione@gmail.com";        //email
                 $this->mail->Password = "nqwm xclx qstr vssn" ;                            //16 character obtained from app password created
                 $this->mail->Port = 465;                                                   //SMTP port
                 $this->mail->SMTPSecure = "ssl";
@@ -40,8 +39,6 @@
         }
         
         function sendNewsletter(array &$userArr, string &$message): bool {
-            // TODO Aggiungere Try-Catch al metodo, vedere sendEmail.php in scripts per capire di più
-
             try {
                 if (empty($userArr) || empty($message)) {
                     error_log("newsletterManager: empty message or user array", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");

@@ -33,6 +33,8 @@
             <?php if ($doSearch) $dbManager->searchRepos($_POST["searchBar"]); ?>
         </div>
 
+        <?php unset($dbManager) ?>
+
     </main>
 
     <script>

@@ -17,7 +17,10 @@
     <title>OpenHub - Change your Password</title>
 </head>
 <body>
-    <?php include("./shared/nav.php"); ?>
+    <?php 
+        include("./shared/nav.php"); 
+        unset($dbManager);
+    ?>
 
     
     <main class="mainContainer">
@@ -36,7 +39,7 @@
                 }
             ?>
 
-            <form action="./scripts/update_password.php" method="post">
+            <form id="form" action="./scripts/update_password.php" method="post">
                 <div class="inputBox">
                     <label for="oldPassword">Old Password: </label>
                     <input required type="password" id="oldPassword" name="oldPassword" placeholder="Firstname">
@@ -55,5 +58,29 @@
 
 
     <?php include("./shared/footer.php"); ?>
+
+    <script>
+        document.getElementById("form").addEventListener("submit", function (event) {
+            let oldPassword = document.getElementById("oldPassword").value.trim();
+            let newPassword = document.getElementById("newPassword").value.trim();
+
+            if (oldPassword == "" || newPassword == ""){
+                alert("You must fill all the fields");
+                preventDefault();
+            }
+            else if (oldPassword.length < 8) {
+                alert("Your old password must be at least 8 characters long");
+                preventDefault();
+            }
+            else if (newPassword.length < 8) {
+                alert("Your new password must be at least 8 characters long");
+                preventDefault();
+            }
+            else if (oldPassword == newPassword) {
+                alert("Your new password must be different from your old password");
+                preventDefault();
+            }
+        });
+    </script>
 </body>
 </html>

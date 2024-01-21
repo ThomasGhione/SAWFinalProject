@@ -8,6 +8,8 @@
 
     require("./shared/banCheck.php");
 
+    unset($dbManager);
+
     if (!isset($_GET["name"]) || empty(urldecode($_GET["name"]))) {
         header("Location: ./manageUsers.php");
         exit;
@@ -43,7 +45,7 @@
                 }
             ?>
 
-            <form action="./scripts/updateRepo.php" method="post" enctype="multipart/form-data">
+            <form id="form" action="./scripts/updateRepo.php" method="post" enctype="multipart/form-data">
                 <div class="inputBox">
                     <label for="fileUpload">Update your repo (only .zip files are accepted): </label>
                     <input required type="file" id="fileUpload" name="fileUpload">
@@ -61,5 +63,20 @@
     </main>
 
     <?php include("./shared/footer.php"); ?>
+
+    <script>
+        document.getElementById("form").addEventListener("submit", function (event) {
+            var file = document.getElementById("fileUpload").files[0];
+
+            if (!file) {
+                alert("You must upload a file");
+                event.preventDefault();
+            }
+            else if (file.type !== "application/zip" || file.type !== "application/x-zip-compressed") {
+                alert("Only .zip files are accepted");
+                event.preventDefault();
+            }
+        });
+    </script>
 </body>
 </html>

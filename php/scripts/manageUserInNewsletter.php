@@ -31,6 +31,7 @@
     } // falls here if user tries to access the page in a bad way (e.g. by manipulating the link)
     catch (Exception $e) { $_SESSION["error"] = $e->getMessage(); }
 
+    unset($dbManager);
     header("Location: ../show_profile.php");
     exit;
 ?>

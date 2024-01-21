@@ -15,6 +15,7 @@
     $firstname = $loggedUser->getFirstname();
     $lastname = $loggedUser->getLastname();
     $email = $loggedUser->getEmail();
+
 ?>
 
 
@@ -25,7 +26,10 @@
     <title>OpenHub - Update your profile page</title>
 </head>
 <body>
-    <?php include("./shared/nav.php"); ?>
+    <?php 
+        include("./shared/nav.php"); 
+        unset($dbManager);
+    ?>
 
     
     <main class="mainContainer">
@@ -79,9 +83,6 @@
         const currentLastname = document.getElementById("lastname").value.trim();
         const currentEmail = document.getElementById("email").value.trim();
 
-        emailFlag = false;
-        emailMessage = "";
-
         document.getElementById("resetData").addEventListener("click", function (event) {
             let el1 = document.getElementById("firstname");
             let el2 = document.getElementById("lastname");
@@ -91,7 +92,26 @@
             el2.value = currentLastname;
             el3.value = currentEmail;
         });
+
+
+        emailFlag = false;
+        emailMessage = "";
         
+        document.getElementById("form").addEventListener("submit", function (event) {
+            let firstname = document.getElementById("firstname").value.trim();
+            let lastname = document.getElementById("lastname").value.trim();
+            let email = document.getElementById("email").value.trim();
+
+            if ((firstname === "") || lastname === "" || email === "") {
+                event.preventDefault();
+                alert("You can't set an empty field");
+            }
+            else if (!emailFlag) {
+                event.preventDefault();
+                alert(emailMessage);
+            }
+        });   
+
         document.getElementById("email").addEventListener("change", async function (event) {
             let email = document.getElementById("email").value.trim();
 
@@ -116,23 +136,7 @@
                 emailFlag = true;
                 emailMessage = "";
             }
-        });
-
-        document.getElementById("form").addEventListener("submit", function (event) {
-            let firstname = document.getElementById("firstname").value.trim();
-            let lastname = document.getElementById("lastname").value.trim();
-            let email = document.getElementById("email").value.trim();
-
-            if ((firstname === "") || lastname === "" || email === "") {
-                event.preventDefault();
-                alert("You can't set an empty field");
-            }
-
-            if (!emailFlag) {
-                event.preventDefault();
-                alert(emailMessage);
-            }
-        });    
+        }); 
 
         async function checkEmail (email) {
             try {

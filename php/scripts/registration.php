@@ -15,6 +15,7 @@
     
     $dbManager->registerUser($user); // If it has problems, it returns from registerUser method
 
+    unset($dbManager);
     header("Location: ../loginForm.php");   // Valid registration
     exit;
 ?>

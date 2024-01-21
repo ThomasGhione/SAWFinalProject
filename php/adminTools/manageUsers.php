@@ -1,5 +1,5 @@
 <?php 
-    require("../shared/initializePage.php");
+    require("../shared/initializePageAdmin.php");
 
     if (!$sessionManager->isSessionSet() || !$sessionManager->isAdmin()) {
         header("Location: ../../index.php");
@@ -24,11 +24,14 @@
     <?php require_once("../shared/nav.php") ?>
     
     <main class="mainContainer">
-        <?php $dbManagerAdmin->manageUsers() ?>
+        <?php 
+            $dbManager->manageUsers();
+            unset($dbManager);
+        ?>
     </main>
 
     <?php
-        
+
         if (isset($_SESSION["error"])) {
             echo "<p class='error'>" . $_SESSION["error"] . "</p>";
             unset($_SESSION["error"]);

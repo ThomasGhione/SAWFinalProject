@@ -5,6 +5,8 @@
         header("Location: ./show_profile.php");
         exit;
     }
+
+    unset($dbManager);
 ?>
 
 

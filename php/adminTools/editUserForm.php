@@ -1,5 +1,5 @@
 <?php 
-    require("../shared/initializePage.php");
+    require("../shared/initializePageAdmin.php");
 
     if (!$sessionManager->isSessionSet() || !$sessionManager->isAdmin()) {
         header("Location: ../../index.php");
@@ -16,6 +16,8 @@
     $email = urldecode($_GET["email"]);
 
     $currentUser = new loggedUser($email);
+
+    unset($dbManager);
 ?>
 
 

@@ -40,17 +40,15 @@
                 throw new Exception("You cannot upload a file that contains these invalid characters , . /");
             }
     
+            if ($dbManager->addNewRepo($email)) 
+                $_SESSION["success"] = "Repo created successfully";
         }
         catch (Exception $e) {
             $_SESSION["error"] = $e->getMessage();
-            header("Location: ../addNewRepoForm.php");
-            exit;
         }
-
-        if ($dbManager->addNewRepo($email)) 
-            $_SESSION["success"] = "Repo created successfully";
     }
 
+    unset($dbManager);
     header("Location: ../addNewRepoForm.php");
     exit;
 

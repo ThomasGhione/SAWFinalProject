@@ -29,6 +29,7 @@
         }
     }
 
+    unset($dbManager);
     header("Location: ../update_profile_form.php");
     exit;
 ?>
