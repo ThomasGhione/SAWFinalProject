@@ -74,8 +74,34 @@
         <div class="right_column">
 
             <?php 
-                $dbManager->showRepos($currentUser->getEmail());
-                unset($dbManager);
+                $rows = $dbManager->showRepos($currentUser->getEmail());
+                
+                if (empty($rows))
+                    echo "<p>You haven't uploaded any repo yet</p>";
+                else {
+                    echo "<table id='table-userRepos'>
+                        <thead>
+                            <tr><th>Name</th><th>Date of Creation</th><th>Last Modification<th>Update</th><th>Delete</th></tr>
+                        </thead>
+                        <tbody>
+                        ";
+
+                    foreach ($rows as $row) {
+                        echo "<tr>";
+                        
+                        echo "<td>" . $row["Name"] . "</td>";
+                        echo "<td>" . $row["CreationDate"] . "</td>";
+                        echo "<td>" . $row["LastModified"] . "</td>";
+                        echo "<td><a href='./update_repo_form.php?name=" . urlencode($row["Name"]) . "'><i class='fa-solid fa-pen'></i></a></td>";
+                        echo "<td><a href='./scripts/deleteRepo.php?name=" . urlencode($row["Name"]) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'</td>";
+
+                        echo "</tr>";
+                    }
+                    
+                    echo "</tbody>
+                        </table>
+                    ";
+                }
             ?>
 
         </div>
@@ -90,7 +116,6 @@
         } );
 
     </script>
-
 
 </body>
 </html>

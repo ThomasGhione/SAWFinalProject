@@ -25,8 +25,49 @@
     
     <main class="mainContainer">
         <?php 
-            $dbManager->manageUsers();
-            unset($dbManager);
+            $rows = $dbManager->manageUsers();
+
+            echo "
+            <table id='table-manageUsers'>
+            <thead>
+                <tr><th>Firstname</th><th>Lastname</th><th>Email</th><th>Role</th><th>Delete</th><th>Edit</th><th>Ban</th><th>Unban</th></tr>
+            </thead>
+            <tbody>
+            ";
+
+            foreach ($rows as $row) {
+                
+                $isBanned = ($row["permission"] === "banned");
+                
+                echo "<tr>";
+                
+                echo "<td>" . $row["firstname"] . "</td>";
+                echo "<td>" . $row["lastname"] . "</td>";
+                echo "<td>" . $row["email"] . "</td>";
+                echo "<td>" . $row["permission"] . "</td>";
+                echo "<td><a href='./adminScripts/deleteUser.php?email=" . urlencode($row["email"]) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'></i></a></td>";
+                echo "<td><a href='./editUserForm.php?email=" . urlencode($row["email"]) . "'><i class='fa-solid fa-pencil'></i></a></td>";
+                
+                echo "<td>";
+                if ($isBanned)
+                    echo "<span class='emptyButton'><i class='fa-solid fa-ban'></i></span>";
+                else   
+                    echo "<a href='./adminScripts/banUser.php?email=" . urlencode($row["email"]) .  "' onclick='return confirmBan();'><i class='fa-solid fa-ban'></i></a>";
+                echo "</td>";
+                
+                echo "<td>";
+                if ($isBanned)
+                    echo "<a href='./adminScripts/unbanUser.php?email=" . urlencode($row["email"]) .  "' onclick='return confirmUnBan();'><i class='fa-solid fa-check'></i></a>";
+                else
+                    echo "<span class='emptyButton'><i class='fa-solid fa-check'></i></span>";
+                echo "</td>";
+
+                echo "</tr>";
+            }
+
+            echo "</tbody>
+                </table>
+            ";
         ?>
     </main>
 

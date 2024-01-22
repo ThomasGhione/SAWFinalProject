@@ -12,9 +12,10 @@
         function getSessionVariable($name) { return $_SESSION[$name] ?? null; }
 
         /* Setter methods */
+        // TODO Chiedere se è necessario usare htmlspecialchars o no
         function setEmail(string $email): void { $_SESSION["email"] = htmlspecialchars($email); }
         function setPermission(&$permission): void { $_SESSION["permission"] = htmlspecialchars($permission); }
-        function setNewsletter($newsletter): void { $_SESSION["newsletter"] = htmlspecialchars($newsletter); }
+        function setNewsletter($newsletter): void { $_SESSION["newsletter"] = $newsletter; }
 
 
         /* Methods */
@@ -23,6 +24,11 @@
             $this->setEmail($email);
             $this->setPermission($permission);
             $this->setNewsletter($newsletter);
+        }
+
+        function setSessionVariablesEmailAndPermission(string $email, string $permission) {
+            $this->setEmail($email);
+            $this->setPermission($permission);
         }
 
         function endSession(): void {

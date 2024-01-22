@@ -6,78 +6,16 @@
 
         // Admin Tools //
 
-        function manageUsers(): void {
+        function manageUsers(): array {
             $result = $this->dbQueryWithoutParams("SELECT * FROM users");
 
-            echo "
-                <table id='table-manageUsers'>
-                <thead>
-                    <tr><th>Firstname</th><th>Lastname</th><th>Email</th><th>Role</th><th>Delete</th><th>Edit</th><th>Ban</th><th>Unban</th></tr>
-                </thead>
-                <tbody>
-            ";
-
-            while ($row = $result->fetch_assoc()) {
-                
-                $isBanned = ($row["permission"] === "banned");
-                
-                echo "<tr>";
-                
-                echo "<td>" . $row["firstname"] . "</td>";
-                echo "<td>" . $row["lastname"] . "</td>";
-                echo "<td>" . $row["email"] . "</td>";
-                echo "<td>" . $row["permission"] . "</td>";
-                echo "<td><a href='./adminScripts/deleteUser.php?email=" . urlencode($row["email"]) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'></i></a></td>";
-                echo "<td><a href='./editUserForm.php?email=" . urlencode($row["email"]) . "'><i class='fa-solid fa-pencil'></i></a></td>";
-                
-                echo "<td>";
-                if ($isBanned)
-                    echo "<span class='emptyButton'><i class='fa-solid fa-ban'></i></span>";
-                else   
-                    echo "<a href='./adminScripts/banUser.php?email=" . urlencode($row["email"]) .  "' onclick='return confirmBan();'><i class='fa-solid fa-ban'></i></a>";
-                echo "</td>";
-                
-                echo "<td>";
-                if ($isBanned)
-                    echo "<a href='./adminScripts/unbanUser.php?email=" . urlencode($row["email"]) .  "' onclick='return confirmUnBan();'><i class='fa-solid fa-check'></i></a>";
-                else
-                    echo "<span class='emptyButton'><i class='fa-solid fa-check'></i></span>";
-                echo "</td>";
-
-                echo "</tr>";
-            }
-
-            echo "</tbody>
-                </table>
-            ";
+            return $result->fetch_all(MYSQLI_ASSOC);
         }
 
-        function manageSubbedToNewsletter(): void {
+        function manageSubbedToNewsletter(): array {
             $result = $this->dbQueryWithoutParams("SELECT * FROM users WHERE newsletter = 1");
-           
-            echo "
-                <table id='table-manageNewsletter'>
-                <thead>
-                    <tr><th>Firstname</th><th>Lastname</th><th>Email</th><th>Send Email</th></tr>
-                </thead>
-                <tbody>
-            ";
-
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-
-                echo "<td>" . $row["firstname"] . "</td>";
-                echo "<td>" . $row["lastname"] . "</td>";
-                echo "<td>" . $row["email"] . "</td>";
-                echo "<td><input type='checkbox' name='userCheckbox[]' value='" . $row["email"] . "'></td>";
-
-                echo "</tr>";
-            }
-
-            echo "
-                </tbody>
-                </table>
-            ";
+            
+            return $result->fetch_all(MYSQLI_ASSOC);
         }
 
         function unbanUser(string $userEmail): bool {
@@ -138,7 +76,7 @@
         }
 
         // TODO Change this function to use updated way to update users
-        function editUser(string $userEmail): bool {
+        function editUser(string $userEmail, &$sessionManager): bool {
             try {
                 $this->conn->begin_transaction();
 
@@ -148,81 +86,45 @@
                     throw new Exception("Tried to edit a user that does not exist");
                 }
 
-                // Sets data names and data 
-                $dataTypeToUpdate = "";
-                $dataToUpdate = array(); 
-                $isEmailModified = !empty($_POST["email"]);
-                $isPasswordModified = !empty($_POST["pass"]);
-                $isPermissionModified = !empty($_POST["permission"]);
+                $newEmail = trim($_POST["email"]);
+                $firstname = htmlspecialchars(trim($_POST["firstname"]));
+                $lastname = htmlspecialchars(trim($_POST["lastname"]));
 
-                foreach ($_POST as $dataName => $data) {
-                    if (!empty($data)) {
-                        $dataTypeToUpdate .= " " . $dataName . " = ?,";
-                        array_push($dataToUpdate, trim(htmlspecialchars($data)));
-                    }
+                $this->checkCommonEditData($userEmail, $newEmail, $firstname, $lastname);
+
+                $hasEmailChanged = ($userEmail != $newEmail);
+
+
+                $permission = $_POST["permission"];
+
+                if ($permission != "user" && $permission != "mod" && $permission != "admin" && $permission != "banned") {
+                    error_log("Invalid permission", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Invalid permission");
                 }
 
+                $pass = trim($_POST["pass"]);
+                if (strlen($pass) < 8) {
+                    error_log("Choose a password with at least 8 characters", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Choose a password with at least 8 characters");
+                }
+                $pass = password_hash($pass, PASSWORD_DEFAULT);
 
-                if ($isPasswordModified) {
-                    $pass = htmlspecialchars(trim($_POST["pass"]));
+                $result = $this->dbQueryWithParams("UPDATE users SET firstname = ?, lastname = ?, email = ?, permission = ?, password = ? WHERE email = ?", "ssssss", [$firstname, $lastname, $newEmail, $permission, $pass, $userEmail]);
 
-                    if (strlen($pass) < 8) {
-                        error_log("Choose a password with at least 8 characters", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                        throw new Exception("Choose a password with at least 8 characters");
-                    }
-
-                    $newPass = password_hash($pass, PASSWORD_DEFAULT);
-
-                    substr_replace($pass, $newPass, 0);
+                if ($result != 1){
+                    error_log("Something went wrong while updating user's data from Manage Users page", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Something went wrong, try again later");
                 }
 
+                if ($hasEmailChanged) { // Following code checks if email has changed, if so it changes session data and everything related to that email in the database (including the folder name)
 
-                if ($isEmailModified) { // Following code checks if email has changed, if so, it checks if email is valid, if so it changes session data and everything related to that email 
-                    $newEmail = htmlspecialchars(trim($_POST["email"]));
-                    
-                    $result = $this->dbQueryWithParams("SELECT email FROM users WHERE email = ?", "s", [$newEmail]);
-                    
-                    if ($result->num_rows == 1) {
-                        error_log("Email already exists", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                        throw new Exception("Email already exists, please try again");
-                    }
-
-                    // Updates all remember me cookies from current email to the new one, 
                     $result = $this->dbQueryWithParams("UPDATE remMeCookies SET email = ? WHERE email = ?", "ss", [$newEmail, $userEmail]);
                     $result = $this->dbQueryWithParams("UPDATE repos SET Owner = ? WHERE Owner = ?", "ss", [$newEmail, $userEmail]);
                     rename("../../repos/$userEmail", "../../repos/$newEmail");
                 }
 
-
-                if ($isPermissionModified) {
-                    $newPermission = htmlspecialchars(trim($_POST["permission"]));
-
-                    
-                    if ($newPermission != "user" && $newPermission != "mod" && $newPermission != "admin" && $newPermission != "banned") {
-                        error_log("Invalid permission", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                        throw new Exception("Invalid permission");
-                    }
-
-                    $result = $this->dbQueryWithParams("UPDATE users SET permission = ? WHERE email = ?", "ss", [$newPermission, $userEmail]);
-                }
-
-                // cleans data to be used in query function
-                $dataTypeToUpdate = str_replace(", userEmail = ?, submit = ?,", "", $dataTypeToUpdate);
-                array_pop($dataToUpdate);
-                array_pop($dataToUpdate);
-                array_push($dataToUpdate, $userEmail); // Adds last value to be used in query function
-
-                // Sets data types for query function            
-                $dataCount = "";
-                for ($i = count($dataToUpdate); $i > 0; $i--) 
-                    $dataCount .= "s";
-
-                $result = $this->dbQueryWithParams("UPDATE users SET " . $dataTypeToUpdate . " WHERE email = ?", $dataCount, $dataToUpdate);
-                if ($result != 1){
-                    error_log("Something went wrong while updating user's data from Manage Users page", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                    throw new Exception("Something went wrong, try again later");
-                }
-            
+                if ($sessionManager->getEmail() === $newEmail)
+                    $sessionManager->setSessionVariablesEmailAndPermission($newEmail, $permission);
             }
             catch (Exception $e) {
                 $this->conn->rollback();
@@ -233,7 +135,5 @@
             $this->conn->commit();
             return true;
         }
-
     }
-
 ?>

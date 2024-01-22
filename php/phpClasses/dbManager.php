@@ -174,7 +174,6 @@
 
 
         // Checks whether the user is banned or not
-
         function isBanned(string $email): bool {
             $result = $this->dbQueryWithParams("SELECT permission FROM users WHERE email = ?", "s", [$email]);
             
@@ -189,41 +188,20 @@
             try {
                 $this->conn->begin_transaction();
 
-                $newEmail = htmlspecialchars(trim($_POST["email"]));
-
-                if (filter_var($newEmail, FILTER_VALIDATE_EMAIL) === false) {
-                    error_log("Email is not valid", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                    throw new Exception("Email is not valid, please try again");
-                }
-
-                $hasEmailChanged = ($email != $newEmail);
-
-                if ($hasEmailChanged) {
-                    if ($this->emailExists($newEmail)) {
-                        error_log("Email already exists", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                        throw new Exception("Email already exists, please try again");
-                    }
-
-                    if (strlen($newEmail) > 64) {
-                        error_log("Email is too long", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                        throw new Exception("Email is too long, maximum 64 characters");
-                    }
-                }
-
+                $newEmail = trim($_POST["email"]);
                 $firstname = htmlspecialchars(trim($_POST["firstname"]));
                 $lastname = htmlspecialchars(trim($_POST["lastname"]));
 
-                if (strlen($firstname) > 64) {
-                    error_log("Firstname is too long", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                    throw new Exception("Firstname is too long, maximum 64 characters");
-                }
+                $this->checkCommonEditData($email, $newEmail, $firstname, $lastname);
 
-                if (strlen($lastname) > 64) {
-                    error_log("Lastname is too long", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                    throw new Exception("Lastname is too long, maximum 64 characters");
-                }
+                $hasEmailChanged = ($email != $newEmail);
 
-                $this->dbQueryWithParams("UPDATE users SET email = ?, firstname = ?, lastname = ? WHERE email = ?", "ssss", [$newEmail, $firstname, $lastname, $email]);
+                $result = $this->dbQueryWithParams("UPDATE users SET email = ?, firstname = ?, lastname = ? WHERE email = ?", "ssss", [$newEmail, $firstname, $lastname, $email]);
+
+                if ($result != 1){
+                    error_log("Something went wrong while updating user's data from Manage Users page", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Something went wrong, try again later");
+                }
 
                 // If email has changed, we need to update some data related to repos and cookies
                 if ($hasEmailChanged) {
@@ -250,8 +228,8 @@
 
             $this->conn->begin_transaction();
 
-            $oldPassword = htmlspecialchars(trim($_POST["oldPassword"]));
-            $newPassword = htmlspecialchars(trim($_POST["newPassword"]));
+            $oldPassword = trim($_POST["oldPassword"]);
+            $newPassword = trim($_POST["newPassword"]);
 
             try {
                 $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$email]);
@@ -371,7 +349,7 @@
 
         function searchRepos(string &$repoQuery): void {
                         
-            $repoQuery = "%" . $repoQuery . "%";
+            $repoQuery = "%" . htmlspecialchars(trim($repoQuery)) . "%";
             $result = $this->dbQueryWithParams("SELECT Name, Owner, CreationDate, LastModified FROM repos WHERE (Owner LIKE ? OR Name LIKE ?)", "ss", [$repoQuery, $repoQuery]);
 
             if (!$result->num_rows) 
@@ -403,36 +381,10 @@
             }    
         }
 
-        function showRepos(string $email): void {
+        function showRepos(string $email): array {
             $result = $this->dbQueryWithParams("SELECT Name, CreationDate, LastModified FROM repos WHERE Owner = ?", "s", [$email]);
-        
-            if ($result->num_rows == 0) {
-                echo "<p>You haven't uploaded any repo yet</p>";
-            } 
-            else {
-                echo "<table id='table-userRepos'>
-                    <thead>
-                        <tr><th>Name</th><th>Date of Creation</th><th>Last Modification<th>Update</th><th>Delete</th></tr>
-                    </thead>
-                    <tbody>
-                ";
-
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    
-                    echo "<td>" . $row["Name"] . "</td>";
-                    echo "<td>" . $row["CreationDate"] . "</td>";
-                    echo "<td>" . $row["LastModified"] . "</td>";
-                    echo "<td><a href='./update_repo_form.php?name=" . urlencode($row["Name"]) . "'><i class='fa-solid fa-pen'></i></a></td>";
-                    echo "<td><a href='./scripts/deleteRepo.php?name=" . urlencode($row["Name"]) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'</td>";
-
-                    echo "</tr>";
-                }
-                
-                echo "</tbody>
-                    </table>
-                ";
-            }
+            
+            return $result->fetch_all(MYSQLI_ASSOC);
         }
 
 
@@ -608,12 +560,43 @@
             return true;
         }
 
-
-        // Aux Methods //
-
         function emailExists($email): bool {
             $result = $this->dbQueryWithParams("SELECT email FROM users WHERE email = ?", "s", [$email]);
             return ($result->num_rows == 0) ? false : true;
+        }
+
+        // Used in editUser and updateProfile methods
+        function checkCommonEditData ($email, $newEmail, $firstname, $lastname) {
+            $email = trim($_POST["email"]);
+            if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+                error_log("Email is not valid", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                throw new Exception("Email is not valid, please try again");
+            }
+
+            $hasEmailChanged = ($email != $newEmail);
+
+            if ($hasEmailChanged) {
+                if ($this->emailExists($newEmail)) {
+                    error_log("Email already exists", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Email already exists, please try again");
+                }
+
+                if (strlen($newEmail) > 64) {
+                    error_log("Email is too long", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Email is too long, please try again");
+                }
+            }
+
+            if (strlen($firstname) > 64){
+                error_log("Firstname is too long", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                throw new Exception("Firstname is too long, please try again");
+            }
+
+            if (strlen($lastname) > 64){
+                error_log("Lastname is too long", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                throw new Exception("Lastname is too long, please try again");
+            }
+
         }
 
 

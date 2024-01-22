@@ -11,34 +11,22 @@
     else { // Following code checks the number of arguments used in POST, it can be improved... probably :3
         try {
         
-            if (!isset($_POST["submit"]) || !isset($_POST["userEmail"]) || empty($_POST["userEmail"])) {
+            if (!isset($_POST["submit"]) || !isset($_POST["userEmail"]) || empty($_POST["userEmail"]) || !isset($_POST["firstname"]) || !isset($_POST["lastname"]) || !isset($_POST["email"]) || !isset($_POST["pass"]) || !isset($_POST["permission"])) {
                 error_log("Someone tried to send a form without submitting it first or didn't set the email of the user to be edited");
                 throw new Exception("Invalid request");
             }
 
-            $count = 0;
-            
-            foreach ($_POST as $dataName => $data) 
-                if (!empty($_POST[$dataName])) ++$count;
-
-            // We used a count because it's much easier to expand the profile editing with more options
-            if ($count < 3) {   // At least submit and email should be always set
-                error_log("Admin must choose at least 1 field to edit", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                throw new Exception("Please choose at least 1 field to edit, number of empty values = $count");
-            }
-            if ($count > 7) {   // Max number of editable data is 7, so the system returns error if more data is sent 
-                error_log("Someone tried to edit more data that the system admits", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                throw new Exception("Invalid request");
+            if (empty($_POST["firstname"]) || empty($_POST["lastname"]) || empty($_POST["email"]) || empty($_POST["pass"]) || empty($_POST["permission"])) {
+                error_log("Not all fields were set, invalid form", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                throw new Exception("You can't send a form without filling all the fields");
             }
 
-            if ($dbManager->editUser($_POST["userEmail"])) 
+            if ($dbManager->editUser($_POST["userEmail"], $sessionManager)) 
                 $_SESSION["success"] = "Your changes were applied successfully!";
         }
         catch (Exception $e) {
             $_SESSION["error"] = $e->getMessage();
         }
-
-
     }
     
     unset($dbManager);
