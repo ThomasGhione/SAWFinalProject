@@ -24,7 +24,6 @@
         }
     }
     
-    unset($dbManager);
     header("Location: ../loginForm.php"); // Covers both invalid request and invalid login 
     exit;
 

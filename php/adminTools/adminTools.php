@@ -15,10 +15,8 @@
     <link rel="stylesheet" type="text/css" href="../../CSS/adminMenu.css">
 </head>
 <body>
-    <?php 
-        require_once("../shared/nav.php"); 
-        unset($dbManager);
-    ?>
+    <?php require_once("../shared/nav.php"); ?>
+    
     <main class="mainContainer">
         
         <div class="admin-menu">

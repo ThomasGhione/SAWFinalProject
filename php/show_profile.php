@@ -24,6 +24,7 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"> </script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"> </script>
+    <script src="https://kit.fontawesome.com/e856a5c7fb.js" crossorigin="anonymous"></script>
 
     <title>OpenHub - Personal Area</title>
 </head>

@@ -5,8 +5,6 @@
         header("Location: ../../../index.php");
         exit;
     }
-
-    unset($dbManager);
     
     require_once("../../phpClasses/newsletterManager.php");
     $newsletterManager = new newsletterManager();

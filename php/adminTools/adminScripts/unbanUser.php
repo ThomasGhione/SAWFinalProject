@@ -30,13 +30,11 @@
         }
 
         if ($dbManager->unbanUser($email))
-            $_SESSION["success"] = "User banned successfully";
+            $_SESSION["success"] = "User unbanned successfully";
         
     }
     catch (Exception $e) { $_SESSION["error"] = $e->getMessage(); }
 
-    unset($dbManager);
     header("Location: ../manageUsers.php");
     exit;
-
 ?>

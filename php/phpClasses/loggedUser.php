@@ -11,10 +11,11 @@
         private $birthday;
         private $description;
         private $newsletter;
-private $permission;
+        private $permission;
 
         function __construct(string $email) {
             $dbManager = new dbManager();
+            $dbManager->activateConn();
             $result = $dbManager->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$email]);
             try {
                 if ($result->num_rows == 0) {
@@ -51,6 +52,8 @@ private $permission;
             $this->setNewsletter(htmlspecialchars($row["newsletter"]));
 
             $this->setPermission(htmlspecialchars($row["permission"]));
+
+            $dbManager->closeConn();
         }
 
 

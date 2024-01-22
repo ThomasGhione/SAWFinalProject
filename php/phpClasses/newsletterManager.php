@@ -75,7 +75,7 @@
         }
 
         function setNewsletter(&$dbManager, &$sessionManager, string $email, bool &$set): void {
-            
+            $dbManager->activateConn();
             $result = $dbManager->dbQueryWithParams("SELECT newsletter FROM users WHERE email = ?", "s", [$email]); 
             $row = $result->fetch_assoc();
             $isSubbed = $row["newsletter"];
@@ -88,6 +88,7 @@
             $result = $dbManager->dbQueryWithParams("UPDATE users SET newsletter = ? WHERE email = ?", "is", [$addFlag, $email]);
 
             $sessionManager->setNewsletter(!$isSubbed);
+            $dbManager->closeConn();
         }
     }
 

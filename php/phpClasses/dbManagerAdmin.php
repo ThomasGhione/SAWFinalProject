@@ -7,18 +7,27 @@
         // Admin Tools //
 
         function manageUsers(): array {
+            $this->activateConn();
+            
             $result = $this->dbQueryWithoutParams("SELECT * FROM users");
+            $finalResult = $result->fetch_all(MYSQLI_ASSOC);
 
-            return $result->fetch_all(MYSQLI_ASSOC);
+            $this->closeConn();
+            return $finalResult;
         }
 
         function manageSubbedToNewsletter(): array {
-            $result = $this->dbQueryWithoutParams("SELECT * FROM users WHERE newsletter = 1");
+            $this->activateConn();
             
-            return $result->fetch_all(MYSQLI_ASSOC);
+            $result = $this->dbQueryWithoutParams("SELECT * FROM users WHERE newsletter = 1");
+            $finalResult = $result->fetch_all(MYSQLI_ASSOC);
+
+            $this->closeConn();
+            return $finalResult;
         }
 
         function unbanUser(string $userEmail): bool {
+            $this->activateConn();
             $this->conn->begin_transaction();
 
             try {
@@ -28,16 +37,19 @@
             }
             catch (Exception $e) {
                 $this->conn->rollback();
+                $this->closeConn();
                 error_log($e->getMessage(), 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 $_SESSION["error"] = $e->getMessage();
                 return false;
             }
 
             $this->conn->commit();
+            $this->closeConn();
             return true;
         }
 
         function banUser(string $userEmail): bool {
+            $this->activateConn();
             $this->conn->begin_transaction();
 
             try {
@@ -47,16 +59,19 @@
             }
             catch (Exception $e) {
                 $this->conn->rollback();
+                $this->closeConn();
                 error_log($e->getMessage(), 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 $_SESSION["error"] = $e->getMessage();
                 return false;
             }
 
             $this->conn->commit();
+            $this->closeConn();
             return true;
         }
 
         function deleteUser(string $userEmail): bool {
+            $this->activateConn();
             $this->conn->begin_transaction();
 
             try {
@@ -66,18 +81,20 @@
             } 
             catch (Exception $e) {
                 $this->conn->rollback();
+                $this->closeConn();
                 error_log($e->getMessage(), 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 $_SESSION["error"] = $e->getMessage();
                 return false;
             }
             
             $this->conn->commit();
+            $this->closeConn();
             return true;
         }
 
-        // TODO Change this function to use updated way to update users
         function editUser(string $userEmail, &$sessionManager): bool {
             try {
+                $this->activateConn();
                 $this->conn->begin_transaction();
 
                 $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$userEmail]); 
@@ -128,11 +145,13 @@
             }
             catch (Exception $e) {
                 $this->conn->rollback();
+                $this->closeConn();
                 $_SESSION["error"] = $e->getMessage();
                 return false;
             }
 
             $this->conn->commit();
+            $this->closeConn();
             return true;
         }
     }

@@ -19,7 +19,6 @@
 <body>
     <?php 
         include("./shared/nav.php"); 
-        unset($dbManager);
     ?>
 
     
@@ -65,20 +64,20 @@
             let newPassword = document.getElementById("newPassword").value.trim();
 
             if (oldPassword == "" || newPassword == ""){
+                event.preventDefault();
                 alert("You must fill all the fields");
-                preventDefault();
             }
             else if (oldPassword.length < 8) {
+                event.preventDefault();
                 alert("Your old password must be at least 8 characters long");
-                preventDefault();
             }
             else if (newPassword.length < 8) {
+                event.preventDefault();
                 alert("Your new password must be at least 8 characters long");
-                preventDefault();
             }
             else if (oldPassword == newPassword) {
+                event.preventDefault();
                 alert("Your new password must be different from your old password");
-                preventDefault();
             }
         });
     </script>

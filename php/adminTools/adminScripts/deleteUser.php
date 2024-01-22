@@ -36,7 +36,6 @@
     }
     catch (Exception $e) { $_SESSION["error"] = $e->getMessage(); }
 
-    unset($dbManager);
     header("Location: ../manageUsers.php");
     exit;
 

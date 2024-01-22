@@ -16,8 +16,6 @@
     $email = urldecode($_GET["email"]);
 
     $currentUser = new loggedUser($email);
-
-    unset($dbManager);
 ?>
 
 
@@ -47,7 +45,7 @@
                 }
             ?>
 
-            <form action="./adminScripts/editUser.php" method="post">
+            <form id="form" action="./adminScripts/editUser.php" method="post">
                 
                 <div class="inputBox">
                     <label for="firstname">Firstname: </label>
@@ -111,31 +109,90 @@
             el5.value = "";
         });
 
-        document.getElementById("form").addEventListener("submit", function (event) {
-            let firstname = document.getElementById("firstname").value;
-            let lastname = document.getElementById("lastname").value;
-            let email = document.getElementById("newEmail").value;
-            let pass = document.getElementById("pass").value;
+        emailFlag = true;
+        emailMessage = "";
 
-            if ((firstname.trim() === "") || lastname.trim() === "" || newEmail.trim() === "" || pass.trim() === "") {
+        document.getElementById("form").addEventListener("submit", function (event) {
+            let firstname = document.getElementById("firstname").value.trim();
+            let lastname = document.getElementById("lastname").value.trim();
+            let email = document.getElementById("newEmail").value.trim();
+            let pass = document.getElementById("pass").value.trim();
+
+            if (firstname === "" || lastname === "" || newEmail === "" || pass === "") {
                 event.preventDefault();
                 alert("You can't set an empty field");
             }
-
-            if ((pass.length < 8)) {
+            else if ((pass.length < 8)) {
                 event.preventDefault();
                 alert("Password must be at least 8 characters long");
             }
+            else if (!emailFlag) {
+                event.preventDefault();
+                alert(emailMessage);
+            }
+        });
+
+        document.getElementById("newEmail").addEventListener("change", async function (event) {
+            let email = document.getElementById("newEmail").value.trim();
 
             let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-            if (!emailRegex.text(newEmail)) {
-                event.preventDefault();
-                alert("Email is not valid");
+            if (email === currentEmail) {
+                emailFlag = true;
+                emailMessage = "";
+                return;
             }
 
-        });
+            if (!emailRegex.test(email)) {
+                emailFlag = false;
+                emailMessage = "Invalid email";
+                return;
+            }
 
+            let res = await checkEmail(email);            
+        
+            if (res === "exists") {
+                emailFlag = false;
+                emailMessage = "This email is already in use";
+            }
+            else if (res === "error") {
+                emailFlag = false;
+                emailMessage = "Something went wrong, try again later";
+            }
+            else {
+                emailFlag = true;
+                emailMessage = "";
+            }
+        }); 
+
+        async function checkEmail (email) {
+            try {
+                const response = await fetch("../scripts/ajaxScripts/check_email.php", {
+                    method: "POST",
+                    headers: { 
+                        "Content-Type": "application/x-www-form-urlencoded", 
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
+                    body: "email=" + encodeURIComponent(email),
+                });                emailFlag = true;
+                emailMessage = "";
+
+                if (!response.ok) 
+                    throw new Error("Something went wrong, try again later");
+
+                const data = await response.text();
+
+                console.log(data);
+
+                if (data === "exists") {
+                    console.log("This email is already in use");
+                    return data;
+                }
+            } catch (error) {
+                console.error(error);
+                return "error";
+            }
+        };
 
     </script>
 

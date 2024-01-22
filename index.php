@@ -9,6 +9,9 @@
 
 <head>
     <?php require("./php/shared/commonHead.php"); ?>
+
+    <script src="https://kit.fontawesome.com/e856a5c7fb.js" crossorigin="anonymous"></script>
+
     <title>OpenHub Homepage</title>
 </head>
 

@@ -49,7 +49,6 @@
         }
     }
 
-    unset($dbManager);
     header("Location: ../addNewRepoForm.php");
     exit;
 

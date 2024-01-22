@@ -8,14 +8,10 @@
 
     require("./shared/banCheck.php");
 
-    unset($dbManager);
-
     if (!isset($_GET["name"]) || empty(urldecode($_GET["name"]))) {
         header("Location: ./manageUsers.php");
         exit;
     }
-
-    $email = urldecode($_GET["name"]);
 ?>
 
 
@@ -51,7 +47,7 @@
                     <input required type="file" id="fileUpload" name="fileUpload">
                 </div>
             
-                <input type="hidden" name="repoToEdit" value="<?php echo htmlspecialchars($_GET["name"])?>">
+                <input type="hidden" name="repoToEdit" value="<?php echo htmlspecialchars(urldecode($_GET["name"]))?>">
 
                 <input type="submit" class="formButton" name="submit" value="Edit">
             </form>

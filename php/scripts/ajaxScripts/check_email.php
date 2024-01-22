@@ -11,7 +11,6 @@
     $email = urldecode($_POST["email"]);
 
     echo $dbManager->emailExists($email) ? "exists" : "notExists";
-
-    unset($dbManager);
+    
     exit;
 ?>

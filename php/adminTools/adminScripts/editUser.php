@@ -29,7 +29,6 @@
         }
     }
     
-    unset($dbManager);
     header("Location: ../manageUsers.php"); // Covers both invalid request and invalid login 
     exit;    
 ?>

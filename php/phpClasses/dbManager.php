@@ -14,23 +14,31 @@
 
 
         protected $conn;
-        
-        function __construct() {
+
+        function __destruct() {
+            $this->closeConn();
+        }
+
+        function activateConn() {
             try {
-                if (!($this->conn = new mysqli(dbManager::DB_SERVER, dbManager::USERNAME, dbManager::PASSWORD, dbManager::DB_NAME))) {
-                    error_log("Error: cannot connect to database", 3 , $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                    throw new Exception("Error: cannot connect to DB");
-                }  
+                if (!isset($this->conn))
+                    if (!($this->conn = new mysqli(dbManager::DB_SERVER, dbManager::USERNAME, dbManager::PASSWORD, dbManager::DB_NAME))) {
+                        error_log("Error: cannot connect to database", 3 , $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                        throw new Exception("Error: cannot connect to DB");
+                    }
             }
             catch (Exception $e) { die ($e->getMessage() . mysqli_connect_error()); } // TODO if die then create error page rather than BOOM the server
         }
 
-        function __destruct() {
-            if ($this->conn) $this->conn->close();
+        function closeConn() {
+            if ($this->conn) {
+                $this->conn->close();
+                $this->conn = null;
+            }
         }
 
-        // Query functions //
 
+        // Query functions //
         function dbQueryWithParams(string $query, string $paramsTypes, array $params) {
             try {
                 if (!($stmt = $this->conn->prepare($query))) {
@@ -79,6 +87,8 @@
 
         function registerUser($user): bool {
             try {
+                $this->activateConn();
+
                 $this->conn->begin_transaction();
 
                 $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$user->getEmail()]);
@@ -104,6 +114,7 @@
             catch (Exception $e) {
                 $this->conn->rollback();
                 $_SESSION["error"] = $e->getMessage();
+                $this->closeConn();
                 header("Location: ../registrationForm.php");
                 exit;
             }
@@ -111,11 +122,14 @@
             $_SESSION["success"] = "Registration Completed, please login to access the website";
             
             $this->conn->commit();
+            $this->closeConn();
             return true;
         }
 
         function loginUser($user): bool {
             try {
+                $this->activateConn();
+                
                 $this->conn->begin_transaction();
 
                 $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$user->getEmail()]);
@@ -160,11 +174,14 @@
             catch (Exception $e) {
                 $this->conn->rollback();
                 $_SESSION["error"] = $e->getMessage();
+                $this->closeConn();
                 header("Location: ../loginForm.php");
                 exit;
             }
 
             $this->conn->commit();
+            $this->closeConn();
+
             $user->setPermission($row["permission"]);
             $user->setNewsletter($row["newsletter"]);
             
@@ -175,17 +192,19 @@
 
         // Checks whether the user is banned or not
         function isBanned(string $email): bool {
+            
             $result = $this->dbQueryWithParams("SELECT permission FROM users WHERE email = ?", "s", [$email]);
-            
-            $row = $result->fetch_assoc();
-            
-            return ($row["permission"] == "banned");
+            $permission = $result->fetch_assoc()["permission"];
+
+            return ($permission == "banned");
         }
 
         // Editing profile functions (only for users)
 
         function editProfile(string $email, &$sessionManager): bool {
             try {
+                $this->activateConn();
+                
                 $this->conn->begin_transaction();
 
                 $newEmail = trim($_POST["email"]);
@@ -216,15 +235,19 @@
             }
             catch (Exception $e) {
                 $this->conn->rollback();
+                $this->closeConn();
                 $_SESSION["error"] = $e->getMessage();
                 return false;
             }
 
             $this->conn->commit();
+            $this->closeConn();
             return true;
         }
 
         function updatePassword(string $email): bool {
+
+            $this->activateConn();
 
             $this->conn->begin_transaction();
 
@@ -262,11 +285,13 @@
             }
             catch (Exception $e) {
                 $this->conn->rollback();
+                $this->closeConn();
                 $_SESSION["error"] = $e->getMessage();
                 return false;
             }
 
             $this->conn->commit();
+            $this->closeConn();
             return true;
         }
         
@@ -275,6 +300,7 @@
         
         function deleteRememberMeCookieFromDB(string &$cookie, string $email): bool {    // Used for logout
             try {
+                $this->activateConn();
                 $this->conn->begin_transaction();
 
                 $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && UID = ?)", "ss", [$email, $cookie]);
@@ -286,15 +312,19 @@
             }
             catch (Exception $e) {
                 $this->conn->rollback();
+                $this->closeConn();
                 $_SESSION["error"] = $e->getMessage();
                 return false;
             }
 
             $this->conn->commit();
+            $this->closeConn();
             return true;
         }
 
         function recoverSession(string &$cookie, &$session): void {
+            $this->activateConn();
+            
             $cookieArr = explode(" ", $cookie);
 
             $result = $this->dbQueryWithParams("SELECT * FROM remMeCookies WHERE (UID = ? && (STR_TO_DATE(ExpDate, '%Y-%m-%d') > CURDATE()))", "s", [$cookieArr[0]]);
@@ -308,83 +338,46 @@
                 $session->setSessionVariables($row["email"], $row["permission"]);
             }
             
+            $this->closeConn();
             // otherwise session won't be set
         }
             
 
         // Search Area tools //
 
-        function searchUsers(string &$userQuery): void {
-            
-            $userQuery = "%" . $userQuery . "%";
+        function searchUsers(string &$userQuery): array {
+            $this->activateConn();
+
+            $userQuery = "%" . htmlspecialchars(trim($userQuery)) . "%";
             $result = $this->dbQueryWithParams("SELECT email, firstname, lastname FROM users WHERE (email LIKE ? OR firstname LIKE ? OR lastname LIKE ?)", "sss", [$userQuery, $userQuery, $userQuery]);
+            $finalResult = $result->fetch_all(MYSQLI_ASSOC);
 
-            if (!$result->num_rows) 
-                echo "<h2>No users were found with these values</h2>";
-            else {
-                echo "
-                    <table id='table-searchUsers'>
-                    <caption> Users found </caption>
-                    <thead>
-                        <tr><th>Email</th><th>Firstname</th><th>Lastname</th></tr>
-                    </thead>
-                    <tbody>
-                ";
+            $this->closeConn();
 
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-
-                    echo "<td>" . $row["email"] . "</td>";
-                    echo "<td>" . $row["firstname"] . "</td>";
-                    echo "<td>" . $row["lastname"] . "</td>";
-
-                    echo "</tr>";
-                }
-
-                echo "</tbody>
-                    </table>
-                ";     
-            }       
+            return $finalResult;      
         }
 
-        function searchRepos(string &$repoQuery): void {
-                        
+        function searchRepos(string &$repoQuery): array {
+            $this->activateConn();
+            
             $repoQuery = "%" . htmlspecialchars(trim($repoQuery)) . "%";
             $result = $this->dbQueryWithParams("SELECT Name, Owner, CreationDate, LastModified FROM repos WHERE (Owner LIKE ? OR Name LIKE ?)", "ss", [$repoQuery, $repoQuery]);
+            $finalResult = $result->fetch_all(MYSQLI_ASSOC);
 
-            if (!$result->num_rows) 
-                echo "<h2>No repos were found with these values</h2>";
-            else {
-                echo "
-                    <table id='table-searchRepos'>
-                    <caption> Users found </caption>
-                    <thead>
-                        <tr><th>Owner</th><th>Name</th><th>CreationDate</th><th>LastModified</th></tr>
-                    </thead>
-                    <tbody>
-                ";
+            $this->closeConn();
 
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-
-                    echo "<td>" . $row["Owner"] . "</td>";
-                    echo "<td>" . $row["Name"] . "</td>";
-                    echo "<td>" . $row["CreationDate"] . "</td>";
-                    echo "<td>" . $row["LastModified"] . "</td>";
-                
-                    echo "</tr>";
-                }
-
-                echo "</tbody>
-                    </table>
-                ";
-            }    
+            return $finalResult;
         }
 
         function showRepos(string $email): array {
-            $result = $this->dbQueryWithParams("SELECT Name, CreationDate, LastModified FROM repos WHERE Owner = ?", "s", [$email]);
+            $this->activateConn();
             
-            return $result->fetch_all(MYSQLI_ASSOC);
+            $result = $this->dbQueryWithParams("SELECT Name, CreationDate, LastModified FROM repos WHERE Owner = ?", "s", [$email]);
+            $finalResult = $result->fetch_all(MYSQLI_ASSOC);
+
+            $this->closeConn();
+
+            return $finalResult;
         }
 
 
@@ -396,6 +389,7 @@
             $currentDate = date("Y-m-d", time());
         
             try {
+                $this->activateConn();
                 $this->conn->begin_transaction();
 
                 $result = $this->dbQueryWithParams("INSERT INTO repos (Name, Owner, CreationDate, LastModified, RepoLocation) VALUES (?, ?, ?, ?, ?)", "sssss", [$reposName, $email, $currentDate, $currentDate, $pathLocation]);
@@ -422,17 +416,20 @@
             }
             catch (Exception $e) {
                 $this->conn->rollback();
+                $this->closeConn();
                 $_SESSION["error"] = $e->getMessage();
                 return false;
             }
             
             $this->conn->commit();
+            $this->closeConn();
             return true;
         }
 
         function deleteRepo(string $email, string $repoName): bool {
             
             try{
+                $this->activateConn();
                 $this->conn->begin_transaction();
 
                 $result = $this->dbQueryWithParams("SELECT * FROM repos WHERE (Owner = ? && Name = ?)", "ss", [$email, $repoName]);
@@ -456,11 +453,13 @@
             }
             catch (Exception $e) {
                 $this->conn->rollback();
+                $this->closeConn();
                 $_SESSION["error"] = $e->getMessage();
                 return false;
             }
 
             $this->conn->commit();
+            $this->closeConn();
             return true;
         }
 
@@ -469,6 +468,8 @@
             $currentDate = date("Y-m-d", time());
             
             try {
+                $this->activateConn();
+
                 $this->conn->begin_transaction();
 
                 $result = $this->dbQueryWithParams("SELECT * FROM repos WHERE (Owner = ? && Name = ?)", "ss", [$email, $repoToEdit]);
@@ -512,11 +513,13 @@
             }
             catch (Exception $e) {
                 $this->conn->rollback();
+                $this->closeConn();
                 $_SESSION["error"] = $e->getMessage();
                 return false;
             }
 
             $this->conn->commit();
+            $this->closeConn();
             return true;
         }
 
@@ -561,6 +564,7 @@
         }
 
         function emailExists($email): bool {
+            $this->activateConn();
             $result = $this->dbQueryWithParams("SELECT email FROM users WHERE email = ?", "s", [$email]);
             return ($result->num_rows == 0) ? false : true;
         }
@@ -595,19 +599,6 @@
             if (strlen($lastname) > 64){
                 error_log("Lastname is too long", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("Lastname is too long, please try again");
-            }
-
-        }
-
-
-        // Error methods //
-
-        function manageFatalError() {
-            $lastError = error_get_last();
-            if ($lastError["type"] === E_ERROR) { 
-                error_log("Fatal error: " . $lastError["message"], 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                $_SESSION["error"] = "Unexpected error occured, try again later";
-                return false; // fre non so perché tu l'abbia aggiunta in manageError ma nel dubbio la aggiungo anche io qui
             }
         }
     }

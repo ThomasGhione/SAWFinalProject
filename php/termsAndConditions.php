@@ -2,8 +2,6 @@
     require("./shared/initializePage.php");
 
     require("./shared/banCheck.php");
-
-    unset($dbManager);
 ?>
 
 <!DOCTYPE html>

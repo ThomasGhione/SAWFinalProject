@@ -1,4 +1,4 @@
-<?php
+<?php    
     require("../../shared/initializePageAdmin.php");
     
     if (!$sessionManager->isSessionSet() || !$sessionManager->isAdmin()) {
@@ -35,7 +35,6 @@
     }
     catch (Exception $e) { $_SESSION["error"] = $e->getMessage(); }
 
-    unset($dbManager);
     header("Location: ../manageUsers.php");
     exit;
 

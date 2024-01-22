@@ -12,7 +12,6 @@
         $cookieManager->deleteCookie("remMeCookie");
     }
     
-    unset($dbManager);
     $sessionManager->endSession();
     
     header("Location: /SAW/SAWFinalProject/index.php");

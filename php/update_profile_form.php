@@ -15,7 +15,6 @@
     $firstname = $loggedUser->getFirstname();
     $lastname = $loggedUser->getLastname();
     $email = $loggedUser->getEmail();
-
 ?>
 
 
@@ -26,11 +25,7 @@
     <title>OpenHub - Update your profile page</title>
 </head>
 <body>
-    <?php 
-        include("./shared/nav.php"); 
-        unset($dbManager);
-    ?>
-
+    <?php include("./shared/nav.php"); ?>
     
     <main class="mainContainer">
 
@@ -94,7 +89,7 @@
         });
 
 
-        emailFlag = false;
+        emailFlag = true;
         emailMessage = "";
         
         document.getElementById("form").addEventListener("submit", function (event) {
@@ -102,7 +97,7 @@
             let lastname = document.getElementById("lastname").value.trim();
             let email = document.getElementById("email").value.trim();
 
-            if ((firstname === "") || lastname === "" || email === "") {
+            if (firstname === "" || lastname === "" || email === "") {
                 event.preventDefault();
                 alert("You can't set an empty field");
             }
@@ -117,9 +112,16 @@
 
             let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
+            if (email === currentEmail) {
+                emailFlag = true;
+                emailMessage = "";
+                return;
+            }
+
             if (!emailRegex.test(email)) {
                 emailFlag = false;
                 emailMessage = "Invalid email";
+                return;
             }
 
             let res = await checkEmail(email);            
@@ -147,7 +149,8 @@
                         "X-Requested-With": "XMLHttpRequest"
                     },
                     body: "email=" + encodeURIComponent(email),
-                });
+                });                emailFlag = true;
+                emailMessage = "";
 
                 if (!response.ok) 
                     throw new Error("Something went wrong, try again later");

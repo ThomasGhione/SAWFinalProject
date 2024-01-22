@@ -54,6 +54,7 @@
 
         <?php
             if ($sessionManager->isSessionSet()) {
+                $dbManager->activateConn();
                 $result = $dbManager->dbQueryWithParams("SELECT pfp FROM users WHERE email = ?", "s", [$sessionManager->getEmail()]);
                 
                 $row = $result->fetch_assoc();
@@ -62,6 +63,8 @@
                     $currentPfp = "default.jpg";
                 else
                     $currentPfp = $sessionManager->getEmail();
+
+                $dbManager->closeConn();
 
                 echo "<a href=$root/php/show_profile.php><img class='navUsrImg' src='$root/images/pfps/$currentPfp' alt='Your profile picture'></a>";
             }
