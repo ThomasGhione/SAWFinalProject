@@ -30,13 +30,13 @@
                 throw new Exception("A repo with this name already exists, please chooese another name");
             }
 
-            $fileName = $_FILES["fileUpload"]["name"];
             if (preg_match("/[.,\/]/", $repoName)) {
                 error_log("$email tried to create a repo with a name that contained invalid characters", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("You cannot create a repo that contains these invalid characters , . /");
             }
 
-            if (preg_match("/[.,\/]/", $fileName)) {
+            $fileNameWithoutExtension = pathinfo($_FILES["fileUpload"]["name"], PATHINFO_FILENAME);
+            if (preg_match("/[.,\/]/", $fileNameWithoutExtension)) {
                 error_log("$email tried to upload a file with a name that contained invalid characters", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("You cannot upload a file that contains these invalid characters , . /");
             }

@@ -111,7 +111,10 @@
     <?php include("shared/footer.php") ?>
 
     <script>
-
+        function confirmDelete() {
+            return confirm("Are you sure you want to delete this repo?");
+        }
+        
         $(document).ready( function () {
             $('#table-userRepos').DataTable();
         } );

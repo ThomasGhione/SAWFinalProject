@@ -69,13 +69,17 @@
                 alert("One of the fields are empty");
                 event.preventDefault();
             }
-            else if (file.type !== "application/zip" || file.type !== "application/x-zip-compressed") {
+            else if (file.type !== "application/zip" && file.type !== "application/x-zip-compressed") {
                 // application/zip are sent from linux, application/x-zip-compressed are sent from windows
                 alert("Only .zip files are accepted");
                 event.preventDefault();
             }
             else if (/[.,\/]/.test(reposName) || /[.,\/]/.test(fileName)) {
                 alert("Repository name should not contain . / or ,");
+                event.preventDefault();
+            }
+            else if ( /[.,\/]/.test(fileName)) {
+                alert("File name should not contain . / or ,");
                 event.preventDefault();
             }
 

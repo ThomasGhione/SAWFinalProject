@@ -6,6 +6,11 @@ footer {
     padding: 10px;
 }
 
+.footerLink:link, .footerLink:visited {
+    color: white;
+    text-decoration: underline;
+}
+
 @media screen and (max-width: 600px) {
     footer > * {
         font-size: 14px;

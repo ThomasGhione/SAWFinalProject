@@ -409,7 +409,7 @@
             
                 $tempPath = $_FILES["fileUpload"]["tmp_name"];
         
-                if (!move_uploaded_file($tempPath, "../../repos/$email/$reposName/ . $fileName")) {
+                if (!move_uploaded_file($tempPath, "../../repos/$email/$reposName/$fileName")) {
                     error_log("Something went wrong while transferring the file into its new location", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
@@ -506,7 +506,7 @@
                 $fileName = htmlspecialchars(trim($_FILES["fileUpload"]["name"]));
                 $tempPath = $_FILES["fileUpload"]["tmp_name"]; // The server saves the file in a temporary location, so we need to move it to its final location
 
-                if (!move_uploaded_file($tempPath, "../../repos/$email/$repoToEdit/ . $fileName")) {
+                if (!move_uploaded_file($tempPath, "../../repos/$email/$repoToEdit/$fileName")) {
                     error_log("Something went wrong while transferring the file into its new location", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }

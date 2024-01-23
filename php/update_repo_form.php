@@ -1,7 +1,7 @@
 <?php 
     require("./shared/initializePage.php");
 
-    if (!$sessionManager->isSessionSet() || !$sessionManager->isAdmin()) {
+    if (!$sessionManager->isSessionSet()) {
         header("Location: ../../index.php");
         exit;
     }
@@ -68,7 +68,7 @@
                 alert("You must upload a file");
                 event.preventDefault();
             }
-            else if (file.type !== "application/zip" || file.type !== "application/x-zip-compressed") {
+            else if (file.type !== "application/zip" && file.type !== "application/x-zip-compressed") {
                 alert("Only .zip files are accepted");
                 event.preventDefault();
             }
