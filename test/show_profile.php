@@ -1,14 +1,14 @@
 <?php
-    require("./shared/initializePage.php");
+    require("../php/shared/initializePage.php");
 
     if (!$sessionManager->isSessionSet()) {
-        header("Location: ./loginForm.php");
+        header("Location: ../php/loginForm.php");
         exit;
     }
 
-    require("./shared/banCheck.php");
+    require("../php/shared/banCheck.php");
 
-    require_once("./phpClasses/loggedUser.php");
+    require_once("../php/phpClasses/loggedUser.php");
 
     $currentUser = new loggedUser($sessionManager->getEmail()); // sets user data obtained from database
 ?>
@@ -17,7 +17,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php require_once("./shared/commonHead.php") ?>
+    <?php require_once("../php/shared/commonHead.php") ?>
 
     <link rel="stylesheet" type="text/css" href="../CSS/personalArea.css">
     <link rel="stylesheet" type="text/css" href="../CSS/tableStyle.css">
@@ -29,7 +29,7 @@
     <title>OpenHub - Personal Area</title>
 </head>
 <body>
-    <?php include("shared/nav.php") ?>
+    <?php include("../php/shared/nav.php") ?>
 
     <div class="main_personalarea">
         <div class="left_column">
@@ -48,16 +48,16 @@
             </div>
             
             <div class="personalAreaOptions">
-                <a class="personalAreaButton" href="./update_profile_form.php">Edit your profile</a>
-                <a class="personalAreaButton" href="./update_profile_password_form.php">Change your password</a>
-                <a class="personalAreaButton" href="./addNewRepoForm.php">Add a new repo here!</a>
+                <a class="personalAreaButton" href="../php/update_profile_form.php">Edit your profile</a>
+                <a class="personalAreaButton" href="../php/update_profile_password_form.php">Change your password</a>
+                <a class="personalAreaButton" href="../php/addNewRepoForm.php">Add a new repo here!</a>
 
                 <?php
                     
                     if (!$currentUser->getNewsletter())
-                        echo "<a class='personalAreaButton' href='./scripts/manageUserInNewsletter.php?sub=" . "true" . "'>Subscribe to our newsletter!</a>";
+                        echo "<a class='personalAreaButton' href='../php/scripts/manageUserInNewsletter.php?sub=" . "true" . "'>Subscribe to our newsletter!</a>";
                     else
-                        echo "<a class='personalAreaButton' href='./scripts/manageUserInNewsletter.php?sub=" . "false" . "'>Unsubscribe from our newsletter!</a>";
+                        echo "<a class='personalAreaButton' href='../php/scripts/manageUserInNewsletter.php?sub=" . "false" . "'>Unsubscribe from our newsletter!</a>";
 
                     if (isset($_SESSION["error"])) {
                         echo "<p class='error'>" . $_SESSION["error"] . "</p>";
@@ -108,7 +108,7 @@
         </div>
     </div>
 
-    <?php include("shared/footer.php") ?>
+    <?php include("../php/shared/footer.php") ?>
 
     <script>
         function confirmDelete() {

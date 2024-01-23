@@ -26,7 +26,6 @@
 </head>
 <body>
     <?php include("./shared/nav.php"); ?>
-
     
     <main class="mainContainer">
 
@@ -79,9 +78,6 @@
         const currentLastname = document.getElementById("lastname").value.trim();
         const currentEmail = document.getElementById("email").value.trim();
 
-        emailFlag = false;
-        emailMessage = "";
-
         document.getElementById("resetData").addEventListener("click", function (event) {
             let el1 = document.getElementById("firstname");
             let el2 = document.getElementById("lastname");
@@ -91,15 +87,41 @@
             el2.value = currentLastname;
             el3.value = currentEmail;
         });
+
+
+        emailFlag = true;
+        emailMessage = "";
         
+        document.getElementById("form").addEventListener("submit", function (event) {
+            let firstname = document.getElementById("firstname").value.trim();
+            let lastname = document.getElementById("lastname").value.trim();
+            let email = document.getElementById("email").value.trim();
+
+            if (firstname === "" || lastname === "" || email === "") {
+                event.preventDefault();
+                alert("You can't set an empty field");
+            }
+            else if (!emailFlag) {
+                event.preventDefault();
+                alert(emailMessage);
+            }
+        });   
+
         document.getElementById("email").addEventListener("change", async function (event) {
             let email = document.getElementById("email").value.trim();
 
             let emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
+            if (email === currentEmail) {
+                emailFlag = true;
+                emailMessage = "";
+                return;
+            }
+
             if (!emailRegex.test(email)) {
                 emailFlag = false;
                 emailMessage = "Invalid email";
+                return;
             }
 
             let res = await checkEmail(email);            
@@ -116,23 +138,7 @@
                 emailFlag = true;
                 emailMessage = "";
             }
-        });
-
-        document.getElementById("form").addEventListener("submit", function (event) {
-            let firstname = document.getElementById("firstname").value.trim();
-            let lastname = document.getElementById("lastname").value.trim();
-            let email = document.getElementById("email").value.trim();
-
-            if ((firstname === "") || lastname === "" || email === "") {
-                event.preventDefault();
-                alert("You can't set an empty field");
-            }
-
-            if (!emailFlag) {
-                event.preventDefault();
-                alert(emailMessage);
-            }
-        });    
+        }); 
 
         async function checkEmail (email) {
             try {
@@ -143,7 +149,8 @@
                         "X-Requested-With": "XMLHttpRequest"
                     },
                     body: "email=" + encodeURIComponent(email),
-                });
+                });                emailFlag = true;
+                emailMessage = "";
 
                 if (!response.ok) 
                     throw new Error("Something went wrong, try again later");

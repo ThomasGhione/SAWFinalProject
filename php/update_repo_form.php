@@ -1,8 +1,8 @@
 <?php 
     require("./shared/initializePage.php");
 
-    if (!$sessionManager->isSessionSet() || !$sessionManager->isAdmin()) {
-        header("Location: ../../index.php");
+    if (!$sessionManager->isSessionSet()) {
+        header("Location: ./loginForm.php");
         exit;
     }
 
@@ -12,8 +12,6 @@
         header("Location: ./manageUsers.php");
         exit;
     }
-
-    $email = urldecode($_GET["name"]);
 ?>
 
 
@@ -43,13 +41,13 @@
                 }
             ?>
 
-            <form action="./scripts/updateRepo.php" method="post" enctype="multipart/form-data">
+            <form id="form" action="./scripts/updateRepo.php" method="post" enctype="multipart/form-data">
                 <div class="inputBox">
                     <label for="fileUpload">Update your repo (only .zip files are accepted): </label>
                     <input required type="file" id="fileUpload" name="fileUpload">
                 </div>
             
-                <input type="hidden" name="repoToEdit" value="<?php echo htmlspecialchars($_GET["name"])?>">
+                <input type="hidden" name="repoToEdit" value="<?php echo htmlspecialchars(urldecode($_GET["name"]))?>">
 
                 <input type="submit" class="formButton" name="submit" value="Edit">
             </form>
@@ -61,5 +59,20 @@
     </main>
 
     <?php include("./shared/footer.php"); ?>
+
+    <script>
+        document.getElementById("form").addEventListener("submit", function (event) {
+            var file = document.getElementById("fileUpload").files[0];
+
+            if (!file) {
+                alert("You must upload a file");
+                event.preventDefault();
+            }
+            else if (file.type !== "application/zip" && file.type !== "application/x-zip-compressed") {
+                alert("Only .zip files are accepted");
+                event.preventDefault();
+            }
+        });
+    </script>
 </body>
 </html>

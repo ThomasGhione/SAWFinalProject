@@ -11,17 +11,17 @@
     else { // Following code checks the number of arguments used in POST, it can be improved... probably :3
         try {
         
-            if (!isset($_POST["submit"]) || !isset($_POST["userEmail"]) || empty($_POST["userEmail"]) || !isset($_POST["firstname"]) || !isset($_POST["lastname"]) || !isset($_POST["email"]) || !isset($_POST["pass"]) || !isset($_POST["permission"])) {
+            if (!isset($_POST["submit"]) || !isset($_POST["userEmail"]) || empty($_POST["userEmail"]) || !isset($_POST["pass"])) {
                 error_log("[" . date("Y-m-d H:i:s") . "] Someone tried to send a form without submitting it first or didn't set the email of the user to be edited");
                 throw new Exception("Invalid request");
             }
 
-            if (empty($_POST["firstname"]) || empty($_POST["lastname"]) || empty($_POST["email"]) || empty($_POST["pass"]) || empty($_POST["permission"])) {
+            if (empty($_POST["pass"])) {
                 error_log("[" . date("Y-m-d H:i:s") . "] Not all fields were set, invalid form". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("You can't send a form without filling all the fields");
             }
 
-            if ($dbManager->editUser($_POST["userEmail"], $sessionManager)) 
+            if ($dbManager->editUserPass($_POST["userEmail"])) 
                 $_SESSION["success"] = "Your changes were applied successfully!";
         }
         catch (Exception $e) {

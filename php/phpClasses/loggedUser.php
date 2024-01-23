@@ -1,7 +1,6 @@
 <?php
 
     class loggedUser {
-
         private $firstname;
         private $lastname;
         private $email;
@@ -11,14 +10,15 @@
         private $birthday;
         private $description;
         private $newsletter;
-private $permission;
+        private $permission;
 
         function __construct(string $email) {
             $dbManager = new dbManager();
+            $dbManager->activateConn();
             $result = $dbManager->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$email]);
             try {
                 if ($result->num_rows == 0) {
-                    error_log("Query failed", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Query failed". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong. Please try again later");
                 }
             }
@@ -51,6 +51,8 @@ private $permission;
             $this->setNewsletter(htmlspecialchars($row["newsletter"]));
 
             $this->setPermission(htmlspecialchars($row["permission"]));
+
+            $dbManager->closeConn();
         }
 
 
@@ -77,6 +79,5 @@ private $permission;
         function getDescription(): string { return $this->description; }
         function getNewsletter() { return $this->newsletter; }
         function getPermission(): string { return $this->permission; }
-
     }
 ?>

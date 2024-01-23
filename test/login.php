@@ -1,10 +1,10 @@
 <?php
-    require("../shared/initializePage.php");  
+    require("../php/shared/initializePage.php");  
 
-    require_once("../phpClasses/user.php");
+    require_once("../php/phpClasses/user.php");
 
     if ($sessionManager->isSessionSet()) {
-        header("Location: ../show_profile.php");
+        header("Location: ./show_profile.php");
         exit;
     }
 
@@ -19,12 +19,12 @@
             
             $sessionManager->setSessionVariables($user->getEmail(), $user->getPermission(), $user->getNewsletter());
 
-            header("Location: ../show_profile.php");
+            header("Location: ./show_profile.php");
             exit;
         }
     }
     
-    header("Location: ../loginForm.php"); // Covers both invalid request and invalid login 
+    header("Location: ../php/loginForm.php"); // Covers both invalid request and invalid login 
     exit;
 
 ?>

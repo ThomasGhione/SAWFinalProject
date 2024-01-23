@@ -1,5 +1,5 @@
 <?php
-    require("../shared/initializePage.php");
+    require("../shared/initializePageAdmin.php");
     
     if (!$sessionManager->isSessionSet() || !$sessionManager->isAdmin()) {
         header("Location: ../../index.php");
@@ -25,7 +25,34 @@
     <main class="mainContainer">
         <form action="./adminScripts/sendEmail.php" method="post">
             <div class="newsletter-container">
-                <?php $dbManagerAdmin->manageSubbedToNewsletter() ?>
+                <?php 
+                    $rows = $dbManager->manageSubbedToNewsletter();
+
+                    echo "
+                    <table id='table-manageNewsletter'>
+                    <thead>
+                        <tr><th>Firstname</th><th>Lastname</th><th>Email</th><th>Send Email</th></tr>
+                    </thead>
+                    <tbody>
+                    ";
+    
+                    foreach ($rows as $row) {
+                        echo "<tr>";
+    
+                        echo "<td>" . $row["firstname"] . "</td>";
+                        echo "<td>" . $row["lastname"] . "</td>";
+                        echo "<td>" . $row["email"] . "</td>";
+                        echo "<td><input type='checkbox' name='userCheckbox[]' value='" . $row["email"] . "'></td>";
+        
+                        echo "</tr>";
+                    }
+    
+                    echo "
+                        </tbody>
+                        </table>
+                    ";
+
+                ?>
                 <textarea name="message" id="textArea" rows="6" cols="50" style="resize: none;"></textarea>
                 <input type="hidden" name="selectedUsers" id="selectedUsersInput">
                 <input type="submit" class="newsletter-form-button" value="Submit">

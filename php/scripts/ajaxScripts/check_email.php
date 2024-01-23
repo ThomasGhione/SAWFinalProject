@@ -1,10 +1,7 @@
 <?php     
     require_once("../../shared/initializePage.php");
 
-    if (!$sessionManager->isSessionSet()) {
-        header("Location: ../../loginForm.php");
-        exit;
-    }
+    // Can't use session control because this script can be called also from Registration page
 
     if(($_SERVER["REQUEST_METHOD"] !== "POST") || (empty($_SERVER["HTTP_X_REQUESTED_WITH"])) || !isset($_POST["email"]) || (empty($_POST["email"])) || !filter_var(urldecode($_POST["email"]), FILTER_VALIDATE_EMAIL)) {
         echo "Invalid request";
@@ -13,11 +10,7 @@
 
     $email = urldecode($_POST["email"]);
 
-    if ($dbManager->emailExists($email)) 
-        echo "exists";
-    else
-        echo "notExists";
-
-    unset($dbManager);
+    echo $dbManager->emailExists($email) ? "exists" : "notExists";
+    
     exit;
 ?>

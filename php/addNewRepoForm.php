@@ -2,7 +2,7 @@
     require("./shared/initializePage.php");
 
     if (!$sessionManager->isSessionSet()) {
-        header("Location: ../index.php");
+        header("Location: ./loginForm.php");
         exit;
     }
 
@@ -33,8 +33,6 @@
                     echo "<p class='success'>" . $_SESSION["success"] . "</p>";
                     unset($_SESSION["success"]);
                 }
-                else
-                    echo "<p class='error'>&nbsp;</p>"; 
             ?>
 
             <form id="repoForm" action="./scripts/addNewRepo.php" method="post" enctype="multipart/form-data"> 
@@ -64,11 +62,25 @@
         
         document.getElementById("repoForm").addEventListener("submit", function(event) {
             var reposName = document.getElementById("reposName").value;
-            var fileName = document.getElementById("fileUpload").files[0].name;
+            var file = document.getElementById("fileUpload").files[0];
+            var fileName = file.name.substring(0, file.name.lastIndexOf(".zip"));
 
-            if (/[.,\/?]/.test(reposName) || /[.,\/?]/.test(fileName)) {
+            if (reposName == "" || !file) {
+                alert("One of the fields are empty");
                 event.preventDefault();
-                alert("Repository name should not contain . / or ,")
+            }
+            else if (file.type !== "application/zip" && file.type !== "application/x-zip-compressed") {
+                // application/zip are sent from linux, application/x-zip-compressed are sent from windows
+                alert("Only .zip files are accepted");
+                event.preventDefault();
+            }
+            else if (/[.,\/]/.test(reposName) || /[.,\/]/.test(fileName)) {
+                alert("Repository name should not contain . / or ,");
+                event.preventDefault();
+            }
+            else if ( /[.,\/]/.test(fileName)) {
+                alert("File name should not contain . / or ,");
+                event.preventDefault();
             }
 
         })

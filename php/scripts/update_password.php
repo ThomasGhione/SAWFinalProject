@@ -11,12 +11,12 @@
     else {
         try {
             if (!isset($_POST["submit"]) || !isset($_POST["oldPassword"]) || !isset($_POST["newPassword"])){
-                error_log("Invalid request", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("[" . date("Y-m-d H:i:s") . "] Invalid request". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("Invalid request");
             }
 
             if (empty($_POST["oldPassword"]) || (empty($_POST["newPassword"]))) {
-                error_log("At least one of the fields in update_password is empty", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("[" . date("Y-m-d H:i:s") . "] At least one of the fields in update_password is empty". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("No fields can be empty");
             }
 

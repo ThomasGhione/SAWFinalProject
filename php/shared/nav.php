@@ -54,6 +54,7 @@
 
         <?php
             if ($sessionManager->isSessionSet()) {
+                $dbManager->activateConn();
                 $result = $dbManager->dbQueryWithParams("SELECT pfp FROM users WHERE email = ?", "s", [$sessionManager->getEmail()]);
                 
                 $row = $result->fetch_assoc();
@@ -63,10 +64,26 @@
                 else
                     $currentPfp = $sessionManager->getEmail();
 
+                $dbManager->closeConn();
+
                 echo "<a href=$root/php/show_profile.php><img class='navUsrImg' src='$root/images/pfps/$currentPfp' alt='Your profile picture'></a>";
             }
         ?>
         
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("searchAreaForm").addEventListener("submit", function (event) {
+                let searchBar = document.getElementById("searchBar").value.trim();
+
+                if (searchBar == "") {
+                    event.preventDefault();
+                    alert("You must enter something to search!");
+                }
+            })
+        })
+    </script>
+
 
 </nav> 
