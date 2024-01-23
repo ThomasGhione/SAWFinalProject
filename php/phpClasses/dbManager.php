@@ -355,7 +355,7 @@
                 $result = $this->dbQueryWithParams("SELECT email, permission FROM users WHERE email = ?", "s", [$row["email"]]);
                 $row = $result->fetch_assoc();
                     
-                $session->setSessionVariables($row["email"], $row["permission"]);
+                $session->setSessionVariablesEmailAndPermission($row["email"], $row["permission"]);
             }
             
             $this->closeConn();
