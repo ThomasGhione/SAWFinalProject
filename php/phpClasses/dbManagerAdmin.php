@@ -6,6 +6,7 @@
 
         // Admin Tools //
 
+        // this method returns the array of all the users in the database
         function manageUsers(): array {
             $this->activateConn();
             
@@ -16,6 +17,7 @@
             return $finalResult;
         }
 
+        // this method returns the array of all the users in the database that are subscribed to the newsletter
         function manageSubbedToNewsletter(): array {
             $this->activateConn();
             
@@ -26,6 +28,7 @@
             return $finalResult;
         }
 
+        // this method returns a bool that indicates if the user's been unbanned successfully
         function unbanUser(string $userEmail): bool {
             $this->activateConn();
             $this->conn->begin_transaction();
@@ -48,13 +51,14 @@
             return true;
         }
 
+        // this method returns a bool that indicates if the user's been banned successfully
         function banUser(string $userEmail): bool {
             $this->activateConn();
             $this->conn->begin_transaction();
 
             try {
                 $result = $this->dbQueryWithParams("UPDATE users SET permission = 'banned' WHERE email = ?", "s", [$userEmail]);
-                if ($result != 1)
+                if ($result != 1) // result should be 1, if it's not it means that the user wasn't found
                     throw new Exception("Something went wrong when banning a user, probably user wasn't defined, see final error: " . error_get_last());
             }
             catch (Exception $e) {
@@ -70,13 +74,14 @@
             return true;
         }
 
+        // this method returns a bool that indicates if the user's been deleted successfully
         function deleteUser(string $userEmail): bool {
             $this->activateConn();
             $this->conn->begin_transaction();
 
             try {
                 $result = $this->dbQueryWithParams("DELETE FROM users WHERE email=?", "s", [$userEmail]);
-                if ($result != 1)
+                if ($result != 1) // result should be 1, if it's not it means that the user wasn't found
                     throw new Exception("Something went wrong when deleting a user, probably user wasn't defined, see final error: " . error_get_last());
             } 
             catch (Exception $e) {
@@ -92,14 +97,15 @@
             return true;
         }
 
+        // this method returns a bool that indicates if the user's been edited successfully
         function editUser(string $userEmail, &$sessionManager): bool {
             try {
                 $this->activateConn();
                 $this->conn->begin_transaction();
 
                 $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$userEmail]); 
-                if ($result->num_rows != 1) {
-                    error_log("This user does not exist", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                if ($result->num_rows != 1) { // if the user doesn't exist throws an error
+                    error_log("\n" . "This user does not exist", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Tried to edit a user that does not exist");
                 }
 
@@ -114,8 +120,9 @@
 
                 $permission = $_POST["permission"];
 
+                // permission is valid only if it's one of the following: user, mod, admin, banned
                 if ($permission != "user" && $permission != "mod" && $permission != "admin" && $permission != "banned") {
-                    error_log("Invalid permission", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("\n" . "Invalid permission", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Invalid permission");
                 }
 
@@ -123,7 +130,7 @@
                 $result = $this->dbQueryWithParams("UPDATE users SET firstname = ?, lastname = ?, email = ?, permission = ? WHERE email = ?", "sssss", [$firstname, $lastname, $newEmail, $permission, $userEmail]);
 
                 if ($result != 1){
-                    error_log("Something went wrong while updating user's data from Manage Users page", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("\n" . "Something went wrong while updating user's data from Manage Users page", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
 
@@ -149,28 +156,28 @@
             return true;
         }
 
-        function editUserPass (string $userEmail): bool {
+        function editUserPass(string $userEmail): bool {
             try {
                 $this->activateConn();
                 $this->conn->begin_transaction();
 
                 $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$userEmail]); 
-                if ($result->num_rows != 1) {
-                    error_log("This user does not exist", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                if ($result->num_rows != 1) { // user must exists
+                    error_log("\n" . "This user does not exist", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Tried to edit a user that does not exist");
                 }
 
                 $pass = trim($_POST["pass"]);
                 if (strlen($pass) < 8) {
-                    error_log("Choose a password with at least 8 characters", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("\n" . "Choose a password with at least 8 characters", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Choose a password with at least 8 characters");
                 }
                 $pass = password_hash($pass, PASSWORD_DEFAULT);
 
                 $result = $this->dbQueryWithParams("UPDATE users SET password = ? WHERE email = ?", "ss", [$pass, $userEmail]);
 
-                if ($result != 1){
-                    error_log("Something went wrong while updating user's data from Manage Users page", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                if ($result != 1) {
+                    error_log("\n" . "Something went wrong while updating user's data from Manage Users page", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
             }

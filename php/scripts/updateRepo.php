@@ -14,13 +14,13 @@
     else {
         try {
             if (!isset($_POST["submit"]) || !isset($_POST["repoToEdit"]) || empty($_POST["repoToEdit"]) || !isset($_FILES["fileUpload"]["type"]) || empty($_FILES["fileUpload"]["type"])){
-                error_log("One or more fields are empty in updateRepo.php", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("\n" . "One or more fields are empty in updateRepo.php", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("One or more fields are empty");
             }
             
             $fileType = $_FILES["fileUpload"]["type"];
             if (($fileType != "application/zip") && ($fileType != "application/x-zip-compressed")) {
-                error_log("Uploaded file is not a .zip file, contenuto di filetype: $fileType, contennuto di FILES: " . $_FILES["fileUpload"]["type"], 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("\n" . "Uploaded file is not a .zip file, contenuto di filetype: $fileType, contennuto di FILES: " . $_FILES["fileUpload"]["type"], 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("Uploaded file is not a .zip file");
             }
 

@@ -1,10 +1,7 @@
 <?php
 
     class sessionManager {
-
-        function __construct() {
-            session_start();
-        }
+        function __construct() { session_start(); }
 
         /* Getter methods*/
         function getEmail(): string { return $_SESSION["email"]; }
@@ -36,12 +33,12 @@
             session_destroy();
         }
 
-
-
+        // returns true if the session is set, false otherwise
         function isSessionSet(): bool {
             return isset($_SESSION["email"]);
         }
 
+        // returns true if the user is an admin, false otherwise
         function isAdmin(): bool {
             return isset($_SESSION["permission"]) && ($_SESSION["permission"] == "admin");
         }

@@ -12,12 +12,12 @@
         try {
         
             if (!isset($_POST["submit"]) || !isset($_POST["userEmail"]) || empty($_POST["userEmail"]) || !isset($_POST["firstname"]) || !isset($_POST["lastname"]) || !isset($_POST["email"]) || !isset($_POST["pass"]) || !isset($_POST["permission"])) {
-                error_log("Someone tried to send a form without submitting it first or didn't set the email of the user to be edited");
+                error_log("\n" . "Someone tried to send a form without submitting it first or didn't set the email of the user to be edited");
                 throw new Exception("Invalid request");
             }
 
             if (empty($_POST["firstname"]) || empty($_POST["lastname"]) || empty($_POST["email"]) || empty($_POST["pass"]) || empty($_POST["permission"])) {
-                error_log("Not all fields were set, invalid form", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("\n" . "Not all fields were set, invalid form", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("You can't send a form without filling all the fields");
             }
 
