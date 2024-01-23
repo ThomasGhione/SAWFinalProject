@@ -18,7 +18,7 @@
             $result = $dbManager->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$email]);
             try {
                 if ($result->num_rows == 0) {
-                    error_log("\n" . "Query failed", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Query failed". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                     throw new Exception("Something went wrong. Please try again later");
                 }
             }

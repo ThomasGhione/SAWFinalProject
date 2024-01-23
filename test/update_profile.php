@@ -11,12 +11,12 @@
     else { // Following code checks the number of arguments used in POST, it can be improved... probably :3
         try {
             if (!isset($_POST["submit"]) || !isset($_POST["firstname"]) || !isset($_POST["lastname"]) || !isset($_POST["email"])) {
-                error_log("\n" . "Not all fields were set, invalid form", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("[" . date("Y-m-d H:i:s") . "] Not all fields were set, invalid form". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("Something went wrong when trying to update your data, try again later");
             }
 
             if (empty($_POST["firstname"]) || empty($_POST["lastname"]) || empty($_POST["email"])) {
-                error_log("\n" . "User " . $sessionManager->getEmail() . " tried to update his data with empty fields", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("[" . date("Y-m-d H:i:s") . "] User " . $sessionManager->getEmail() . " tried to update his data with empty fields". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
                 throw new Exception("One or more required fields were empty");
             }
 
