@@ -1,5 +1,7 @@
 <?php
-    require("../php/shared/initializePage.php");  
+    include("../php/scripts/login.php");
+    
+    /*require("../php/shared/initializePage.php");  
 
     require_once("../php/phpClasses/user.php");
 
@@ -26,5 +28,5 @@
     
     header("Location: ../php/loginForm.php"); // Covers both invalid request and invalid login 
     exit;
-
+    */
 ?>

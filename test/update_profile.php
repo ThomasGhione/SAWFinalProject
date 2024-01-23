@@ -1,4 +1,7 @@
 <?php
+    include("../php/scripts/update_profile.php");
+
+    /*
     require("../php/shared/initializePage.php");    
 
     if (!$sessionManager->isSessionSet()) {
@@ -31,4 +34,5 @@
 
     header("Location: ../php/update_profile_form.php");
     exit;
+    */
 ?>

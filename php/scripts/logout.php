@@ -1,8 +1,8 @@
 <?php
-    require("../shared/initializePage.php");    
+    require($_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/php/shared/initializePage.php");    
 
     if (!$sessionManager->isSessionSet()) {
-        header("Location: ../../index.php");
+        header("Location: /SAW/SAWFinalProject/index.php");
         exit;
     }
 

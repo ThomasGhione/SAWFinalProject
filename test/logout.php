@@ -1,4 +1,7 @@
 <?php
+    include("../php/scripts/logout.php");
+/*
+    
     require("../php/shared/initializePage.php");    
 
     if (!$sessionManager->isSessionSet()) {
@@ -16,4 +19,5 @@
     
     header("Location: ../index.php");
     exit;
+*/
 ?>

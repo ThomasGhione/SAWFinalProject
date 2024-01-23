@@ -1,4 +1,6 @@
 <?php 
+    include("../php/scripts/registration.php");
+/*
     require("../php/shared/initializePage.php");    
 
     require_once("../php/phpClasses/user.php");
@@ -17,4 +19,5 @@
 
     header("Location: ../php/loginForm.php");   // Valid registration
     exit;
+*/
 ?>

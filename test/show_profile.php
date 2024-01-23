@@ -1,4 +1,11 @@
 <?php
+    include("../php/show_profile.php");
+?>
+
+
+<!--
+<?php
+    /*
     require("../php/shared/initializePage.php");
 
     if (!$sessionManager->isSessionSet()) {
@@ -11,13 +18,14 @@
     require_once("../php/phpClasses/loggedUser.php");
 
     $currentUser = new loggedUser($sessionManager->getEmail()); // sets user data obtained from database
+    */
 ?>
 
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php require_once("../php/shared/commonHead.php") ?>
+    <?php // require_once("../php/shared/commonHead.php") ?>
 
     <link rel="stylesheet" type="text/css" href="../CSS/personalArea.css">
     <link rel="stylesheet" type="text/css" href="../CSS/tableStyle.css">
@@ -29,13 +37,14 @@
     <title>OpenHub - Personal Area</title>
 </head>
 <body>
-    <?php include("../php/shared/nav.php") ?>
+    <?php // include("../php/shared/nav.php") ?>
 
     <div class="main_personalarea">
         <div class="left_column">
 
             <div class="infos">
                 <?php 
+                    /*
                     if (!($pfpHref = ($currentUser->getPfp())))
                         $pfpHref = "default.jpg";
                 
@@ -44,6 +53,7 @@
                     echo "<p>Welcome " . $currentUser->getFirstname() . " " . $currentUser->getLastname() . "</p>";
                     echo "<br>";
                     echo "<i class='fa-solid fa-square-envelope'>" . " " . $currentUser->getEmail() . "</i>";
+                    */
                 ?>
             </div>
             
@@ -53,7 +63,7 @@
                 <a class="personalAreaButton" href="../php/addNewRepoForm.php">Add a new repo here!</a>
 
                 <?php
-                    
+                    /*
                     if (!$currentUser->getNewsletter())
                         echo "<a class='personalAreaButton' href='../php/scripts/manageUserInNewsletter.php?sub=" . "true" . "'>Subscribe to our newsletter!</a>";
                     else
@@ -67,7 +77,7 @@
                         echo "<p class='success'>" . $_SESSION["success"] . "</p>";
                         unset($_SESSION["success"]);
                     }
-                
+                    */
                 ?>
             </div>
         </div>
@@ -75,6 +85,7 @@
         <div class="right_column">
 
             <?php 
+                /*
                 $rows = $dbManager->showRepos($currentUser->getEmail());
                 
                 if (empty($rows))
@@ -103,12 +114,13 @@
                         </table>
                     ";
                 }
+                */
             ?>
 
         </div>
     </div>
 
-    <?php include("../php/shared/footer.php") ?>
+    <?php // include("../php/shared/footer.php") ?>
 
     <script>
         function confirmDelete() {
@@ -123,3 +135,4 @@
 
 </body>
 </html>
+-->
