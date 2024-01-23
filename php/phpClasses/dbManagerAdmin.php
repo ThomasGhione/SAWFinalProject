@@ -119,14 +119,8 @@
                     throw new Exception("Invalid permission");
                 }
 
-                $pass = trim($_POST["pass"]);
-                if (strlen($pass) < 8) {
-                    error_log("Choose a password with at least 8 characters", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
-                    throw new Exception("Choose a password with at least 8 characters");
-                }
-                $pass = password_hash($pass, PASSWORD_DEFAULT);
 
-                $result = $this->dbQueryWithParams("UPDATE users SET firstname = ?, lastname = ?, email = ?, permission = ?, password = ? WHERE email = ?", "ssssss", [$firstname, $lastname, $newEmail, $permission, $pass, $userEmail]);
+                $result = $this->dbQueryWithParams("UPDATE users SET firstname = ?, lastname = ?, email = ?, permission = ? WHERE email = ?", "sssss", [$firstname, $lastname, $newEmail, $permission, $userEmail]);
 
                 if ($result != 1){
                     error_log("Something went wrong while updating user's data from Manage Users page", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
@@ -142,6 +136,43 @@
 
                 if ($sessionManager->getEmail() === $newEmail)
                     $sessionManager->setSessionVariablesEmailAndPermission($newEmail, $permission);
+            }
+            catch (Exception $e) {
+                $this->conn->rollback();
+                $this->closeConn();
+                $_SESSION["error"] = $e->getMessage();
+                return false;
+            }
+
+            $this->conn->commit();
+            $this->closeConn();
+            return true;
+        }
+
+        function editUserPass (string $userEmail): bool {
+            try {
+                $this->activateConn();
+                $this->conn->begin_transaction();
+
+                $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$userEmail]); 
+                if ($result->num_rows != 1) {
+                    error_log("This user does not exist", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Tried to edit a user that does not exist");
+                }
+
+                $pass = trim($_POST["pass"]);
+                if (strlen($pass) < 8) {
+                    error_log("Choose a password with at least 8 characters", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Choose a password with at least 8 characters");
+                }
+                $pass = password_hash($pass, PASSWORD_DEFAULT);
+
+                $result = $this->dbQueryWithParams("UPDATE users SET password = ? WHERE email = ?", "ss", [$pass, $userEmail]);
+
+                if ($result != 1){
+                    error_log("Something went wrong while updating user's data from Manage Users page", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    throw new Exception("Something went wrong, try again later");
+                }
             }
             catch (Exception $e) {
                 $this->conn->rollback();

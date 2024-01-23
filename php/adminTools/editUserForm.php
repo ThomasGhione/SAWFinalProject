@@ -13,7 +13,7 @@
 
     require_once("../phpClasses/loggedUser.php");
 
-    $email = urldecode($_GET["email"]);
+    $email = htmlspecialchars(urldecode($_GET["email"]));
 
     $currentUser = new loggedUser($email);
 ?>
@@ -32,7 +32,7 @@
     <main class="mainContainer">
 
         <fieldset class="formSection">
-            <h2>Edit profile here:</h2>
+            <h2>Edit user profile here:</h2>
                         
             <?php
                 if (isset($_SESSION["error"])) {
@@ -45,7 +45,7 @@
                 }
             ?>
 
-            <form id="form" action="./adminScripts/editUser.php" method="post">
+            <form id="formNoPass" action="./adminScripts/editUser.php" method="post">
                 
                 <div class="inputBox">
                     <label for="firstname">Firstname: </label>
@@ -63,11 +63,6 @@
                 </div>
 
                 <div class="inputBox">
-                    <label for="pass">Password: </label>
-                    <input type="password" id="pass" name="pass" placeholder="Password">
-                </div>
-
-                <div class="inputBox">
                     <label for="permission">Role: </label>
                     <select id="permission" name="permission">
                         <option value="user" <?php echo $currentUser->getPermission() === "user" ? "selected" : ""; ?> >User</option>
@@ -75,18 +70,38 @@
                     </select>
                 </div>
 
-                <input type="hidden" name="userEmail" value="<?php echo htmlspecialchars($_GET["email"])?>">
+                <input type="hidden" name="userEmail" value="<?php echo $email?>">
 
                 <input type="submit" class="formButton" name="submit" value="Edit">
             </form>
 
-            <i><a href="./manageUsers.php" class="formButton">Go back to users list</a><i class="blankSpace"></i><button id="resetData" class="formButton">Reset Form</button></i>
+            <i>
+                <a href="./manageUsers.php" class="formButton">Go back to users list</a>
+                <button id="resetDataFormNoPass" class="formButton">Reset Form</button>
+            </i>
+
+        </fieldset>
+
+        <fieldset class="formSection">
+            <h2>Change user password:</h2>
+
+            <form id="formWithPass" action="./adminScripts/editUserPass.php" method="post">
+
+                <div class="inputBox">
+                    <label for="pass">Password: </label>
+                    <input type="password" id="pass" name="pass" placeholder="Password">
+                </div>
+                
+                <input type="hidden" name="userEmail" value="<?php echo $email?>">
+                <input type="submit" class="formButton" name="submit" value="Change Password">
+            </form>
+
+            <button id="resetDataFormWithPass" class="formButton">Reset Form</button>
 
         </fieldset>
 
     </main>
-
-
+                        
     <?php include("../shared/footer.php"); ?>
 
     <script>
@@ -95,40 +110,57 @@
         const currentEmail = document.getElementById("newEmail").value;
         const currentPermission = document.getElementById("permission").value;
 
-        document.getElementById("resetData").addEventListener("click", function (event) {
+            
+        // Reset buttons
+
+        document.getElementById("resetDataFormNoPass").addEventListener("click", function (event) {
             let el1 = document.getElementById("firstname");
             let el2 = document.getElementById("lastname");
             let el3 = document.getElementById("newEmail");
             let el4 = document.getElementById("permission");
-            let el5 = document.getElementById("pass");
 
             el1.value = currentFirstname;
             el2.value = currentLastname;
             el3.value = currentEmail;
             el4.value = currentPermission;
-            el5.value = "";
         });
+
+        document.getElementById("resetDataFormWithPass").addEventListener("click", function (event) {
+            let el1 = document.getElementById("pass");
+
+            el1.value = "";
+        });
+
+
 
         emailFlag = true;
         emailMessage = "";
 
-        document.getElementById("form").addEventListener("submit", function (event) {
+        document.getElementById("formNoPass").addEventListener("submit", function (event) {
             let firstname = document.getElementById("firstname").value.trim();
             let lastname = document.getElementById("lastname").value.trim();
             let email = document.getElementById("newEmail").value.trim();
-            let pass = document.getElementById("pass").value.trim();
 
-            if (firstname === "" || lastname === "" || newEmail === "" || pass === "") {
+            if (firstname === "" || lastname === "" || newEmail === "") {
                 event.preventDefault();
                 alert("You can't set an empty field");
-            }
-            else if ((pass.length < 8)) {
-                event.preventDefault();
-                alert("Password must be at least 8 characters long");
             }
             else if (!emailFlag) {
                 event.preventDefault();
                 alert(emailMessage);
+            }
+        });
+
+        document.getElementById("formWithPass").addEventListener("submit", function (event) {
+            let pass = document.getElementById("pass").value.trim();
+
+            if (pass === "") {
+                event.preventDefault();
+                alert("You can't set an empty field");
+            }
+            else if (pass.length < 8) {
+                event.preventDefault();
+                alert("Password must be at least 8 characters long");
             }
         });
 
