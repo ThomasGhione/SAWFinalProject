@@ -1,8 +1,8 @@
 <?php
-    require($_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/php/shared/initializePage.php");    
+    require("../shared/initializePage.php");    
 
     if (!$sessionManager->isSessionSet()) {
-        header("Location: /SAW/SAWFinalProject/php/loginForm.php");
+        header("Location: ../loginForm.php");
         exit;
     }
 
@@ -29,6 +29,6 @@
         }
     }
 
-    header("Location: /SAW/SAWFinalProject/php/update_profile_form.php");
+    header("Location: ../update_profile_form.php");
     exit;
 ?>

@@ -1,34 +1,28 @@
 <?php
-    include("../php/show_profile.php");
-?>
-
-
-<!--
-<?php
-    /*
-    require("../php/shared/initializePage.php");
+    // This page is used only for automatic test
+    
+    require("../shared/initializePage.php");
 
     if (!$sessionManager->isSessionSet()) {
-        header("Location: ../php/loginForm.php");
+        header("Location: ../loginForm.php");
         exit;
     }
 
-    require("../php/shared/banCheck.php");
+    require("../shared/banCheck.php");
 
-    require_once("../php/phpClasses/loggedUser.php");
+    require_once("../phpClasses/loggedUser.php");
 
     $currentUser = new loggedUser($sessionManager->getEmail()); // sets user data obtained from database
-    */
 ?>
 
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <?php // require_once("../php/shared/commonHead.php") ?>
+    <?php require_once("../shared/commonHead.php") ?>
 
-    <link rel="stylesheet" type="text/css" href="../CSS/personalArea.css">
-    <link rel="stylesheet" type="text/css" href="../CSS/tableStyle.css">
+    <link rel="stylesheet" type="text/css" href="../../CSS/personalArea.css">
+    <link rel="stylesheet" type="text/css" href="../../CSS/tableStyle.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"> </script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"> </script>
@@ -37,37 +31,35 @@
     <title>OpenHub - Personal Area</title>
 </head>
 <body>
-    <?php // include("../php/shared/nav.php") ?>
+    <?php include("../shared/nav.php") ?>
 
     <div class="main_personalarea">
         <div class="left_column">
 
             <div class="infos">
                 <?php 
-                    /*
                     if (!($pfpHref = ($currentUser->getPfp())))
                         $pfpHref = "default.jpg";
                 
-                    echo "<img class='pfp' src='/SAW/SAWFinalProject/images/pfps/$pfpHref' alt='Your profile picture'>";
+                    echo "<img class='pfp' src='../../images/pfps/$pfpHref' alt='Your profile picture'>";
 
                     echo "<p>Welcome " . $currentUser->getFirstname() . " " . $currentUser->getLastname() . "</p>";
                     echo "<br>";
                     echo "<i class='fa-solid fa-square-envelope'>" . " " . $currentUser->getEmail() . "</i>";
-                    */
                 ?>
             </div>
             
             <div class="personalAreaOptions">
-                <a class="personalAreaButton" href="../php/update_profile_form.php">Edit your profile</a>
-                <a class="personalAreaButton" href="../php/update_profile_password_form.php">Change your password</a>
-                <a class="personalAreaButton" href="../php/addNewRepoForm.php">Add a new repo here!</a>
+                <a class="personalAreaButton" href="../update_profile_form.php">Edit your profile</a>
+                <a class="personalAreaButton" href="../update_profile_password_form.php">Change your password</a>
+                <a class="personalAreaButton" href="../addNewRepoForm.php">Add a new repo here!</a>
 
                 <?php
-                    /*
+                    
                     if (!$currentUser->getNewsletter())
-                        echo "<a class='personalAreaButton' href='../php/scripts/manageUserInNewsletter.php?sub=" . "true" . "'>Subscribe to our newsletter!</a>";
+                        echo "<a class='personalAreaButton' href='../scripts/manageUserInNewsletter.php?sub=" . "true" . "'>Subscribe to our newsletter!</a>";
                     else
-                        echo "<a class='personalAreaButton' href='../php/scripts/manageUserInNewsletter.php?sub=" . "false" . "'>Unsubscribe from our newsletter!</a>";
+                        echo "<a class='personalAreaButton' href='../scripts/manageUserInNewsletter.php?sub=" . "false" . "'>Unsubscribe from our newsletter!</a>";
 
                     if (isset($_SESSION["error"])) {
                         echo "<p class='error'>" . $_SESSION["error"] . "</p>";
@@ -77,7 +69,7 @@
                         echo "<p class='success'>" . $_SESSION["success"] . "</p>";
                         unset($_SESSION["success"]);
                     }
-                    */
+                
                 ?>
             </div>
         </div>
@@ -85,7 +77,6 @@
         <div class="right_column">
 
             <?php 
-                /*
                 $rows = $dbManager->showRepos($currentUser->getEmail());
                 
                 if (empty($rows))
@@ -104,8 +95,8 @@
                         echo "<td>" . $row["Name"] . "</td>";
                         echo "<td>" . $row["CreationDate"] . "</td>";
                         echo "<td>" . $row["LastModified"] . "</td>";
-                        echo "<td><a href='./update_repo_form.php?name=" . urlencode($row["Name"]) . "'><i class='fa-solid fa-pen'></i></a></td>";
-                        echo "<td><a href='./scripts/deleteRepo.php?name=" . urlencode($row["Name"]) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'</td>";
+                        echo "<td><a href='../update_repo_form.php?name=" . urlencode($row["Name"]) . "'><i class='fa-solid fa-pen'></i></a></td>";
+                        echo "<td><a href='../scripts/deleteRepo.php?name=" . urlencode($row["Name"]) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'</td>";
 
                         echo "</tr>";
                     }
@@ -114,13 +105,12 @@
                         </table>
                     ";
                 }
-                */
             ?>
 
         </div>
     </div>
 
-    <?php // include("../php/shared/footer.php") ?>
+    <?php include("../shared/footer.php") ?>
 
     <script>
         function confirmDelete() {
@@ -135,4 +125,3 @@
 
 </body>
 </html>
--->
