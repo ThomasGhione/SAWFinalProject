@@ -29,7 +29,7 @@
     <title>OpenHub - Personal Area</title>
 </head>
 <body>
-    <?php include("shared/nav.php") ?>
+    <?php include("./shared/nav.php") ?>
 
     <div class="main_personalarea">
         <div class="left_column">
@@ -39,7 +39,7 @@
                     if (!($pfpHref = ($currentUser->getPfp())))
                         $pfpHref = "default.jpg";
                 
-                    echo "<img class='pfp' src='/SAW/SAWFinalProject/images/pfps/$pfpHref' alt='Your profile picture'>";
+                    echo "<img class='pfp' src='../images/pfps/$pfpHref' alt='Your profile picture'>";
 
                     echo "<p>Welcome " . $currentUser->getFirstname() . " " . $currentUser->getLastname() . "</p>";
                     echo "<br>";
@@ -108,7 +108,7 @@
         </div>
     </div>
 
-    <?php include("shared/footer.php") ?>
+    <?php include("./shared/footer.php") ?>
 
     <script>
         function confirmDelete() {

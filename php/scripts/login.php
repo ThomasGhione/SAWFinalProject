@@ -1,5 +1,5 @@
 <?php
-    require("../shared/initializePage.php");  
+    require("../shared/initializePage.php");
 
     require_once("../phpClasses/user.php");
 
