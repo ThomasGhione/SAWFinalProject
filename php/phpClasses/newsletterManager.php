@@ -8,7 +8,7 @@
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
 
-    $root = $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject";
+    $root = "/chroot/home/S5311626/public_html";
     
     require "$root/php/externalTools/PHPMailer/src/Exception.php";
     require "$root/php/externalTools/PHPMailer/src/PHPMailer.php";
@@ -41,7 +41,7 @@
         function sendNewsletter(array &$userArr, string &$message): bool {
             try {
                 if (empty($userArr) || empty($message)) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] newsletterManager: empty message or user array". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] newsletterManager: empty message or user array". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Message can't be empty");
                 }
 
@@ -53,7 +53,7 @@
                     $selectedEmail = strtolower($selectedEmail);
     
                     if (filter_var($selectedEmail, FILTER_VALIDATE_EMAIL) === false) {
-                        error_log("[" . date("Y-m-d H:i:s") . "] newsletterManager: invalid email". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                        error_log("[" . date("Y-m-d H:i:s") . "] newsletterManager: invalid email". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                         throw new Exception("Invalid email");
                     }
     

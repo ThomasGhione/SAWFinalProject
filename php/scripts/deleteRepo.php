@@ -11,14 +11,14 @@
 
     try {
         if (!isset($_GET["name"])) {
-            error_log("[" . date("Y-m-d H:i:s") . "] Bad method used or repo name not set". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+            error_log("[" . date("Y-m-d H:i:s") . "] Bad method used or repo name not set". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
             throw new Exception("Bad method used or repo name not set");
         }
 
         $repoName = urldecode($_GET["name"]);
 
         if (empty($repoName)) {
-            error_log("[" . date("Y-m-d H:i:s") . "] Repo name can't be empty". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+            error_log("[" . date("Y-m-d H:i:s") . "] Repo name can't be empty". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
             throw new Exception("Repo name can't be empty");
         }
 

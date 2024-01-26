@@ -41,7 +41,7 @@
             catch (Exception $e) {
                 $this->conn->rollback();
                 $this->closeConn();
-                error_log($e->getMessage(). "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log($e->getMessage(). "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                 $_SESSION["error"] = $e->getMessage();
                 return false;
             }
@@ -64,7 +64,7 @@
             catch (Exception $e) {
                 $this->conn->rollback();
                 $this->closeConn();
-                error_log($e->getMessage(). "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log($e->getMessage(). "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                 $_SESSION["error"] = $e->getMessage();
                 return false;
             }
@@ -87,7 +87,7 @@
             catch (Exception $e) {
                 $this->conn->rollback();
                 $this->closeConn();
-                error_log($e->getMessage(). "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log($e->getMessage(). "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                 $_SESSION["error"] = $e->getMessage();
                 return false;
             }
@@ -105,7 +105,7 @@
 
                 $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$userEmail]); 
                 if ($result->num_rows != 1) { // if the user doesn't exist throws an error
-                    error_log("[" . date("Y-m-d H:i:s") . "] This user does not exist". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] This user does not exist". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Tried to edit a user that does not exist");
                 }
 
@@ -122,7 +122,7 @@
 
                 // permission is valid only if it's one of the following: user, mod, admin, banned
                 if ($permission != "user" && $permission != "mod" && $permission != "admin" && $permission != "banned") {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Invalid permission". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Invalid permission". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Invalid permission");
                 }
 
@@ -130,7 +130,7 @@
                 $result = $this->dbQueryWithParams("UPDATE users SET firstname = ?, lastname = ?, email = ?, permission = ? WHERE email = ?", "sssss", [$firstname, $lastname, $newEmail, $permission, $userEmail]);
 
                 if ($result != 1){
-                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while updating user's data from Manage Users page". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while updating user's data from Manage Users page". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
 
@@ -163,13 +163,13 @@
 
                 $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$userEmail]); 
                 if ($result->num_rows != 1) { // user must exists
-                    error_log("[" . date("Y-m-d H:i:s") . "] This user does not exist". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] This user does not exist". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Tried to edit a user that does not exist");
                 }
 
                 $pass = trim($_POST["pass"]);
                 if (strlen($pass) < 8) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Choose a password with at least 8 characters". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Choose a password with at least 8 characters". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Choose a password with at least 8 characters");
                 }
                 $pass = password_hash($pass, PASSWORD_DEFAULT);
@@ -177,7 +177,7 @@
                 $result = $this->dbQueryWithParams("UPDATE users SET password = ? WHERE email = ?", "ss", [$pass, $userEmail]);
 
                 if ($result != 1) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while updating user's data from Manage Users page". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while updating user's data from Manage Users page". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
             }

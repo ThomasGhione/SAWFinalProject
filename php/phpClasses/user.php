@@ -14,18 +14,18 @@
             // before using the flag we need to check if the request is valid
             try {
                 if (!isset($_POST["submit"]) || !isset($_POST["email"]) || !isset($_POST["pass"])) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Invalid request". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Invalid request". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Invalid request");
                 }
 
                 if (empty($_POST["email"]) || empty($_POST["pass"])) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Empty parameters have been passed to the form". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Empty parameters have been passed to the form". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Empty parameters have been passed to the form. Please try again");
                 }
                 
                 $email = filter_var(trim($_POST["email"]), FILTER_VALIDATE_EMAIL);
                 if ($email === false || strlen($email) > 64) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Invalid email". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Invalid email". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Invalid email. Please try again");
                 }
 
@@ -66,12 +66,12 @@
         private function cRegister(string $email, string &$password): void {
             try {
                 if (!isset($_POST["firstname"]) || !isset($_POST["lastname"]) || !isset($_POST["confirm"])) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Invalid request". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Invalid request". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Invalid request");
                 }
 
                 if (empty($_POST["firstname"]) || empty($_POST["lastname"]) || empty($_POST["confirm"])) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Empty parameters have been passed to the form". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Empty parameters have been passed to the form". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Empty parameters have been passed to the form. Please try again later");
                 }
 
@@ -79,23 +79,23 @@
                 $lastname = htmlspecialchars(trim($_POST["lastname"]));
                 
                 if (strlen($firstname) > 64) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] First name is too long". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] First name is too long". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("First name is too long. Please try again");
                 }       
                 if (strlen($lastname) > 64) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Last name is too long". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Last name is too long". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Last name is too long. Please try again");
                 }
                 
                 $confirm = htmlspecialchars(trim($_POST["confirm"]));
                 
                 if ($this->isPasswordWeak($password)) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Password isn't strong enough". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Password isn't strong enough". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Password isn't strong enough. Please choose a stronger password");
                 }
                 
                 if (!$this->passwordMatches($password, $confirm)) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Passwords don't match". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Passwords don't match". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Passwords don't match");
                 }
             }
@@ -155,27 +155,27 @@
         /*
         private function isPasswordWeak(string &$password): bool {
             if (strlen($password) < 8) {
-                error_log("[" . date("Y-m-d H:i:s") . "] Pw is too short". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("[" . date("Y-m-d H:i:s") . "] Pw is too short". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                 throw new Exception("Password is too short, please choose a longer password");
             }
             if (strlen($password) > 24) {
-                error_log("[" . date("Y-m-d H:i:s") . "] Pw is too long". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("[" . date("Y-m-d H:i:s") . "] Pw is too long". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                 throw new Exception("Password is too long, please choose a shorter password");
             }
             if (!preg_match('@[A-Z]@', $password)) {
-                error_log("[" . date("Y-m-d H:i:s") . "] Pw doesn't contain uppercase letters". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("[" . date("Y-m-d H:i:s") . "] Pw doesn't contain uppercase letters". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                 throw new Exception("Password doesn't contain uppercase letters, please try again");
             }
             if (!preg_match('@[a-z]@', $password)) {
-                error_log("[" . date("Y-m-d H:i:s") . "] Pw doesn't contain lowercase letters". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("[" . date("Y-m-d H:i:s") . "] Pw doesn't contain lowercase letters". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                 throw new Exception("Password doesn't contain lowercase letters, please try again");
             }
             if (!preg_match('@[0-9]@', $password)) {
-                error_log("[" . date("Y-m-d H:i:s") . "] Pw doesn't contain numbers". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("[" . date("Y-m-d H:i:s") . "] Pw doesn't contain numbers". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                 throw new Exception("Password doesn't contain numbers, please try again");
             }
             if (!preg_match('@[^\w]@', $password)) {
-                error_log("[" . date("Y-m-d H:i:s") . "] Pw doesn't contain special characters". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("[" . date("Y-m-d H:i:s") . "] Pw doesn't contain special characters". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                 throw new Exception("Password doesn't contain special characters, please try again");
             }
 

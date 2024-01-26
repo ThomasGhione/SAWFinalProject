@@ -11,17 +11,17 @@
 
     try {
         if ($_SERVER["REQUEST_METHOD"] != "POST") {
-            error_log("[" . date("Y-m-d H:i:s") . "] Invalid request". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+            error_log("[" . date("Y-m-d H:i:s") . "] Invalid request". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
             throw new Exception("Invalid request");
         }
 
         if (!isset($_POST["selectedUsers"]) || empty($_POST["selectedUsers"])) {
-            error_log("[" . date("Y-m-d H:i:s") . "] No user selected". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+            error_log("[" . date("Y-m-d H:i:s") . "] No user selected". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
             throw new Exception("No user selected");
         }
 
         if (!isset($_POST["message"]) || empty($_POST["message"])) {
-            error_log("[" . date("Y-m-d H:i:s") . "] Message can't be empty". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+            error_log("[" . date("Y-m-d H:i:s") . "] Message can't be empty". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
             throw new Exception("Message can't be empty");
         }
 

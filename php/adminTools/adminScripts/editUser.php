@@ -17,7 +17,7 @@
             }
 
             if (empty($_POST["firstname"]) || empty($_POST["lastname"]) || empty($_POST["email"]) || empty($_POST["pass"]) || empty($_POST["permission"])) {
-                error_log("[" . date("Y-m-d H:i:s") . "] Not all fields were set, invalid form". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("[" . date("Y-m-d H:i:s") . "] Not all fields were set, invalid form". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                 throw new Exception("You can't send a form without filling all the fields");
             }
 

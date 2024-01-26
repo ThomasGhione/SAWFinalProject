@@ -22,8 +22,8 @@
         <div class="admin-menu">
             <h2>Admin Menu</h2>
 
-            <a class="admin-menu-button" href="/SAW/SAWFinalProject/php/adminTools/manageUsers.php">Manage Users</a>
-            <a class="admin-menu-button" href="/SAW/SAWFinalProject/php/adminTools/manageNewsletter.php">Manage Newsletter</a>
+            <a class="admin-menu-button" href="/~S5311626/php/adminTools/manageUsers.php">Manage Users</a>
+            <a class="admin-menu-button" href="/~S5311626/php/adminTools/manageNewsletter.php">Manage Newsletter</a>
         </div>
     </main>
     

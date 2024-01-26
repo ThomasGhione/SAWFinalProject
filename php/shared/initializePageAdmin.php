@@ -1,5 +1,5 @@
 <?php 
-    $root = $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/php";
+    $root = "/chroot/home/S5311626/public_html/php";
     
     require_once("$root/shared/errInitialize.php");
     require_once("$root/phpClasses/dbManagerAdmin.php");

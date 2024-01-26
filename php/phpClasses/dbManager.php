@@ -19,7 +19,7 @@
             try {
                 if (!isset($this->conn))
                     if (!($this->conn = new mysqli(dbManager::DB_SERVER, dbManager::USERNAME, dbManager::PASSWORD, dbManager::DB_NAME))) {
-                        error_log("[" . date("Y-m-d H:i:s") . "] Error: cannot connect to database", 3 , $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                        error_log("[" . date("Y-m-d H:i:s") . "] Error: cannot connect to database", 3 , "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                         throw new Exception("Error: cannot connect to DB");
                     }
             }
@@ -43,19 +43,19 @@
         function dbQueryWithParams(string $query, string $paramsTypes, array $params) {
             try {
                 if (!($stmt = $this->conn->prepare($query))) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Error: cannot prepare the following query -> " . $query. "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Error: cannot prepare the following query -> " . $query. "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("server error");
                 }
                 if (count($params) != strlen($paramsTypes)) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Error: number of parameters does not match the number of types". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Error: number of parameters does not match the number of types". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("server error");
                 }
                 if (!($stmt->bind_param($paramsTypes, ...$params))) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Error: cannot bind the following parameters -> " . $params. "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Error: cannot bind the following parameters -> " . $params. "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("server error");
                 }
                 if (!($stmt->execute())) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Error: cannot execute the following query -> " . $query. "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Error: cannot execute the following query -> " . $query. "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Server error");
                 }
             }
@@ -74,7 +74,7 @@
         function dbQueryWithoutParams(string $query) {
             try {
                 if (($result = $this->conn->query($query)) == false) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Error: cannot execute the following query -> " . $query. "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Error: cannot execute the following query -> " . $query. "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Server error");
                 }
             }
@@ -96,7 +96,7 @@
                 $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$user->getEmail()]);
 
                 if ($result->num_rows != 0) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Email already in use". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Email already in use". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Email already in use");
                 }
     
@@ -104,7 +104,7 @@
                 $result = $this->dbQueryWithParams('INSERT INTO users (email, password, firstname, lastname, username, permission, pfp, gender, birthday, description, newsletter) VALUES (?, ?, ?, ?, null, "user", null, "notSpecified", null, null, false)', 'ssss', $paramArr);
     
                 if ($result != 1) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] cannot insert user into database (1 expected)". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] cannot insert user into database (1 expected)". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Something went wrong, please try again later");
                 }
 
@@ -138,19 +138,19 @@
                 $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$user->getEmail()]);
 
                 if ($result->num_rows != 1) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Email not found". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Email not found". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Email not found, please try again");
                 }
     
                 $row = $result->fetch_assoc();
     
                 if (!password_verify($user->getPassword(), $row["password"])) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Wrong password". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Wrong password". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Wrong password. please try again");
                 }
 
                 if ($this->isBanned($user->getEmail())) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] User is banned". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] User is banned". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("You are banned. Please contact an admin if you think you didn't violate our terms and conditions");
                 }
     
@@ -166,7 +166,7 @@
                     $result = $this->dbQueryWithParams("INSERT INTO remMeCookies (UID, email, ExpDate) VALUES (?, ?, ?)", "sss", $paramArr);
     
                     if ($result != 1) {
-                        error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong in INSERT INTO (1 expected), try again later". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                        error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong in INSERT INTO (1 expected), try again later". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                         throw new Exception("Something went wrong, try again later");
                     }
     
@@ -223,7 +223,7 @@
                 $result = $this->dbQueryWithParams("UPDATE users SET email = ?, firstname = ?, lastname = ? WHERE email = ?", "ssss", [$newEmail, $firstname, $lastname, $email]);
 
                 if ($result != 1){
-                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while updating user's data from Manage Users page". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while updating user's data from Manage Users page". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
 
@@ -268,19 +268,19 @@
                 $result = $this->dbQueryWithParams("SELECT * FROM users WHERE email = ?", "s", [$email]);
 
                 if ($result->num_rows != 1) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while updating the pw. (result->num_rows expected to be 1)". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while updating the pw. (result->num_rows expected to be 1)". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Something went wrong while updating the password, please try again");
                 }
 
                 $row = $result->fetch_assoc();
 
                 if (!password_verify($oldPassword, $row["password"])) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Wrong password". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Wrong password". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Wrong password, please try again");
                 }
 
                 if (strlen($newPassword) < 8) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Password must be at least 8 characters long". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Password must be at least 8 characters long". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Password must be at least 8 characters long, please try again");
                 }
 
@@ -289,7 +289,7 @@
                 $result = $this->dbQueryWithParams("UPDATE users SET password = ? WHERE email = ?", "ss", [$newPassword, $email]);
 
                 if ($result != 1) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while updating the pw. (result expected to be 1)". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while updating the pw. (result expected to be 1)". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Something went wrong while updating the password, please try again");
                 }
             }
@@ -321,7 +321,7 @@
                 $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && UID = ?)", "ss", [$email, $cookie]);
 
                 if ($result != 1) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Couldn't delete the cookie from the database (0 found)". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Couldn't delete the cookie from the database (0 found)". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
             }
@@ -415,7 +415,7 @@
         function addNewRepo(string $email): bool {
             $reposName = htmlspecialchars(trim($_POST["reposName"]));
             $fileName = htmlspecialchars(trim($_FILES["fileUpload"]["name"]));
-            $pathLocation = "/SAW/SAWFinalProject/repos/$email/$reposName";
+            $pathLocation = "/chroot/home/S5311626/public_html/repos/$email/$reposName";
             $currentDate = date("Y-m-d", time());
         
             try {
@@ -425,13 +425,13 @@
                 $result = $this->dbQueryWithParams("INSERT INTO repos (Name, Owner, CreationDate, LastModified, RepoLocation) VALUES (?, ?, ?, ?, ?)", "sssss", [$reposName, $email, $currentDate, $currentDate, $pathLocation]);
 
                 if ($result != 1) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Repos could not be created in database". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Repos could not be created in database". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
 
                 if (!mkdir("../../repos/$email/$reposName")) {
                     $error = error_get_last();
-                    error_log($error["message"] . " Current value in pathLocation is: " . $pathLocation. "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log($error["message"] . " Current value in pathLocation is: " . $pathLocation. "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
         
@@ -440,7 +440,7 @@
                 $tempPath = $_FILES["fileUpload"]["tmp_name"];
         
                 if (!move_uploaded_file($tempPath, "../../repos/$email/$reposName/$fileName")) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while transferring the file into its new location". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while transferring the file into its new location". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
             }
@@ -471,19 +471,19 @@
                 $result = $this->dbQueryWithParams("SELECT * FROM repos WHERE (Owner = ? && Name = ?)", "ss", [$email, $repoName]);
                 
                 if ($result->num_rows != 1) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] User $email tried to delete a repo not of his own, or chosen user does not exist". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] User $email tried to delete a repo not of his own, or chosen user does not exist". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
 
                 $result = $this->dbQueryWithParams("DELETE FROM repos WHERE (Owner = ? && Name = ?)", "ss", [$email, $repoName]);
 
                 if ($result != 1) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while deleting the repo from the database". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while deleting the repo from the database". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
 
                 if (!$this->deleteDirectory("../../repos/$email/$repoName")) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong when trying to delete the repo from the file system, specific error is: " . $_SESSION["error"]. "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong when trying to delete the repo from the file system, specific error is: " . $_SESSION["error"]. "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Something went wrong, contact admin if you can't see your repo anymore");
                 }
             }
@@ -511,7 +511,7 @@
                 $result = $this->dbQueryWithParams("SELECT * FROM repos WHERE (Owner = ? && Name = ?)", "ss", [$email, $repoToEdit]);
 
                 if ($result->num_rows != 1) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] User $email tried to update a repo not of his own, or chosen user does not exist". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] User $email tried to update a repo not of his own, or chosen user does not exist". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
 
@@ -520,7 +520,7 @@
                 $result = $this->dbQueryWithParams("UPDATE repos SET LastModified = ? WHERE (Owner = ? && Name = ?)", "sss", [$currentDate, $email, $repoToEdit]);
 
                 if ($result != 1) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while updating the repo in the database". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while updating the repo in the database". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
 
@@ -534,7 +534,7 @@
                     if (is_file($file) && is_writable($file)) 
                         unlink($file);
                     else {
-                        error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while deleting the old file". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                        error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while deleting the old file". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                         throw new Exception("Something went wrong, try again later");
                     }
                 }
@@ -543,7 +543,7 @@
                 $tempPath = $_FILES["fileUpload"]["tmp_name"]; // The server saves the file in a temporary location, so we need to move it to its final location
 
                 if (!move_uploaded_file($tempPath, "../../repos/$email/$repoToEdit/$fileName")) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while transferring the file into its new location". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while transferring the file into its new location". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
             }
@@ -612,7 +612,7 @@
         function checkCommonEditData(string $email, string $newEmail, string $firstname, string $lastname): void {
             $email = trim($_POST["email"]);
             if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-                error_log("[" . date("Y-m-d H:i:s") . "] Email is not valid". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("[" . date("Y-m-d H:i:s") . "] Email is not valid". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                 throw new Exception("Email is not valid, please try again");
             }
 
@@ -620,23 +620,23 @@
 
             if ($hasEmailChanged) {
                 if ($this->emailExists($newEmail)) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Email already exists". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Email already exists". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Email already exists, please try again");
                 }
 
                 if (strlen($newEmail) > 64) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Email is too long". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                    error_log("[" . date("Y-m-d H:i:s") . "] Email is too long". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Email is too long, please try again");
                 }
             }
 
             if (strlen($firstname) > 64) {
-                error_log("[" . date("Y-m-d H:i:s") . "] Firstname is too long". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("[" . date("Y-m-d H:i:s") . "] Firstname is too long". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                 throw new Exception("Firstname is too long, please try again");
             }
 
             if (strlen($lastname) > 64) {
-                error_log("[" . date("Y-m-d H:i:s") . "] Lastname is too long". "\n", 3, $_SERVER["DOCUMENT_ROOT"] . "/SAW/SAWFinalProject/texts/errorLog.txt");
+                error_log("[" . date("Y-m-d H:i:s") . "] Lastname is too long". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                 throw new Exception("Lastname is too long, please try again");
             }
         }

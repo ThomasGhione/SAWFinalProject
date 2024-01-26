@@ -5,8 +5,6 @@
         header("Location: ./show_profile.php");
         exit;
     }
-
-    unset($dbManager);
 ?>
 
 
@@ -65,7 +63,7 @@
             </form>
             
             <div>
-                <a class="formButton" href="/SAW/SAWFinalProject/php/loginForm.php">Already a user?</a>
+                <a class="formButton" href="/~S5311626/php/loginForm.php">Already a user?</a>
                 <button id="resetData" class="formButton">Cancel all data</button>
             </div>
 
