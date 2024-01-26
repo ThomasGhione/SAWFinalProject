@@ -1,11 +1,11 @@
 <nav>
 
     <?php 
-        $root = "/SAW/SAWFinalProject";
+        $root = "/chroot/home/S5311626/public_html";
     ?>
 
     <div class="left_nav">
-        <a href="<?php echo $root; ?>/index.php"><img class="navLogoImg" src="<?php echo $root; ?>/images/bestLogo.png" alt="Website Logo, you can click on it to return to the homepage"></a>
+        <a href="<?php echo $root; ?>/index.php"><img class="navLogoImg" src="/~S5311626/images/bestLogo.png" alt="Website Logo, you can click on it to return to the homepage"></a>
 
         <div class="left-nav-buttons">
             <a href="<?php echo $root; ?>/index.php" class="navButton">Homepage</a>
