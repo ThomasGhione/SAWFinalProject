@@ -429,18 +429,18 @@
                     throw new Exception("Something went wrong, try again later");
                 }
 
-                if (!mkdir("../../repos/$email/$reposName")) {
+                if (!mkdir($pathLocation)) {
                     $error = error_get_last();
                     error_log($error["message"] . " Current value in pathLocation is: " . $pathLocation. "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
         
-                chmod("../../repos/$email/$reposName", 0766);
+                chmod($pathLocation, 0766);
             
                 $tempPath = $_FILES["fileUpload"]["tmp_name"];
         
-                if (!move_uploaded_file($tempPath, "../../repos/$email/$reposName/$fileName")) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while transferring the file into its new location". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
+                if (!move_uploaded_file($tempPath, $pathLocation . "/$fileName")) {
+                    error_log("[" . date("Y-m-d H:/chroot/home/S5311626/public_html/repos/i:s") . "] Something went wrong while transferring the file into its new location". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
             }

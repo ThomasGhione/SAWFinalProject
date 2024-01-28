@@ -13,4 +13,3 @@
 [2024-01-28 11:49:32] One or more fields are empty in addNewRepo.php
 [2024-01-28 11:49:51] One or more fields are empty in addNewRepo.php
 mkdir(): Permission denied Current value in pathLocation is: /chroot/home/S5311626/public_html/repos/simo64.tomasella@gmail.com/test
-mkdir(): Permission denied Current value in pathLocation is: /chroot/home/S5311626/public_html/repos/simo64.tomasella@gmail.com/test
