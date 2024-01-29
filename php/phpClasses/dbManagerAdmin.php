@@ -80,7 +80,7 @@
             $this->conn->begin_transaction();
 
             try {
-                $result = $this->dbQueryWithParams("DELETE FROM users WHERE email=?", "s", [$userEmail]);
+                $result = $this->dbQueryWithParams("DELETE FROM users WHERE email = ?", "s", [$userEmail]);
                 if ($result != 1) // result should be 1, if it's not it means that the user wasn't found
                     throw new Exception("Something went wrong when deleting a user, probably user wasn't defined, see final error: " . error_get_last());
             } 

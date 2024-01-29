@@ -155,7 +155,7 @@
                 }
     
                 if ($user->getRemMeFlag()) { 
-                    $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && (STR_TO_DATE(ExpDate, '%Y-%m-%d') < CURDATE()))", "s", [$user->getEmail()]);
+                    $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? AND (STR_TO_DATE(ExpDate, '%Y-%m-%d') < CURDATE()))", "s", [$user->getEmail()]);
     
                     $actTime = time();
                     $oneWeek = 604800; // 60 * 60 * 24 * 7 = 604800 seconds = 1 week
@@ -318,7 +318,7 @@
                 $this->activateConn();
                 $this->conn->begin_transaction();
 
-                $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? && UID = ?)", "ss", [$email, $cookie]);
+                $result = $this->dbQueryWithParams("DELETE FROM remMeCookies WHERE (email = ? AND UID = ?)", "ss", [$email, $cookie]);
 
                 if ($result != 1) {
                     error_log("[" . date("Y-m-d H:i:s") . "] Couldn't delete the cookie from the database (0 found)". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
@@ -347,7 +347,7 @@
             
             $cookieArr = explode(" ", $cookie);
 
-            $result = $this->dbQueryWithParams("SELECT * FROM remMeCookies WHERE (UID = ? && (STR_TO_DATE(ExpDate, '%Y-%m-%d') > CURDATE()))", "s", [$cookieArr[0]]);
+            $result = $this->dbQueryWithParams("SELECT * FROM remMeCookies WHERE (UID = ? AND (STR_TO_DATE(ExpDate, '%Y-%m-%d') > CURDATE()))", "s", [$cookieArr[0]]);
             
             if ($result->num_rows == 1) { // if we find it then we check when its expiring date, if it's not valid we delete it
                 $row = $result->fetch_assoc();
@@ -468,14 +468,14 @@
                 $this->activateConn();
                 $this->conn->begin_transaction();
 
-                $result = $this->dbQueryWithParams("SELECT * FROM repos WHERE (Owner = ? && Name = ?)", "ss", [$email, $repoName]);
+                $result = $this->dbQueryWithParams("SELECT * FROM repos WHERE (Owner = ? AND Name = ?)", "ss", [$email, $repoName]);
                 
                 if ($result->num_rows != 1) {
                     error_log("[" . date("Y-m-d H:i:s") . "] User $email tried to delete a repo not of his own, or chosen user does not exist". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }
 
-                $result = $this->dbQueryWithParams("DELETE FROM repos WHERE (Owner = ? && Name = ?)", "ss", [$email, $repoName]);
+                $result = $this->dbQueryWithParams("DELETE FROM repos WHERE (Owner = ? AND Name = ?)", "ss", [$email, $repoName]);
 
                 if ($result != 1) {
                     error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while deleting the repo from the database". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
@@ -508,7 +508,7 @@
 
                 $this->conn->begin_transaction();
 
-                $result = $this->dbQueryWithParams("SELECT * FROM repos WHERE (Owner = ? && Name = ?)", "ss", [$email, $repoToEdit]);
+                $result = $this->dbQueryWithParams("SELECT * FROM repos WHERE (Owner = ? AND Name = ?)", "ss", [$email, $repoToEdit]);
 
                 if ($result->num_rows != 1) {
                     error_log("[" . date("Y-m-d H:i:s") . "] User $email tried to update a repo not of his own, or chosen user does not exist". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
