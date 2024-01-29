@@ -435,7 +435,7 @@
                     throw new Exception("Something went wrong, try again later");
                 }
         
-                chmod($pathLocation, 0766);
+                chmod($pathLocation, 0777);
             
                 $tempPath = $_FILES["fileUpload"]["tmp_name"];
         
@@ -515,14 +515,8 @@
                     throw new Exception("Something went wrong, try again later");
                 }
 
-                $row = $result->fetch_assoc();
-
-                $result = $this->dbQueryWithParams("UPDATE repos SET LastModified = ? WHERE (Owner = ? AND Name = ?)", "sss", [$currentDate, $email, $repoToEdit]);
-
-                if ($result != 1) {
-                    error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while updating the repo in the database". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
-                    throw new Exception("Something went wrong, try again later");
-                }
+                // Not checking this line of code because the user can update the repo in the same day, so the LastModified date will be the same and the query will return 0
+                $this->dbQueryWithParams("UPDATE repos SET LastModified = ? WHERE (Owner = ? AND Name = ?)", "sss", [$currentDate, $email, $repoToEdit]);
 
                 // Following code deletes the old file and replaces it with the new one
                 $repoPath = "/chroot/home/S5311626/public_html/repos/$email/$repoToEdit";
