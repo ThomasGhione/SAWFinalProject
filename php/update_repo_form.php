@@ -47,7 +47,7 @@
                     <input required type="file" id="fileUpload" name="fileUpload">
                 </div>
             
-                <input type="hidden" name="repoToEdit" value="<?php echo htmlspecialchars(urldecode($_GET["name"]))?>">
+                <input type="hidden" name="repoToEdit" value="<?php echo urldecode($_GET["name"])?>">
 
                 <input type="submit" class="formButton" name="submit" value="Edit">
             </form>

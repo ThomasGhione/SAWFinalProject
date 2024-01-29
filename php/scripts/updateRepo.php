@@ -26,7 +26,7 @@
 
             $repoToEdit = trim($_POST["repoToEdit"]);
             
-            if($dbManager->updateRepo($sessionManager->getEmail(), $_POST["repoToEdit"]))
+            if($dbManager->updateRepo($sessionManager->getEmail(), $repoToEdit))
                 $_SESSION["success"] = "Repo updated successfully";
         }
         catch (Exception $e) { $_SESSION["error"] = $e->getMessage(); }

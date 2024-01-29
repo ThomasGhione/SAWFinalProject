@@ -110,8 +110,8 @@
 
                 // Creates a new directory for user's repos 
                 $email = $user->getEmail();
-                mkdir("../../repos/$email");
-                chmod("../../repos/$email", 0777);
+                mkdir("/chroot/home/S5311626/public_html/repos/$email");
+                chmod("/chroot/home/S5311626/public_html/repos/$email", 0777);
             }
             catch (Exception $e) {
                 $this->conn->rollback();
@@ -235,7 +235,7 @@
                     // Updates all remember me cookies from current email to the new one, 
                     $result = $this->dbQueryWithParams("UPDATE remMeCookies SET email = ? WHERE email = ?", "ss", [$newEmail, $email]);
                     $result = $this->dbQueryWithParams("UPDATE repos SET Owner = ? WHERE Owner = ?", "ss", [$newEmail, $email]);
-                    rename("../../repos/$email", "../../repos/$newEmail");
+                    rename("/chroot/home/S5311626/public_html/repos/$email", "/chroot/home/S5311626/public_html/repos/$newEmail");
                 }
             }
             catch (Exception $e) {
@@ -517,7 +517,7 @@
 
                 $row = $result->fetch_assoc();
 
-                $result = $this->dbQueryWithParams("UPDATE repos SET LastModified = ? WHERE (Owner = ? && Name = ?)", "sss", [$currentDate, $email, $repoToEdit]);
+                $result = $this->dbQueryWithParams("UPDATE repos SET LastModified = ? WHERE (Owner = ? AND Name = ?)", "sss", [$currentDate, $email, $repoToEdit]);
 
                 if ($result != 1) {
                     error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while updating the repo in the database". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
@@ -525,7 +525,7 @@
                 }
 
                 // Following code deletes the old file and replaces it with the new one
-                $repoPath = "../../repos/$email/$repoToEdit";
+                $repoPath = "/chroot/home/S5311626/public_html/repos/$email/$repoToEdit";
 
                 $files = glob($repoPath . '/*'); // Gets all files and directories inside $repoPath and puts them in an array called $files
 
@@ -542,7 +542,7 @@
                 $fileName = htmlspecialchars(trim($_FILES["fileUpload"]["name"]));
                 $tempPath = $_FILES["fileUpload"]["tmp_name"]; // The server saves the file in a temporary location, so we need to move it to its final location
 
-                if (!move_uploaded_file($tempPath, "../../repos/$email/$repoToEdit/$fileName")) {
+                if (!move_uploaded_file($tempPath, "/chroot/home/S5311626/public_html/repos/$email/$repoToEdit/$fileName")) {
                     error_log("[" . date("Y-m-d H:i:s") . "] Something went wrong while transferring the file into its new location". "\n", 3, "/chroot/home/S5311626/public_html/texts/errorLog.txt");
                     throw new Exception("Something went wrong, try again later");
                 }

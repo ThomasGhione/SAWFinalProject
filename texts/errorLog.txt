@@ -14,3 +14,7 @@
 [2024-01-28 11:49:51] One or more fields are empty in addNewRepo.php
 mkdir(): Permission denied Current value in pathLocation is: /chroot/home/S5311626/public_html/repos/simo64.tomasella@gmail.com/test
 mkdir(): Permission denied Current value in pathLocation is: /chroot/home/S5311626/public_html/repos/simo64.tomasella@gmail.com/test
+[2024-01-29 01:20:15] Something went wrong while updating the repo in the database
+[2024-01-29 01:22:37] Something went wrong while updating the repo in the database
+[2024-01-29 01:37:55] Something went wrong while updating the repo in the database
+[2024-01-29 01:53:23] Something went wrong while updating the repo in the database

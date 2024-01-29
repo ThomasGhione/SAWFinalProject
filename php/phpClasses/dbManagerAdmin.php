@@ -138,7 +138,7 @@
 
                     $result = $this->dbQueryWithParams("UPDATE remMeCookies SET email = ? WHERE email = ?", "ss", [$newEmail, $userEmail]);
                     $result = $this->dbQueryWithParams("UPDATE repos SET Owner = ? WHERE Owner = ?", "ss", [$newEmail, $userEmail]);
-                    rename("../../repos/$userEmail", "../../repos/$newEmail");
+                    rename("/chroot/home/S5311626/public_html/repos/$userEmail", "/chroot/home/S5311626/public_html/repos/$newEmail");
                 }
 
                 if ($sessionManager->getEmail() === $newEmail)
