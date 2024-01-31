@@ -83,7 +83,7 @@
         </fieldset>
 
         <fieldset class="formSection">
-            <h2>Change user password:</h2>
+            <legend>Change user password:</legend>
 
             <form id="formWithPass" action="./adminScripts/editUserPass.php" method="post">
 
