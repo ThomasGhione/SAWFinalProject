@@ -47,19 +47,19 @@
                 echo "<td>" . $row["lastname"] . "</td>";
                 echo "<td>" . $row["email"] . "</td>";
                 echo "<td>" . $row["permission"] . "</td>";
-                echo "<td><a href='./adminScripts/deleteUser.php?email=" . urlencode($row["email"]) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'></i></a></td>";
-                echo "<td><a href='./editUserForm.php?email=" . urlencode($row["email"]) . "'><i class='fa-solid fa-pencil'></i></a></td>";
+                echo "<td><a href='./adminScripts/deleteUser.php?email=" . urlencode($row["email"]) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'></i><span class='visually-hidden'>Delete User</span></a></td>";
+                echo "<td><a href='./editUserForm.php?email=" . urlencode($row["email"]) . "'><i class='fa-solid fa-pencil'></i><span class='visually-hidden'>Edit User</span></a></td>";
                 
                 echo "<td>";
                 if ($isBanned)
                     echo "<span class='emptyButton'><i class='fa-solid fa-ban'></i></span>";
                 else   
-                    echo "<a href='./adminScripts/banUser.php?email=" . urlencode($row["email"]) .  "' onclick='return confirmBan();'><i class='fa-solid fa-ban'></i></a>";
+                    echo "<a href='./adminScripts/banUser.php?email=" . urlencode($row["email"]) .  "' onclick='return confirmBan();'><i class='fa-solid fa-ban'></i><span class='visually-hidden'>Ban User</span></a>";
                 echo "</td>";
                 
                 echo "<td>";
                 if ($isBanned)
-                    echo "<a href='./adminScripts/unbanUser.php?email=" . urlencode($row["email"]) .  "' onclick='return confirmUnBan();'><i class='fa-solid fa-check'></i></a>";
+                    echo "<a href='./adminScripts/unbanUser.php?email=" . urlencode($row["email"]) .  "' onclick='return confirmUnBan();'><i class='fa-solid fa-check'></i><span class='visually-hidden'>Unban User</span></a>";
                 else
                     echo "<span class='emptyButton'><i class='fa-solid fa-check'></i></span>";
                 echo "</td>";
