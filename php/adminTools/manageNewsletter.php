@@ -42,7 +42,7 @@
                         echo "<td>" . $row["firstname"] . "</td>";
                         echo "<td>" . $row["lastname"] . "</td>";
                         echo "<td>" . $row["email"] . "</td>";
-                        echo "<td><input type='checkbox' name='userCheckbox[]' value='" . $row["email"] . "'></td>";
+                        echo "<td><label class='visually-hidden' for='userCheckBox-" . $row["email"] . "'>Select " . $row["email"] . "</label><input type='checkbox' id='userCheckBox-" . $row["email"] . "' name='userCheckbox[]' value='" . $row["email"] . "'></td>";
         
                         echo "</tr>";
                     }
@@ -53,7 +53,10 @@
                     ";
 
                 ?>
-                <textarea name="message" id="textArea" rows="6" cols="50" style="resize: none;"></textarea>
+                
+                <label class="newsletterMessage" for="textArea">Write your message down here: </label>
+                    <textarea name="message" id="textArea" rows="3" cols="50" style="resize: none;"></textarea>
+                
                 <input type="hidden" name="selectedUsers" id="selectedUsersInput">
                 <input type="submit" class="newsletter-form-button" value="Submit">
             </div>

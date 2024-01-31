@@ -43,3 +43,12 @@ textarea[name="message"] {
 .newsletter-form-button:hover {
     filter: brightness(125%);
 }
+
+.newsletterMessage {
+    font-weight: bold;
+    border: 2px solid black;
+    border-radius: 5px;
+    margin-top: 10px;
+    padding: 7px;
+    background-color: white;
+}
