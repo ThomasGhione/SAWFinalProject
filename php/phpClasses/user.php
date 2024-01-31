@@ -120,17 +120,6 @@
         function getPermission() { return $this->permission; }
         function getRemMeFlag() { return $this->remMeFlag; }
         function getNewsletter() { return $this->newsletter; }
-        function getUser(): array {
-            return array(
-                "firstName" => $this->getFirstName(),
-                "lastName" => $this->getLastName(),
-                "email" => $this->getEmail(),
-                "password" => $this->getPassword(),
-                "permission" => $this->getPermission(),
-                "remMeFlag" => $this->getRemMeFlag(),
-                "newsletter" => $this->getNewsletter()
-            );
-        }
 
         // Setters
         function setFirstName(string &$firstname): void { $this->firstname = htmlspecialchars($firstname); }
