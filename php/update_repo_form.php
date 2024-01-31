@@ -28,7 +28,7 @@
     <main class="mainContainer">
 
         <fieldset class="formSection">
-            <h2>Edit repo here:</h2>
+            <legend>Edit repo here:</legend>
                         
             <?php
                 if (isset($_SESSION["error"])) {

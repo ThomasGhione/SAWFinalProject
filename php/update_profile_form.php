@@ -30,7 +30,7 @@
     <main class="mainContainer">
 
         <fieldset class="formSection">
-            <h2>Edit your profile here:</h2>
+            <legend>Edit your profile here:</legend>
                         
             <?php
                 if (isset($_SESSION["error"])) {

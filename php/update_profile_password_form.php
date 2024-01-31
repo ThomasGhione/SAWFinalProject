@@ -25,7 +25,7 @@
     <main class="mainContainer">
 
         <fieldset class="formSection">
-            <h2>Change your password:</h2>
+            <legend>Change your password:</legend>
                         
             <?php
                 if (isset($_SESSION["error"])) {

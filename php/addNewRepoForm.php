@@ -22,7 +22,7 @@
     <main class="mainContainer">
 
         <fieldset class="formSection">
-            <h2>Create a new repo</h2>
+            <legend>Create a new repo</legend>
 
             <?php
                 if (isset($_SESSION["error"])) {
