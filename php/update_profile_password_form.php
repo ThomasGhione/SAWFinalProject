@@ -41,12 +41,12 @@
             <form id="form" action="./scripts/update_password.php" method="post">
                 <div class="inputBox">
                     <label for="oldPassword">Old Password: </label>
-                    <input required type="password" id="oldPassword" name="oldPassword" placeholder="Firstname">
+                    <input required type="password" id="oldPassword" name="oldPassword" placeholder="Old password">
                 </div>
                 
                 <div class="inputBox">
                     <label for="newPassword">New Password: </label>
-                    <input required type="password" id="newPassword" name="newPassword" placeholder="Lastname">
+                    <input required type="password" id="newPassword" name="newPassword" placeholder="New password">
                 </div>
 
                 <input type="submit" class="formButton" name="submit" value="Change your password">
