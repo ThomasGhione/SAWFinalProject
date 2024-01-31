@@ -21,7 +21,7 @@
 
     <main class="mainContainer">
         <fieldset class="formSection">
-            <h2>Sign up here:</h2>
+            <legend>Sign up here:</legend>
             
             <?php
                 if (isset($_SESSION["error"])) {

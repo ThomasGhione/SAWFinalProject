@@ -50,6 +50,15 @@ body {
     margin: -8px;
 }
 
+legend {
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #FCFAFA;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 5px;
+}
+
 
 /* Homepage style */
 
