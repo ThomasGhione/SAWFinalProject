@@ -1,6 +1,4 @@
 <?php
-    // This page is used only for automatic test
-    
     require("../shared/initializePage.php");
 
     if (!$sessionManager->isSessionSet()) {
@@ -110,7 +108,7 @@
         </div>
     </div>
 
-    <?php include("../shared/footer.php") ?>
+    <?php include("./shared/footer.php") ?>
 
     <script>
         function confirmDelete() {
