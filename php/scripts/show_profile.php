@@ -95,8 +95,8 @@
                         echo "<td>" . $row["Name"] . "</td>";
                         echo "<td>" . $row["CreationDate"] . "</td>";
                         echo "<td>" . $row["LastModified"] . "</td>";
-                        echo "<td><a href='../update_repo_form.php?name=" . urlencode($row["Name"]) . "'><i class='fa-solid fa-pen'></i></a></td>";
-                        echo "<td><a href='../scripts/deleteRepo.php?name=" . urlencode($row["Name"]) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'</td>";
+                        echo "<td><a href='../update_repo_form.php?name=" . urlencode($row["Name"]) . "'><i class='fa-solid fa-pen'></i><span class='visually-hidden'>Update</span></a></td>";
+                        echo "<td><a href='../scripts/deleteRepo.php?name=" . urlencode($row["Name"]) . "' onclick='return confirmDelete();'><i class='fa-solid fa-trash'></i><span class='visually-hidden'>Delete</span></a></td>";
 
                         echo "</tr>";
                     }
